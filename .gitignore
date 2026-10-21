@@ -22,7 +22,8 @@ build/
 
 # Prisma
 packages/db/prisma/migrations/dev.db*
-# Prisma 7 emits TypeScript source into the repo; it is regenerated on install.
+# Prisma 7 emits TypeScript source into the repo; it is regenerated on install
+# and again before every production build.
 packages/db/src/generated/
 
 # Testing

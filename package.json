@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspace @neevpass/web",
+    "prebuild": "npm run db:generate",
     "build": "npm run build --workspace @neevpass/web",
     "start": "node scripts/start-prod.mjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
