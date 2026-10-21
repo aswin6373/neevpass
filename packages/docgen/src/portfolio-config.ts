@@ -13,7 +13,7 @@
 
 import { SECTION_KINDS, type SectionKind } from '@neevpass/domain';
 
-export const PORTFOLIO_TEMPLATE_KEYS = ['EDITORIAL', 'STUDIO', 'POSTER'] as const;
+export const PORTFOLIO_TEMPLATE_KEYS = ['EDITORIAL', 'STUDIO', 'POSTER', 'PORTRAIT'] as const;
 
 export type PortfolioTemplateKey = (typeof PORTFOLIO_TEMPLATE_KEYS)[number];
 
@@ -43,6 +43,12 @@ export const PORTFOLIO_TEMPLATES: readonly PortfolioTemplateDefinition[] = [
     label: 'Poster',
     description: 'Oversized condensed type, hard rules and print-shop energy.',
     defaultAccent: '#1f3cff',
+  },
+  {
+    key: 'PORTRAIT',
+    label: 'Portrait',
+    description: 'A photo-led personal page with a warm palette, sticky portrait and quiet typography.',
+    defaultAccent: '#9a3412',
   },
 ] as const;
 

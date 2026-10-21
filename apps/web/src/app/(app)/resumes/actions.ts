@@ -8,6 +8,7 @@ import {
   requireProfileForUser,
   updateResumeConfig,
 } from '@neevpass/db';
+import { resumeTemplateFor } from '@neevpass/docgen';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -97,12 +98,13 @@ export async function updateResumeConfigAction(_prev: FormState, form: FormData)
     const existing = await findResume(scope.profileId, resumeId);
     if (!existing) return { error: 'That resume no longer exists.' };
 
-    // Field names are the config keys; anything unknown is dropped by the
-    // normaliser at render time.
+    // The template owns its header and spacing presets. Sending only a template
+    // key means an old client cannot mix two visual systems into one document.
+    const template = resumeTemplateFor(str(form, 'layout'));
     const config: Record<string, unknown> = {
-      layout: str(form, 'layout'),
-      headerStyle: str(form, 'headerStyle'),
-      density: str(form, 'density'),
+      layout: template.key,
+      headerStyle: template.headerStyle,
+      density: template.density,
       accentColor: str(form, 'accentColor'),
       hiddenSections: form.getAll('hiddenSections'),
     };

@@ -56,12 +56,7 @@ export interface TypographyTokens {
  * That constraint is what keeps the template catalogue maintainable: a new
  * template is a token preset plus a variant, never a new rendering code path.
  */
-export type LayoutVariant =
-  | 'CLASSIC'
-  | 'MODERN'
-  | 'COMPACT'
-  | 'SIDEBAR_LEFT'
-  | 'SIDEBAR_RIGHT';
+export type LayoutVariant = 'CLASSIC' | 'MODERN' | 'COMPACT';
 
 export type HeaderStyle = 'BANNER' | 'STACKED' | 'INLINE' | 'NONE';
 

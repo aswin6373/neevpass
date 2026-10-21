@@ -1,6 +1,11 @@
 import { SECTION_DEFINITIONS } from '@neevpass/domain';
 import { findResume, requireProfileAggregate } from '@neevpass/db';
-import { buildSnapshot, normaliseResumeConfig, renderResumeHtml } from '@neevpass/docgen';
+import {
+  buildSnapshot,
+  normaliseResumeConfig,
+  renderResumeHtml,
+  RESUME_TEMPLATES,
+} from '@neevpass/docgen';
 import { PageHeader, buttonVariants, cn } from '@neevpass/ui';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -115,9 +120,9 @@ export default async function ResumePreviewPage({ params }: PageProps) {
         {/* Controls ------------------------------------------------------- */}
         <aside className="order-2 lg:sticky lg:top-[84px]">
           <div className="border-y border-line py-3.5">
-            <h2 className="text-[13px] font-medium text-content">Layout</h2>
+            <h2 className="text-[13px] font-medium text-content">Template</h2>
             <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
-              These choices apply to this resume only. Your profile and other documents are
+              Three ATS-safe templates for this resume. Your profile and other documents are
               untouched.
             </p>
           </div>
@@ -129,10 +134,13 @@ export default async function ResumePreviewPage({ params }: PageProps) {
                 kind: section.kind,
                 label: section.label,
               }))}
+              templates={RESUME_TEMPLATES.map(({ key, label, description }) => ({
+                key,
+                label,
+                description,
+              }))}
               initial={{
                 layout: config.layout,
-                headerStyle: config.headerStyle,
-                density: config.density,
                 accentColor: config.accentColor,
                 hiddenSections: config.hiddenSections,
               }}

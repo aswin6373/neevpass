@@ -248,7 +248,7 @@ Three properties make this work:
 type ThemeTokens = {
   font:    { heading: FontKey; body: FontKey; scale: number };
   color:   { accent: string; text: string; muted: string; surface: string; rule: string };
-  layout:  { variant: 'CLASSIC' | 'MODERN' | 'COMPACT' | 'SIDEBAR_LEFT' | 'SIDEBAR_RIGHT';
+  layout:  { variant: 'CLASSIC' | 'MODERN' | 'COMPACT';
              headerStyle: 'BANNER' | 'STACKED' | 'INLINE' };
   spacing: { density: 'COMFORTABLE' | 'NORMAL' | 'COMPACT' };
   page:    { size: 'A4' | 'LETTER'; marginMm: number };

@@ -3,7 +3,7 @@
  *
  * The portfolio used to reuse the resume renderer, which made a public profile
  * read like a CV. This renderer shares the snapshot contract but nothing else:
- * three templates, each with its own layout and rhythm, rendered as one
+ * four templates, each with its own layout and rhythm, rendered as one
  * self-contained HTML document with no JavaScript.
  *
  * Every piece of user content goes through `escapeHtml`, and link URLs are
@@ -479,6 +479,143 @@ ${contacts.length > 0 ? `<nav class="contact" aria-label="Contact">${contacts.ma
 }
 
 // ---------------------------------------------------------------------------
+// PORTRAIT — photo-led, warm paper, sticky portrait, quiet typography
+// ---------------------------------------------------------------------------
+
+const PORTRAIT_CSS = (accent: string) => `
+:root{--accent:${accent};--ink:#201d19;--muted:#746c61;--paper:#f3eee4;--card:#fbf8f2;--line:#dcd2c1;--soft:color-mix(in srgb,var(--accent) 9%,#fbf8f2)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:#fff}
+a{color:inherit}
+.wrap{width:min(1180px,calc(100% - 40px));margin:0 auto}
+.topbar{border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 0;font:600 9px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.topbar strong{font-weight:600;color:var(--ink)}
+.layout{display:grid;grid-template-columns:minmax(280px,.82fr) minmax(0,1.55fr);gap:clamp(32px,5vw,76px);align-items:start;padding:clamp(34px,5vw,62px) 0 40px}
+.side{position:sticky;top:24px;min-width:0}
+.portrait{position:relative;margin:0;aspect-ratio:4/5;overflow:hidden;border-radius:46% 46% 18px 18px / 31% 31% 14px 14px;border:1px solid var(--line);background:radial-gradient(circle at 32% 22%,color-mix(in srgb,var(--accent) 24%,#fff) 0,color-mix(in srgb,var(--accent) 9%,#f8f2e7) 58%,#ece2d2 100%);box-shadow:0 28px 55px -42px rgba(32,29,25,.7)}
+.portrait img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.94)}
+.portrait::after{content:"";position:absolute;inset:9px;border:1px solid rgba(255,255,255,.32);border-radius:inherit;pointer-events:none}
+.portrait-placeholder{position:absolute;inset:0;display:grid;place-items:center;color:var(--accent)}
+.portrait-placeholder span{display:grid;place-items:center;width:44%;aspect-ratio:1;border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 26%,transparent);background:color-mix(in srgb,var(--accent) 9%,#fff);font-family:"Iowan Old Style",Charter,Cambria,Georgia,serif;font-size:clamp(2.2rem,5vw,4.2rem);line-height:1;letter-spacing:-.05em}
+.side-meta{display:flex;justify-content:space-between;gap:12px;margin:16px 2px 0;font:600 8.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.contact{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.contact a{display:inline-flex;align-items:center;font-size:9.5px;font-weight:600;letter-spacing:.04em;text-decoration:none;color:var(--accent);background:transparent;border:1px solid color-mix(in srgb,var(--accent) 26%,var(--line));border-radius:999px;padding:5px 9px;transition:background .15s,color .15s,border-color .15s}
+.contact a:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.content{min-width:0}
+.intro{padding-bottom:clamp(24px,3vw,36px);border-bottom:1px solid var(--line)}
+.eyebrow{display:flex;align-items:center;gap:9px;margin:0 0 20px;font:600 9px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--accent)}
+.intro h1{margin:0;max-width:15ch;font-family:"Iowan Old Style",Charter,Cambria,Georgia,"Times New Roman",serif;font-size:clamp(4rem,8.5vw,7.2rem);font-weight:500;line-height:.9;letter-spacing:-.055em;text-wrap:balance}
+.headline{margin:18px 0 0;max-width:42ch;font-size:clamp(1.05rem,1.7vw,1.28rem);line-height:1.45;letter-spacing:-.015em;color:#575045}
+.summary{margin:22px 0 0;max-width:56ch;border-left:2px solid var(--accent);padding-left:15px;font-size:13.5px;line-height:1.75;color:#61594d}
+.sections{margin-top:clamp(12px,2vw,20px)}
+.chapter{padding:clamp(22px,3.2vw,30px) 0 8px;border-bottom:1px solid var(--line)}
+.chapter:last-child{border-bottom:0}
+.chapter-head{display:flex;align-items:baseline;gap:11px;margin:0 0 16px}
+.chapter-num{font:600 8.5px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;color:var(--accent)}
+.chapter-head h2{margin:0;font-family:"Iowan Old Style",Charter,Cambria,Georgia,serif;font-size:clamp(1.5rem,2.7vw,1.95rem);font-weight:500;line-height:1.05;letter-spacing:-.035em}
+.chapter-count{margin-left:auto;font:600 8px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.entries{display:flex;flex-direction:column}
+.entry{padding:13px 0 15px;border-top:1px solid color-mix(in srgb,var(--line) 72%,transparent)}
+.entry:first-child{border-top:0;padding-top:0}
+.entry-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:3px 14px;margin:0 0 5px;font:600 8px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.entry-top .org{color:var(--accent)}
+.entry h3{margin:0 0 2px;font-size:1.02rem;line-height:1.35;font-weight:650;letter-spacing:-.015em}
+.entry-sub{margin:0 0 4px;font-size:8.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+.entry-summary{margin:5px 0 6px;font-size:12.5px;line-height:1.67;color:var(--muted)}
+.bullets{margin:0 0 6px;padding-left:1.05em;font-size:12px;line-height:1.6;color:#514a40}
+.bullets li{margin:0 0 2px}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0 0;padding:0;list-style:none}
+.chips li{font-size:8px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 6px;border-radius:2px;border:1px solid color-mix(in srgb,var(--accent) 18%,var(--line));background:color-mix(in srgb,var(--accent) 5%,#fff);color:#5e564b}
+.entry-links{display:flex;flex-wrap:wrap;gap:9px;margin:8px 0 0}
+.entry-links-item{font-size:9px;font-weight:600;letter-spacing:.04em;color:var(--accent);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--accent) 38%,transparent);padding-bottom:1px}
+.skill-cloud{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.skill-cloud li{font-size:10.5px;padding:5px 9px;border-radius:999px;background:transparent;border:1px solid color-mix(in srgb,var(--accent) 22%,var(--line));color:#554d42}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-top:28px;padding-top:14px;border-top:1px solid var(--line);font:600 8px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.foot .built{color:var(--accent)}
+@media(max-width:860px){.layout{grid-template-columns:1fr;gap:26px}.side{position:static;max-width:420px;width:100%}.portrait{aspect-ratio:1/1;border-radius:44% 44% 16px 16px / 33% 33% 12px 12px}.contact{margin-top:16px}.intro{padding-top:6px}}
+@media(max-width:520px){.wrap{width:calc(100% - 28px)}.chapter-count{display:none}.side-meta{font-size:8px}}
+`;
+
+function portraitInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return 'NP';
+  const first = parts[0]?.[0] ?? '';
+  const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '';
+  return (first + last).toUpperCase() || 'NP';
+}
+
+function safePortraitUrl(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  if (value.startsWith('/') && !value.startsWith('//')) return escapeHtml(value);
+  return /^https?:\/\//i.test(value) ? escapeHtml(value) : undefined;
+}
+
+function portraitBody(snapshot: ProfileSnapshot, config: PortfolioConfig): string {
+  const sections = sectionViews(snapshot, config);
+  const contacts = contactsFor(snapshot, config);
+  const summary = escapeHtml(snapshot.summary ?? '');
+  const photoUrl = safePortraitUrl(snapshot.identity.photoUrl);
+  const initials = portraitInitials(snapshot.identity.fullName);
+  const year = snapshot.takenAt.slice(0, 4);
+
+  const portrait = photoUrl
+    ? `<img src="${photoUrl}" alt="Portrait of ${escapeHtml(snapshot.identity.fullName)}" loading="eager" referrerpolicy="no-referrer">`
+    : `<div class="portrait-placeholder" role="img" aria-label="Profile photo placeholder"><span>${escapeHtml(initials)}</span></div>`;
+
+  const chapters = sections
+    .map((section, i) => {
+      const body =
+        section.chipLabels.length > 0 && section.entries.length === 0
+          ? `<ul class="skill-cloud">${section.chipLabels
+              .map((label) => `<li>${escapeHtml(label)}</li>`)
+              .join('')}</ul>`
+          : `<div class="entries">${section.entries
+              .map((entry) => {
+                const dates = datesFor(entry);
+                return `<article class="entry">
+<div class="entry-top"><span>${dates ? escapeHtml(dates) : escapeHtml(entry.location ?? '')}</span>${entry.organisation ? `<span class="org">${escapeHtml(entry.organisation)}</span>` : ''}</div>
+<h3>${escapeHtml(entry.title)}</h3>
+${entry.subtitle ? `<p class="entry-sub">${escapeHtml(entry.subtitle)}</p>` : ''}
+${entry.summary ? `<p class="entry-summary">${escapeHtml(entry.summary)}</p>` : ''}
+${highlightsHtml(entry, 'bullets')}
+${entryTagsHtml(entry, 'chips')}
+${entryLinksHtml(entry, 'entry-links')}
+</article>`;
+              })
+              .join('')}</div>`;
+
+      return `<section class="chapter" id="section-${section.kind.toLowerCase()}">
+<div class="chapter-head"><span class="chapter-num">${padSection(i)}</span><h2>${escapeHtml(section.title)}</h2><span class="chapter-count">${pluralEntries(Math.max(section.entries.length, section.chipLabels.length))}</span></div>
+${body}
+</section>`;
+    })
+    .join('');
+
+  return `<header class="topbar"><div class="wrap"><strong>${escapeHtml(snapshot.identity.fullName)}</strong><span>Portfolio / ${escapeHtml(year)}</span></div></header>
+<main class="wrap layout">
+<aside class="side">
+<figure class="portrait">${portrait}</figure>
+<div class="side-meta"><span>${escapeHtml(year)}</span><span>${escapeHtml(snapshot.identity.location ?? 'Online')}</span></div>
+${contacts.length > 0 ? `<nav class="contact" aria-label="Contact">${contacts.map((link) => linkTag(link, 'contact-link')).join('')}</nav>` : ''}
+</aside>
+<div class="content">
+<header class="intro">
+<p class="eyebrow">Selected work &amp; experience</p>
+<h1>${escapeHtml(snapshot.identity.fullName)}</h1>
+${snapshot.identity.headline ? `<p class="headline">${escapeHtml(snapshot.identity.headline)}</p>` : ''}
+${summary ? `<p class="summary">${summary}</p>` : ''}
+</header>
+<div class="sections">${chapters}</div>
+<footer class="foot"><span>${escapeHtml(snapshot.identity.fullName)} — Portfolio</span><span class="built">Built with NeevPass</span></footer>
+</div>
+</main>`;
+}
+
+// ---------------------------------------------------------------------------
 // Document shell
 // ---------------------------------------------------------------------------
 
@@ -537,6 +674,15 @@ export function renderPortfolioHtml(input: RenderPortfolioInput): string {
         accentColor: config.accentColor,
         css: POSTER_CSS(config.accentColor),
         body: posterBody(input.snapshot, config),
+      });
+    case 'PORTRAIT':
+      return documentShell({
+        title: input.title,
+        description,
+        templateKey: config.templateKey,
+        accentColor: config.accentColor,
+        css: PORTRAIT_CSS(config.accentColor),
+        body: portraitBody(input.snapshot, config),
       });
     case 'EDITORIAL':
     default:

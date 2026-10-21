@@ -174,6 +174,8 @@ export interface ProfileAggregate {
   readonly summary?: string;
   readonly location?: string;
   readonly phone?: string;
+  /** Same-origin URL of the uploaded profile photo, resolved at the edge. */
+  readonly photoUrl?: string;
   readonly publicSlug?: string;
   readonly defaultVisibility: Visibility;
   readonly links: readonly AggregateLink[];

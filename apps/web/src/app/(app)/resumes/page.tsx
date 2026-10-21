@@ -42,7 +42,7 @@ export default async function ResumesPage() {
         <div>
           <h2 className="text-[13px] font-medium text-content">New resume</h2>
           <p className="mt-1 max-w-sm text-[11px] leading-relaxed text-content-muted">
-            Give it a name you will recognise later. You will land on the preview with the layout
+            Give it a name you will recognise later. You will land on the preview with the template
             controls beside it.
           </p>
         </div>
@@ -61,7 +61,7 @@ export default async function ResumesPage() {
           <EmptyState
             className="mt-5"
             title="No resumes yet"
-            description="Create the first one above. It will pull the entries you have marked public or unlisted, then let you trim the layout."
+            description="Create the first one above. It will pull the entries you have marked public or unlisted, then let you trim the document."
           />
         ) : (
           <ul>

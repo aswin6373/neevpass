@@ -17,3 +17,5 @@ Dockerfile
 .dockerignore
 apps/web/.next
 packages/db/src/generated
+**/.uploads
+.uploads

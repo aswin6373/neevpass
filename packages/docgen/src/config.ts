@@ -12,6 +12,11 @@
 import { DEFAULT_RESUME_SECTION_ORDER, SECTION_KINDS, type SectionKind } from '@neevpass/domain';
 
 import type { LayoutVariant, ThemeTokens } from './theme';
+import {
+  DEFAULT_RESUME_TEMPLATE_KEY,
+  RESUME_TEMPLATE_KEYS,
+  resumeTemplateFor,
+} from './resume-templates';
 
 export interface ResumeConfig {
   /** Section order. Missing sections keep their default position after these. */
@@ -28,23 +33,23 @@ export interface ResumeConfig {
   readonly density: ThemeTokens['density'];
 }
 
-const LAYOUTS: readonly LayoutVariant[] = ['CLASSIC', 'MODERN', 'COMPACT', 'SIDEBAR_LEFT', 'SIDEBAR_RIGHT'];
-const HEADER_STYLES: readonly ThemeTokens['headerStyle'][] = ['BANNER', 'STACKED', 'INLINE', 'NONE'];
-const DENSITIES: readonly ThemeTokens['density'][] = ['COMFORTABLE', 'NORMAL', 'COMPACT'];
+const LAYOUTS: readonly LayoutVariant[] = RESUME_TEMPLATE_KEYS;
 
 const SECTION_KIND_SET: ReadonlySet<string> = new Set(SECTION_KINDS);
 
-/** `RRGGBB`, `#RRGGBB`, `#RGB`, `#RGBA`, `#RRGGBBAA` — enough to be safe in HTML. */
+/** `RRGGBB`, `#RRGGBB`, `#RGB`, `#RGBA`, `#RRGGBBAA` - enough to be safe in HTML. */
 const HEX_COLOR = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
+
+const DEFAULT_TEMPLATE = resumeTemplateFor(DEFAULT_RESUME_TEMPLATE_KEY);
 
 export const DEFAULT_RESUME_CONFIG: ResumeConfig = {
   sectionOrder: DEFAULT_RESUME_SECTION_ORDER,
   hiddenSections: [],
   itemLimits: {},
-  layout: 'CLASSIC',
-  headerStyle: 'BANNER',
+  layout: DEFAULT_RESUME_TEMPLATE_KEY,
+  headerStyle: DEFAULT_TEMPLATE.headerStyle,
   accentColor: '#26523f',
-  density: 'NORMAL',
+  density: DEFAULT_TEMPLATE.density,
 };
 
 function normaliseSectionOrder(value: unknown): ResumeConfig['sectionOrder'] {
@@ -102,14 +107,15 @@ export function normaliseResumeConfig(value: unknown): ResumeConfig {
   const accent = typeof source.accentColor === 'string' && HEX_COLOR.test(source.accentColor.trim())
     ? source.accentColor.trim()
     : DEFAULT_RESUME_CONFIG.accentColor;
+  const template = resumeTemplateFor(oneOf(source.layout, LAYOUTS, DEFAULT_RESUME_CONFIG.layout));
 
   return {
     sectionOrder: normaliseSectionOrder(source.sectionOrder),
     hiddenSections: normaliseSectionKinds(source.hiddenSections),
     itemLimits: normaliseItemLimits(source.itemLimits),
-    layout: oneOf(source.layout, LAYOUTS, DEFAULT_RESUME_CONFIG.layout),
-    headerStyle: oneOf(source.headerStyle, HEADER_STYLES, DEFAULT_RESUME_CONFIG.headerStyle),
+    layout: template.key,
+    headerStyle: template.headerStyle,
     accentColor: accent,
-    density: oneOf(source.density, DENSITIES, DEFAULT_RESUME_CONFIG.density),
+    density: template.density,
   };
 }

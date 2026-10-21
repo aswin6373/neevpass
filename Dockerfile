@@ -63,6 +63,11 @@ COPY --from=build --chown=neevpass:neevpass /repo/apps/web/.next/standalone/apps
 COPY --from=build --chown=neevpass:neevpass /repo/apps/web/.next/static ./.next/static
 COPY --from=build --chown=neevpass:neevpass /repo/apps/web/public ./public
 
+# Uploaded profile photos live on disk. Mount a volume here in production so a
+# container restart does not orphan the database's FileAsset rows.
+RUN mkdir -p /app/.uploads && chown neevpass:neevpass /app/.uploads
+ENV UPLOAD_DIR=/app/.uploads
+
 USER neevpass
 EXPOSE 3000
 

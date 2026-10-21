@@ -80,6 +80,16 @@ describe('buildSnapshot', () => {
     expect(snapshot.identity.headline).toBe('Final-year CS student');
     expect(snapshot.sections.map((section) => section.kind)).toEqual(SECTION_KINDS.filter((kind) => kind !== 'SUMMARY'));
   });
+
+  it('carries the uploaded profile photo into the immutable snapshot', () => {
+    const snapshot = buildSnapshot({
+      aggregate: aggregate({ photoUrl: '/api/assets/photo-1' }),
+      revision: 3,
+      now: NOW,
+    });
+
+    expect(snapshot.identity.photoUrl).toBe('/api/assets/photo-1');
+  });
 });
 
 describe('createEntryFilter', () => {
@@ -116,6 +126,19 @@ describe('normaliseResumeConfig', () => {
     expect(config.itemLimits).toEqual({ PROJECTS: 3, HACKATHONS: 5 });
     expect(config.layout).toBe('MODERN');
     expect(config.accentColor).toBe(DEFAULT_RESUME_CONFIG.accentColor);
+  });
+
+  it('retires the old sidebar layouts in favour of the ATS-safe classic template', () => {
+    expect(
+      normaliseResumeConfig({ layout: 'SIDEBAR_LEFT', headerStyle: 'NONE', density: 'COMPACT' }),
+    ).toMatchObject({ layout: 'CLASSIC', headerStyle: 'BANNER', density: 'NORMAL' });
+    expect(normaliseResumeConfig({ layout: 'SIDEBAR_RIGHT' }).layout).toBe('CLASSIC');
+  });
+
+  it('lets the template own its header and spacing presets', () => {
+    expect(
+      normaliseResumeConfig({ layout: 'MODERN', headerStyle: 'INLINE', density: 'COMFORTABLE' }),
+    ).toMatchObject({ layout: 'MODERN', headerStyle: 'STACKED', density: 'NORMAL' });
   });
 });
 

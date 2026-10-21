@@ -6,6 +6,8 @@ import Link from 'next/link';
 
 import { requireProfile } from '@/lib/session';
 
+import { ProfilePhoto } from './profile-photo';
+
 export const metadata: Metadata = {
   title: 'Profile',
   robots: { index: false, follow: false },
@@ -49,52 +51,60 @@ export default async function ProfilePage() {
         }
       />
 
-      <section className="grid gap-6 border-b border-line pb-6 sm:grid-cols-[minmax(0,1fr)_17rem] sm:items-end sm:gap-10">
-        <div className="flex flex-col gap-1.5">
-          <p className="text-[12px] text-content-secondary">
-            {aggregate.location ? `${aggregate.location} · ` : ''}
-            {user.email}
-          </p>
-          <p className="text-[11px] text-content-muted">
-            Revision {aggregate.revision} · Private unless an entry is marked public
-          </p>
-        </div>
+      <section className="grid gap-7 border-b border-line pb-6 lg:grid-cols-[13rem_minmax(0,1fr)] lg:items-start lg:gap-10">
+        <ProfilePhoto
+          fullName={aggregate.fullName}
+          photoUrl={aggregate.photoUrl}
+          revision={aggregate.revision}
+        />
 
-        <div>
-          <div className="flex items-baseline justify-between gap-3">
-            <p className="text-[11px] text-content-secondary">Profile completeness</p>
-            <p className="text-[11px] tabular-nums text-content">
-              {completeness.percent}%
+        <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_17rem] sm:items-end sm:gap-10">
+          <div className="flex flex-col gap-1.5">
+            <p className="text-[12px] text-content-secondary">
+              {aggregate.location ? `${aggregate.location} · ` : ''}
+              {user.email}
+            </p>
+            <p className="text-[11px] text-content-muted">
+              Revision {aggregate.revision} · Private unless an entry is marked public
             </p>
           </div>
-          <div
-            role="progressbar"
-            aria-valuenow={completeness.percent}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label="Profile completeness"
-            className="mt-2 h-1.5 w-full overflow-hidden bg-surface-sunken"
-          >
+
+          <div>
+            <div className="flex items-baseline justify-between gap-3">
+              <p className="text-[11px] text-content-secondary">Profile completeness</p>
+              <p className="text-[11px] tabular-nums text-content">
+                {completeness.percent}%
+              </p>
+            </div>
             <div
-              className="h-full bg-brand transition-[width] duration-300"
-              style={{ width: `${completeness.percent}%` }}
-            />
+              role="progressbar"
+              aria-valuenow={completeness.percent}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="Profile completeness"
+              className="mt-2 h-1.5 w-full overflow-hidden bg-surface-sunken"
+            >
+              <div
+                className="h-full bg-brand transition-[width] duration-300"
+                style={{ width: `${completeness.percent}%` }}
+              />
+            </div>
+            <p className="mt-2 text-[11px] text-content-muted">
+              {nextSection ? (
+                <>
+                  Next up:{' '}
+                  <Link
+                    href={`/profile/${nextSection.slug}`}
+                    className="text-content-secondary underline decoration-line-strong underline-offset-2 hover:text-content hover:decoration-content"
+                  >
+                    {nextSection.label}
+                  </Link>
+                </>
+              ) : (
+                'Every section has at least one entry.'
+              )}
+            </p>
           </div>
-          <p className="mt-2 text-[11px] text-content-muted">
-            {nextSection ? (
-              <>
-                Next up:{' '}
-                <Link
-                  href={`/profile/${nextSection.slug}`}
-                  className="text-content-secondary underline decoration-line-strong underline-offset-2 hover:text-content hover:decoration-content"
-                >
-                  {nextSection.label}
-                </Link>
-              </>
-            ) : (
-              'Every section has at least one entry.'
-            )}
-          </p>
         </div>
       </section>
 

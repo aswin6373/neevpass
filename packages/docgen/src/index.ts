@@ -24,6 +24,7 @@
 export * from './document';
 export * from './theme';
 export * from './config';
+export * from './resume-templates';
 export * from './portfolio-config';
 export * from './snapshot';
 export * from './build-document';

@@ -70,6 +70,10 @@ describe('normalisePortfolioConfig', () => {
     const config = normalisePortfolioConfig({ accentColor: 'url(javascript:1)' });
     expect(config.accentColor).toBe('#26523f');
   });
+
+  it('uses the portrait accent for the photo-led template', () => {
+    expect(normalisePortfolioConfig({}, 'portrait').accentColor).toBe('#9a3412');
+  });
 });
 
 describe('renderPortfolioHtml', () => {
@@ -80,7 +84,7 @@ describe('renderPortfolioHtml', () => {
     publicOnly: true,
   });
 
-  it.each(['EDITORIAL', 'STUDIO', 'POSTER'] as const)(
+  it.each(['EDITORIAL', 'STUDIO', 'POSTER', 'PORTRAIT'] as const)(
     'renders the %s template as a complete, script-free page',
     (templateKey) => {
       const html = renderPortfolioHtml({
@@ -120,5 +124,51 @@ describe('renderPortfolioHtml', () => {
 
     expect(html).not.toContain('"><img');
     expect(html).toContain('&quot;&gt;&lt;img');
+  });
+
+  it('renders a photo in the portrait template and initials when none exists', () => {
+    const withPhoto = buildSnapshot({
+      aggregate: aggregate({ photoUrl: '/api/assets/photo-1' }),
+      revision: 2,
+      now: NOW,
+      publicOnly: true,
+    });
+    const html = renderPortfolioHtml({
+      snapshot: withPhoto,
+      config: {},
+      templateKey: 'PORTRAIT',
+      title: 'Portfolio',
+    });
+
+    expect(html).toContain('src="/api/assets/photo-1"');
+    expect(html).not.toContain('<div class="portrait-placeholder"');
+
+    const withoutPhoto = renderPortfolioHtml({
+      snapshot,
+      config: {},
+      templateKey: 'PORTRAIT',
+      title: 'Portfolio',
+    });
+
+    expect(withoutPhoto).toContain('portrait-placeholder');
+    expect(withoutPhoto).toContain('>AV</span>');
+  });
+
+  it('does not turn a script URL into a portrait image', () => {
+    const unsafe = buildSnapshot({
+      aggregate: aggregate({ photoUrl: 'javascript:alert(1)' }),
+      revision: 2,
+      now: NOW,
+      publicOnly: true,
+    });
+    const html = renderPortfolioHtml({
+      snapshot: unsafe,
+      config: {},
+      templateKey: 'PORTRAIT',
+      title: 'Portfolio',
+    });
+
+    expect(html).not.toContain('javascript:alert(1)');
+    expect(html).toContain('portrait-placeholder');
   });
 });

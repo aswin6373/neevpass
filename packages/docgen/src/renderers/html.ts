@@ -139,6 +139,27 @@ ${skills}${links}${tags}
 </article>`;
 }
 
+function layoutCssFor(model: DocumentModel): string {
+  switch (model.theme.layout) {
+    case 'CLASSIC':
+      return `.doc-header { text-align: center; border-bottom: 3px double var(--accent); }
+.doc-name { letter-spacing: 0.01em; }
+.doc-headline { margin-top: 3px; }`;
+    case 'MODERN':
+      return `.doc-header { border-left: 4px solid var(--accent); border-bottom: 1px solid var(--rule); padding-left: 12px; }
+.doc-name { text-transform: uppercase; font-weight: 700; letter-spacing: -0.03em; }
+.doc-section-title { border-bottom: 2px solid var(--accent); }`;
+    case 'COMPACT':
+      return `.doc-header { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: baseline; column-gap: 10px; padding-bottom: 6px; margin-bottom: 10px; border-bottom: 1px solid var(--rule); }
+.doc-name { font-size: ${(11 * model.theme.typography.scale * 1.8).toFixed(1)}pt; }
+.doc-headline { grid-column: 2; margin: 0; text-align: right; }
+.doc-identity { grid-column: 1 / -1; margin-top: 2px; }
+.doc-section { margin-bottom: 12px; }`;
+    default:
+      return '';
+  }
+}
+
 function cssFor(model: DocumentModel): string {
   const { theme } = model;
   const type = theme.typography;
@@ -215,6 +236,7 @@ ${bulletCss}
 }
 .entry-link { color: var(--accent); }
 .built-with { margin: 22px 0 0; font-size: ${(baseSize * 0.85).toFixed(1)}pt; color: var(--muted); text-align: center; }
+${layoutCssFor(model)}
 @media print {
   body { background: var(--surface); }
   .page { width: auto; margin: 0; padding: 0; box-shadow: none; }

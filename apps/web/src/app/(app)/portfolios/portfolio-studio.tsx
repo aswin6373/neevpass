@@ -161,7 +161,7 @@ export function PortfolioStudio({
           <fieldset>
             <legend className="text-[13px] font-medium text-content">Template</legend>
             <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
-              Three starting points. You can change this at any time.
+              Four starting points. You can change this at any time.
             </p>
             <div className="mt-3 border-t border-line">
               {templates.map((template) => {
@@ -292,7 +292,7 @@ export function PortfolioStudio({
 }
 
 /**
- * Three tiny swatches that read as miniature versions of the templates rather
+ * Four tiny swatches that read as miniature versions of the templates rather
  * than generic colour chips.
  */
 function TemplateSwatch({ templateKey, accent }: { templateKey: string; accent: string }) {
@@ -329,6 +329,45 @@ function TemplateSwatch({ templateKey, accent }: { templateKey: string; accent: 
         </span>
         <span className="absolute inset-x-1.5 top-6 h-[2px]" style={{ background: '#101010' }} />
         <span className="absolute inset-x-1.5 top-8 h-[1px] w-5" style={{ background: '#101010' }} />
+      </span>
+    );
+  }
+
+  if (templateKey === 'PORTRAIT') {
+    return (
+      <span
+        aria-hidden="true"
+        className="relative block h-10 w-12 shrink-0 overflow-hidden border border-line"
+        style={{ background: '#f3eee4' }}
+      >
+        <span
+          className="absolute bottom-1 left-1.5 top-1.5 w-4 rounded-t-full border"
+          style={{ background: `${accent}29`, borderColor: accent }}
+        />
+        <span
+          className="absolute left-[11px] top-3 h-1.5 w-1.5 rounded-full"
+          style={{ background: accent }}
+        />
+        <span
+          className="absolute left-2 top-2 h-[2px] w-1"
+          style={{ background: '#7a6d5b' }}
+        />
+        <span
+          className="absolute right-1.5 top-2 h-[2px] w-5"
+          style={{ background: '#201d19' }}
+        />
+        <span
+          className="absolute right-1.5 top-4 h-[1px] w-4"
+          style={{ background: '#b8ab98' }}
+        />
+        <span
+          className="absolute inset-x-1.5 top-6 h-[1px]"
+          style={{ background: '#dcd2c1' }}
+        />
+        <span
+          className="absolute inset-x-1.5 top-[29px] h-[2px] w-5"
+          style={{ background: accent }}
+        />
       </span>
     );
   }

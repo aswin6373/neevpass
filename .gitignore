@@ -20,6 +20,9 @@ build/
 .pgdata/
 *.log
 
+# Locally stored uploads (profile photos). Production should mount a volume.
+.uploads/
+
 # Prisma
 packages/db/prisma/migrations/dev.db*
 # Prisma 7 emits TypeScript source into the repo; it is regenerated on install

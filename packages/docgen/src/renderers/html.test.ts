@@ -71,4 +71,35 @@ describe('renderResumeHtml', () => {
     expect(html).not.toContain('"><img');
     expect(html).toContain('&quot;&gt;&lt;img');
   });
+
+  it.each(['CLASSIC', 'MODERN', 'COMPACT'] as const)(
+    'renders the %s template as one ATS-readable text column',
+    (layout) => {
+      const snapshot = buildSnapshot({
+        aggregate: aggregate(),
+        revision: 1,
+        now: new Date('2026-10-11T00:00:00Z'),
+      });
+      const html = renderResumeHtml({ snapshot, config: { layout }, title: 'Resume' });
+
+      expect(html).toContain('<!doctype html>');
+      expect(html).not.toMatch(/<img|<table|<script/i);
+      expect(html).toContain('<h2 class="doc-section-title">');
+      expect(html).toContain('A marketplace for hostel supplies.');
+    },
+  );
+
+  it('ignores an uploaded profile photo in every resume template', () => {
+    const snapshot = buildSnapshot({
+      aggregate: aggregate({ photoUrl: '/api/assets/photo-1' }),
+      revision: 1,
+      now: new Date('2026-10-11T00:00:00Z'),
+    });
+
+    for (const layout of ['CLASSIC', 'MODERN', 'COMPACT']) {
+      const html = renderResumeHtml({ snapshot, config: { layout }, title: 'Resume' });
+      expect(html).not.toContain('/api/assets/photo-1');
+      expect(html).not.toMatch(/<img/i);
+    }
+  });
 });
