@@ -1,8 +1,8 @@
 import type { ProfileAggregate, SectionKind } from '@neevpass/domain';
 import { SECTION_DEFINITIONS } from '@neevpass/domain';
 import { listTaxonomySkills, requireProfileAggregate } from '@neevpass/db';
-import { PageHeader } from '@neevpass/ui';
-import { ArrowLeft } from 'lucide-react';
+import { PageHeader, buttonVariants } from '@neevpass/ui';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -84,6 +84,8 @@ export default async function SectionPage({ params }: PageProps) {
   const sectionNumber = SECTION_DEFINITIONS.findIndex(
     (candidate) => candidate.slug === definition.slug,
   );
+  const previousSection = SECTION_DEFINITIONS[sectionNumber - 1];
+  const nextSection = SECTION_DEFINITIONS[sectionNumber + 1];
   const entryCount = countEntriesFor(definition.kind, aggregate);
 
   return (
@@ -113,7 +115,38 @@ export default async function SectionPage({ params }: PageProps) {
 
       {body}
 
-      <p className="max-w-2xl border-t border-line pt-4 text-[11px] leading-relaxed text-content-muted">
+      <nav
+        aria-label="Profile section navigation"
+        className="flex flex-col gap-4 border-t border-line pt-5 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div>
+          {previousSection ? (
+            <Link
+              href={`/profile/${previousSection.slug}`}
+              className={buttonVariants({ variant: 'secondary', size: 'sm' })}
+            >
+              <ArrowLeft size={13} aria-hidden="true" />
+              {`Back: ${previousSection.label}`}
+            </Link>
+          ) : null}
+        </div>
+
+        <p className="text-[11px] tabular-nums text-content-muted">
+          Section {sectionNumber + 1} of {SECTION_DEFINITIONS.length}
+        </p>
+
+        <div className="flex justify-end">
+          <Link
+            href={nextSection ? `/profile/${nextSection.slug}` : '/profile'}
+            className={buttonVariants({ variant: 'primary', size: 'sm' })}
+          >
+            {nextSection ? `Next: ${nextSection.label}` : 'Finish profile'}
+            <ArrowRight size={13} aria-hidden="true" />
+          </Link>
+        </div>
+      </nav>
+
+      <p className="max-w-2xl pt-1 text-[11px] leading-relaxed text-content-muted">
         Every entry starts private. Private stays yours, unlisted travels only by a direct link, and
         public appears on portfolio pages you publish. Resumes are never public.
       </p>
