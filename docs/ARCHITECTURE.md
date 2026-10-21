@@ -36,10 +36,10 @@ reproducible and free to run — and it leaves a clean seam for AI to be added l
 | UI | Tailwind CSS v4 + in-house `@neevpass/ui` primitives (CVA) |
 | Database | PostgreSQL 17 |
 | ORM | Prisma |
-| Auth | Auth.js v5 — credentials (Argon2id) + GitHub/LinkedIn/Google OAuth |
+| Auth | Auth.js v5 — credentials (scrypt) + GitHub/LinkedIn/Google OAuth |
 | Validation | Zod, one schema shared by client and server |
 | PDF | Browser print view of the same HTML (`/resumes/[id]/preview`) → Print to PDF |
-| Tests | Vitest (unit + integration); browser E2E run manually for v0.1 |
+| Tests | Vitest unit tests; browser E2E run manually for v0.1 |
 | Package manager | npm workspaces |
 | Deployment | Long-lived Node runtime (Docker) + managed Postgres |
 
@@ -298,8 +298,10 @@ meaningful, and it must be versioned so that a rubric change is a migration, not
 
 ### 4.4 Security and privacy model
 
-- **Auth.** Auth.js with Argon2id password hashing and OAuth. Session cookies
-  `httpOnly`, `secure`, `sameSite=lax`. Password reset via single-use, expiring tokens.
+- **Auth.** Auth.js with scrypt password hashing (behind the `PasswordHasher`
+  interface) and OAuth. Session cookies are `httpOnly`, `secure`,
+  `sameSite=lax`. Password reset and email verification are not implemented yet
+  and are launch blockers for public credential accounts.
 - **Authorisation.** One guard, `withProfileAccess(session, profileId)`, is the only place
   ownership is checked. The `profileId`/`userId` used for scoping is always taken from the
   session, **never** from the request body. Every repository method requires an owner scope
@@ -724,7 +726,12 @@ Remaining work for the next milestone:
 - Automated browser E2E suite (onboarding → profile → resume → publish → career) and
   an accessibility pass with axe.
 - Rate limiting and a Content-Security-Policy for public/auth routes.
+- Password reset and email verification for credential accounts.
+- Legal terms and privacy pages; the sign-in footer links to `/terms` and
+  `/privacy`, which do not exist yet.
 - Portfolio slug redirects when a student renames their address.
 - Photo upload and object storage (the schema has the relation; there is no UI yet).
 - Optional server-side PDF rendering for users who need a generated file without the
   print dialog.
+- Docker image smoke test in CI, plus a documented backup, monitoring and alerting
+  runbook for the deployment.

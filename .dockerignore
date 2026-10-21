@@ -16,5 +16,4 @@ docs
 Dockerfile
 .dockerignore
 apps/web/.next
-apps/web/public
 packages/db/src/generated

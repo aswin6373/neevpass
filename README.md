@@ -27,7 +27,7 @@ v0.1 — the full product loop is implemented:
   skill-gap analysis and a persisted, tickable roadmap.
 - **Opportunities** — ranked by skill fit, with saved / applied / dismissed states.
 
-Auth supports credentials (Argon2id) and GitHub / LinkedIn / Google OAuth. The
+Auth supports credentials (scrypt) and GitHub / LinkedIn / Google OAuth. The
 seed creates a demo account with a complete profile in non-production environments
 (`demo@neevpass.test` / `demo-password-123`). Remaining hardening work is tracked in
 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §9.
@@ -41,9 +41,9 @@ seed creates a demo account with a complete profile in non-production environmen
 | UI | Tailwind CSS v4 + in-house `@neevpass/ui` primitives (CVA) + lucide-react |
 | Database | PostgreSQL 17 |
 | ORM | Prisma 7 |
-| Auth | Auth.js v5 — credentials (Argon2id) + GitHub / LinkedIn / Google OAuth |
+| Auth | Auth.js v5 — credentials (scrypt) + GitHub / LinkedIn / Google OAuth |
 | Validation | Zod, one schema shared by client and server |
-| Tests | Vitest (domain, docgen, web helpers), integration against real Postgres |
+| Tests | Vitest unit tests (domain, docgen, web helpers) |
 | Package manager | npm workspaces |
 
 ## Repository layout
@@ -123,11 +123,11 @@ variables win). This is the supported production start command — plain
 
 ### Deployment
 
-- **Docker** — `docker build -t neevpass .` builds a minimal runtime image from
-  the standalone bundle (non-root user, `HEALTHCHECK`-ready via
-  `/api/health`). Supply configuration as environment variables:
-  `DATABASE_URL`, `AUTH_SECRET`, `AUTH_URL`, `NEXT_PUBLIC_APP_URL`,
-  `LOG_LEVEL`.
+- **Docker** — `docker build --build-arg NEXT_PUBLIC_APP_URL="https://your-domain" -t neevpass .`
+  builds a minimal runtime image from the standalone bundle (non-root user,
+  with a `HEALTHCHECK` against `/api/health`). `NEXT_PUBLIC_APP_URL` is inlined
+  at build time, so it must be supplied as a build argument. Runtime
+  configuration is `DATABASE_URL`, `AUTH_SECRET`, `AUTH_URL`, and `LOG_LEVEL`.
 - **Long-lived Node host** — run `npm run build` in CI, ship the repo, and
   start `node scripts/start-prod.mjs` (or embed the same steps in your
   process manager). Migrations are applied with `npm run db:deploy`.
