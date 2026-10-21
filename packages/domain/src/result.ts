@@ -45,8 +45,9 @@ export function valueOr<T, E>(result: Result<T, E>, fallback: T): T {
  * Unwraps a successful result or throws the contained error.
  * Only use at a boundary where throwing is the intended behaviour.
  */
-export function unwrap<T, E>(result: Result<T, E>): T {
+export function unwrap<T, E extends Error>(result: Result<T, E>): T {
   if (result.ok) return result.value;
+  // E extends Error, so the throw is a real error object with a stack trace.
   throw result.error;
 }
 

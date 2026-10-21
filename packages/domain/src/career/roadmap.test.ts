@@ -26,8 +26,8 @@ function gapFor(profileSkills: { skillId: string; proficiency: number }[]) {
     profileSkills,
     requirements: REQUIREMENTS,
     prerequisitesBySkillId: new Map([
-      ['typescript', [{ skillId: 'javascript', slug: 'javascript' }]],
-      ['react', [{ skillId: 'javascript', slug: 'javascript' }]],
+      ['typescript', [{ skillId: 'javascript', slug: 'javascript', name: 'JavaScript' }]],
+      ['react', [{ skillId: 'javascript', slug: 'javascript', name: 'JavaScript' }]],
     ]),
   });
 }
@@ -120,8 +120,8 @@ describe('generateRoadmap', () => {
 
   it('survives a cyclic prerequisite graph without hanging', () => {
     const cycle = new Map([
-      ['a', [{ skillId: 'b', slug: 'b' }]],
-      ['b', [{ skillId: 'a', slug: 'a' }]],
+      ['a', [{ skillId: 'b', slug: 'b', name: 'B' }]],
+      ['b', [{ skillId: 'a', slug: 'a', name: 'A' }]],
     ]);
 
     const plan = generateRoadmap({

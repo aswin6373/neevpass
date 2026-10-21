@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { computeCareerScore } from './score';
 import type { ProfileAggregate } from '../profile/aggregate';
-import type { Visibility } from '../visibility';
+import type { Visibility } from '../profile/visibility';
 
 const V: Visibility = 'PRIVATE';
 
@@ -71,6 +71,19 @@ describe('computeCareerScore', () => {
             summary: 'Did things.',
             highlights: ['Shipped the admin console.'],
             order: 0,
+            visibility: V,
+            skillIds: ['sk-react'],
+          },
+          {
+            id: 'e2',
+            type: 'FULL_TIME',
+            organisation: 'Mitra Studio',
+            title: 'Junior Developer',
+            fromDate: '2025-09',
+            isCurrent: true,
+            summary: 'Kept the lights on.',
+            highlights: [],
+            order: 1,
             visibility: V,
             skillIds: ['sk-react'],
           },

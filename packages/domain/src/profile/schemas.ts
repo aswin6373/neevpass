@@ -30,13 +30,17 @@ const monthDate = yearMonthSchema;
 /** A `YYYY-MM` string or an empty form field. */
 const optionalMonth = z
   .union([z.literal(''), yearMonthSchema])
-  .transform((value) => (value === '' ? undefined : value));
+  .transform((value) => (value === '' ? undefined : value))
+  // `undefined` input (field absent) is allowed and stays undefined.
+  .optional();
 
 /** Coerces a numeric form field; an empty string or absence is undefined. */
 const optionalNumber = (min: number, max: number, label: string) =>
   z
     .union([z.literal(''), z.nan(), z.coerce.number()])
     .transform((value) => (typeof value === 'number' && Number.isFinite(value) ? value : undefined))
+    // An absent or non-numeric field stays undefined; a real number is checked.
+    .optional()
     .refine(
       (value) => value === undefined || (value >= min && value <= max),
       `${label} must be between ${min} and ${max}.`,
@@ -180,7 +184,9 @@ export const profileBasicsSchema = z.object({
   headline: optionalTrimmedString(120, 'Headline'),
   phone: z
     .union([z.literal(''), z.string().trim().regex(/^\+?[0-9\s().-]{7,20}$/, 'Enter a valid phone number.')])
-    .transform((value) => (value === '' ? undefined : value)),
+    .transform((value) => (value === '' ? undefined : value))
+    // An absent phone is fine; an empty field is, too. Only a wrong number fails.
+    .optional(),
   location: optionalTrimmedString(120, 'Location'),
   summary: optionalTrimmedString(CONTENT_LIMITS.summaryMaxChars, 'Summary'),
 });

@@ -24,6 +24,20 @@ export default [
   ...tseslint.configs.recommended,
 
   {
+    // Type-aware linting for TypeScript source. `projectService` resolves the
+    // nearest tsconfig per file, so each package is typed against its own
+    // program and here `tsc --noEmit` and ESLint agree on what a type error is.
+    // Scoped to TS extensions so config and script files (plain JavaScript)
+    // keep working without a project.
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+  },
+
+  {
     rules: {
       // Unused code is a defect, not a style preference. Underscore-prefixed
       // names are the explicit escape hatch for intentionally unused params.
@@ -55,6 +69,16 @@ export default [
       // Throwing a string loses the stack trace.
       'no-throw-literal': 'off',
       '@typescript-eslint/only-throw-error': 'error',
+    },
+  },
+
+  {
+    // The type-aware rule above cannot run on plain JavaScript (config files,
+    // scripts). ESLint's own no-throw check keeps them covered without needing
+    // a type system.
+    files: ['**/*.mjs', '**/*.js'],
+    rules: {
+      '@typescript-eslint/only-throw-error': 'off',
     },
   },
 

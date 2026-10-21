@@ -2,28 +2,43 @@
 
 import { Button } from '@neevpass/ui';
 import { Moon, Sun } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 import { THEME_STORAGE_KEY, type Theme } from '@/lib/theme';
 
 /**
- * Light/dark toggle.
+ * The documentElement's `dark` class is an external store: the inline boot
+ * script writes it before hydration, and the toggle writes it on click.
  *
- * The initial state is `null` on purpose. The theme class is applied by an
- * inline script before React hydrates, so React cannot know the value during
- * the server render without causing a hydration mismatch. Rendering a neutral
- * placeholder until mount keeps the markup identical on both sides.
+ * `useSyncExternalStore` subscribes React to that class without chasing it
+ * with effects. The server snapshot is `null` — the theme class is unknown at
+ * render time without causing a hydration mismatch — so the server-rendered
+ * markup is the neutral placeholder, and hydration swaps in the real value.
  */
-export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme | null>(null);
+const MUTATED_ATTRIBUTES: MutationObserverInit = { attributes: true, attributeFilter: ['class'] };
 
-  useEffect(() => {
-    setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-  }, []);
+function subscribeToThemeClass(onStoreChange: () => void): () => void {
+  const observer = new MutationObserver(onStoreChange);
+  observer.observe(document.documentElement, MUTATED_ATTRIBUTES);
+  return () => observer.disconnect();
+}
+
+function getThemeSnapshot(): Theme {
+  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+}
+
+function getThemeServerSnapshot(): Theme | null {
+  return null;
+}
+
+export function ThemeToggle() {
+  const theme = useSyncExternalStore(subscribeToThemeClass, getThemeSnapshot, getThemeServerSnapshot);
 
   function toggle() {
     const next: Theme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
 
+    // Mutating the external store is enough: the subscription notifies React
+    // and the snapshot change re-renders the toggle.
     document.documentElement.classList.toggle('dark', next === 'dark');
     document.documentElement.style.colorScheme = next;
 
@@ -33,8 +48,6 @@ export function ThemeToggle() {
       // Best effort: a user in a restricted privacy mode still gets a working
       // toggle for the current page.
     }
-
-    setTheme(next);
   }
 
   const label =

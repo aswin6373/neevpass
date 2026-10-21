@@ -15,12 +15,11 @@
  * nothing except opportunity deadlines that are recomputed relative to now.
  */
 
-import { randomBytes, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
+import { randomBytes, scrypt as scryptCallback } from 'node:crypto';
 import { promisify } from 'node:util';
+import type { ScryptOptions } from 'node:crypto';
 
 import { disconnectDatabase, prisma } from './index';
-
-const scrypt = promisify(scryptCallback);
 
 /**
  * Same digest format as apps/web/src/lib/password.ts. Duplicated rather than
@@ -29,6 +28,14 @@ const scrypt = promisify(scryptCallback);
  * self-describing digest means a mismatch fails verification safely, never
  * silently.
  */
+type ScryptFn = (
+  password: string | Buffer,
+  salt: string | Buffer,
+  keylen: number,
+  options: ScryptOptions,
+) => Promise<Buffer>;
+
+const scrypt = promisify(scryptCallback) as unknown as ScryptFn;
 async function hashPassword(plaintext: string): Promise<string> {
   const N = 32768;
   const r = 8;
@@ -1310,7 +1317,7 @@ async function seedDemoAccount(): Promise<void> {
     select: { id: true, slug: true },
   });
 
-  const statuses = new Map([
+  const statuses = new Map<string, 'SAVED' | 'APPLIED' | 'DISMISSED'>([
     ['npmibus-winter-internship', 'SAVED'],
     ['solstice-fullstack-internship', 'APPLIED'],
     ['mlh-hackathon-season', 'DISMISSED'],

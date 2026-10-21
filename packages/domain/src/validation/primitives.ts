@@ -137,14 +137,19 @@ export const urlSchema = z
 /** Accepts an empty string as "not provided" rather than as an invalid URL. */
 export const optionalUrlSchema = z
   .union([z.literal(''), urlSchema])
-  .transform((value) => (value === '' ? undefined : value));
+  .transform((value) => (value === '' ? undefined : value))
+  // An absent field parses to `undefined`, not to a "expected string" error.
+  .optional();
 
 export const optionalTrimmedString = (max: number, label: string) =>
   z
     .string()
     .trim()
     .max(max, `${label} must be at most ${max} characters.`)
-    .transform((value) => (value === '' ? undefined : value));
+    .transform((value) => (value === '' ? undefined : value))
+    // Makes the *input* optional as well as the output: an absent field parses
+    // to `undefined` instead of "expected string, received undefined".
+    .optional();
 
 /** Month precision, which is what most students actually know for past dates. */
 export const yearMonthSchema = z

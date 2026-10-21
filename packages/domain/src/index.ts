@@ -16,5 +16,13 @@ export * from './identity/password';
 
 export * from './profile/sections';
 export * from './profile/visibility';
+export * from './profile/aggregate';
+export * from './profile/completeness';
+export * from './profile/schemas';
+
+export * from './career/score';
+export * from './career/gap';
+export * from './career/roadmap';
+export * from './career/recommend';
 
 export * from './validation/primitives';

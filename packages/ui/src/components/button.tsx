@@ -47,7 +47,7 @@ export interface ButtonProps
   loadingLabel?: string;
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function ButtonWithRef(
   { className, variant, size, block, isLoading = false, loadingLabel, children, disabled, ...props },
   ref,
 ) {
@@ -63,6 +63,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     >
       {isLoading && <Spinner size="sm" label={null} />}
       {children}
+      {isLoading && (
+        // The spinner is decorative (`label={null}`); the loading text is
+        // announced by this visually hidden live region instead.
+        <span role="status" className="sr-only">
+          {loadingLabel ?? 'Loading'}
+        </span>
+      )}
     </button>
   );
 });
+
+// The exported binding's name is what most tooling sees; forwardRef would
+// otherwise display the implementation name with a wrapper suffix.
+Button.displayName = 'Button';

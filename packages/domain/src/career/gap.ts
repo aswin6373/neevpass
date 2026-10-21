@@ -13,7 +13,7 @@
  * where the role is strong matters more than totalling many weak matches.
  */
 
-import type { ProfileSkill, RoleRequirement } from '../profile/aggregate';
+import type { AggregateSkill, RoleRequirement } from '../profile/aggregate';
 
 export type GapStatus = 'MATCHED' | 'PARTIAL' | 'MISSING';
 
@@ -40,7 +40,7 @@ export interface SkillGap {
 }
 
 export interface SkillGapInput {
-  readonly profileSkills: readonly Pick<ProfileSkill, 'skillId' | 'proficiency'>[];
+  readonly profileSkills: readonly Pick<AggregateSkill, 'skillId' | 'proficiency'>[];
   readonly requirements: readonly RoleRequirement[];
   /** skillId → slugs of skills it builds on, used to annotate missing items. */
   readonly prerequisitesBySkillId: ReadonlyMap<string, readonly { skillId: string; slug: string; name: string }[]>;

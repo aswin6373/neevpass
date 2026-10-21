@@ -11,7 +11,7 @@ import tseslint from 'typescript-eslint';
  * slows linting substantially. `tsc --noEmit` covers the type-level checks in
  * the meantime.
  */
-export default [
+const config = [
   {
     ignores: [
       'node_modules/**',
@@ -25,6 +25,20 @@ export default [
   ...nextCoreWebVitals,
   ...nextTypescript,
   ...tseslint.configs.recommended,
+
+  {
+    // Type information for TypeScript source (`projectService` resolves the
+    // nearest tsconfig per file). Scoped to TS extensions so plain JavaScript
+    // config files do not require a type system. The comment below said typed
+    // linting was deferred for speed — but the rules this config turns on are
+    // type-aware, so the type information it needs must exist.
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+  },
 
   {
     rules: {
@@ -51,6 +65,14 @@ export default [
   },
 
   {
+    // Type-aware rules cannot run on plain JavaScript config files.
+    files: ['**/*.mjs', '**/*.js'],
+    rules: {
+      '@typescript-eslint/only-throw-error': 'off',
+    },
+  },
+
+  {
     files: ['src/lib/logger.ts'],
     rules: {
       // The logger is the one place that is allowed to write to the console.
@@ -58,3 +80,5 @@ export default [
     },
   },
 ];
+
+export default config;

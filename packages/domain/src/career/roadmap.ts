@@ -14,7 +14,7 @@
  * prerequisite graph fail soft (treated as depth 0) rather than hang.
  */
 
-import type { ResourceDefinition, RoleRequirement } from '../profile/aggregate';
+import type { ResourceDefinition } from '../profile/aggregate';
 
 import type { SkillGap } from './gap';
 

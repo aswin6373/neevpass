@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { computeProfileCompleteness, mostRecentActivityDate } from './completeness';
 import type { ProfileAggregate } from './aggregate';
-import type { Visibility } from '../visibility';
+import type { Visibility } from './visibility';
 
 const V: Visibility = 'PRIVATE';
 
