@@ -33,19 +33,19 @@ const DESTINATIONS = [
     href: '/resumes',
     title: 'Resumes',
     description: 'Generate a resume from your profile and export it as a PDF.',
-    available: false,
+    available: true,
   },
   {
     href: '/portfolios',
     title: 'Portfolio',
     description: 'Publish an online portfolio at your own address.',
-    available: false,
+    available: true,
   },
   {
     href: '/career',
     title: 'Career',
     description: 'Career score, goals, skill-gap analysis and a roadmap.',
-    available: false,
+    available: true,
   },
 ];
 
@@ -70,13 +70,14 @@ export default async function DashboardPage() {
       />
 
       {scope ? (
-        <Alert variant="success" title="Your profile exists">
-          Profile revision {scope.revision}. Editing arrives in the next phase of the build.
+        <Alert variant="success" title="Your profile is ready">
+          Profile revision {scope.revision}. Every section can be edited, and your changes show up
+          in resumes, portfolios and your career score straight away.
         </Alert>
       ) : (
-        <Alert variant="info" title="Your profile is not set up yet">
-          Your account is ready. Building the profile editor is the next phase of work — until
-          then there is nothing to fill in here.
+        <Alert variant="info" title="Set up your profile (takes a minute)">
+          Name, a headline and where you are — that is all onboarding asks for. Every other section
+          can be filled in later, at your own pace.
         </Alert>
       )}
 

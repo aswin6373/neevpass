@@ -37,28 +37,24 @@ export const PRIMARY_NAV: readonly NavItem[] = [
     href: '/resumes',
     icon: 'FileText',
     description: 'Build and export resumes',
-    comingSoon: true,
   },
   {
     label: 'Portfolio',
     href: '/portfolios',
     icon: 'Globe',
     description: 'Publish an online portfolio',
-    comingSoon: true,
   },
   {
     label: 'Career',
     href: '/career',
     icon: 'Target',
     description: 'Score, goals and skill gaps',
-    comingSoon: true,
   },
   {
     label: 'Opportunities',
     href: '/opportunities',
     icon: 'Compass',
     description: 'Internships, competitions and workshops',
-    comingSoon: true,
   },
 ];
 
@@ -78,7 +74,8 @@ export interface ProfileNavItem extends NavItem {
 /**
  * The profile section sub-navigation, derived from the domain's single source
  * of truth for sections. Adding a section there makes it appear here
- * automatically.
+ * automatically. Every section editor is live, so nothing is flagged
+ * `comingSoon`.
  */
 export const PROFILE_NAV: readonly ProfileNavItem[] = SECTION_DEFINITIONS.map((section) => ({
   kind: section.kind,
@@ -86,7 +83,6 @@ export const PROFILE_NAV: readonly ProfileNavItem[] = SECTION_DEFINITIONS.map((s
   href: `/profile/${section.slug}`,
   icon: section.icon,
   description: section.description,
-  comingSoon: true,
 }));
 
 /**

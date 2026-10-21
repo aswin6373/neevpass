@@ -26,6 +26,7 @@ export { Field, type FieldControlProps, type FieldProps } from './components/fie
 export { Input, type InputProps } from './components/input';
 export { Label, type LabelProps } from './components/label';
 export { PageHeader, type PageHeaderProps } from './components/page-header';
+export { Select, type SelectProps } from './components/select';
 export { SelfReportedNotice, type SelfReportedNoticeProps } from './components/self-reported-notice';
 export { Separator, type SeparatorProps } from './components/separator';
 export { Skeleton, type SkeletonProps } from './components/skeleton';
