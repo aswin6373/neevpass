@@ -15,10 +15,22 @@ to run, with a clean seam for AI to be added later as an enhancement layer.
 
 ## Status
 
-Early development. Auth (credentials + GitHub / Google / LinkedIn OAuth), the app
-shell and the profile foundation are in place. Resumes, portfolios, career tooling
-and opportunities are designed and scaffolded but not built yet — those routes are
-marked *"coming soon"* in the navigation.
+v0.1 — the full product loop is implemented:
+
+- **Profile** — all eleven sections, per-entry visibility (private / unlisted /
+  public), ordering and a completeness meter.
+- **Resumes** — generated live from the profile, with per-resume layout, accent,
+  spacing and hidden-section controls, and a standalone print view for PDF.
+- **Portfolio** — one shareable page at `/p/[slug]`, rendered from a public-only
+  snapshot so private entries never leave the owner's view.
+- **Career** — deterministic score with weighted breakdown, target-role goals,
+  skill-gap analysis and a persisted, tickable roadmap.
+- **Opportunities** — ranked by skill fit, with saved / applied / dismissed states.
+
+Auth supports credentials (Argon2id) and GitHub / LinkedIn / Google OAuth. The
+seed creates a demo account with a complete profile in non-production environments
+(`demo@neevpass.test` / `demo-password-123`). Remaining hardening work is tracked in
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) §9.
 
 ## Tech stack
 
@@ -26,12 +38,12 @@ marked *"coming soon"* in the navigation.
 | --- | --- |
 | Language | TypeScript (strict) |
 | Framework | Next.js 16 (App Router, RSC, Server Actions) |
-| UI | Tailwind CSS v4 + shadcn/ui (Radix primitives) + lucide-react |
+| UI | Tailwind CSS v4 + in-house `@neevpass/ui` primitives (CVA) + lucide-react |
 | Database | PostgreSQL 17 |
 | ORM | Prisma 7 |
 | Auth | Auth.js v5 — credentials (Argon2id) + GitHub / LinkedIn / Google OAuth |
 | Validation | Zod, one schema shared by client and server |
-| Tests | Vitest (unit), integration against real Postgres |
+| Tests | Vitest (domain, docgen, web helpers), integration against real Postgres |
 | Package manager | npm workspaces |
 
 ## Repository layout
@@ -47,7 +59,7 @@ neevpass/
 │   ├── domain/          # Pure domain logic — zero network dependencies (@neevpass/domain)
 │   └── ui/              # Shared UI primitives, design tokens, copy constants (@neevpass/ui)
 ├── docs/
-│   ├── ARCHITECTURE.md  # Full architecture proposal
+│   ├── ARCHITECTURE.md  # Architecture as built
 │   └── adr/             # Architecture decision records
 ├── scripts/
 │   └── db.sh            # Local PostgreSQL lifecycle (no Docker required)
@@ -158,5 +170,5 @@ Run from the repo root:
 - **AI is not required** — `packages/domain` has zero network dependencies; AI is an
   optional adapter behind the same interfaces.
 
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full architecture proposal,
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the architecture as built,
 and [`docs/adr/`](docs/adr/) for architecture decision records.

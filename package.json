@@ -2,6 +2,7 @@
   "name": "neevpass",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "description": "NeevPass — create your professional profile once and use it everywhere.",
   "engines": {
     "node": ">=22.0.0"

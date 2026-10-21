@@ -1,8 +1,9 @@
-# NeevPass — Architecture Proposal
+# NeevPass — Architecture
 
-Status: **DRAFT — awaiting sign-off. No application code has been written.**
-Version: 0.1
-Date: 2026-10-08
+Status: **Implemented (v0.1).** This document began as the pre-implementation proposal;
+it now records the architecture as built. Remaining work is listed in §9.
+Version: 1.0
+Date: 2026-10-21
 
 ---
 
@@ -31,14 +32,14 @@ reproducible and free to run — and it leaves a clean seam for AI to be added l
 | Concern | Choice |
 | --- | --- |
 | Language | TypeScript (strict, no `any` in domain code) |
-| Framework | Next.js 15 (App Router, RSC, Server Actions) |
-| UI | Tailwind CSS v4 + shadcn/ui (Radix primitives) |
+| Framework | Next.js 16 (App Router, RSC, Server Actions) |
+| UI | Tailwind CSS v4 + in-house `@neevpass/ui` primitives (CVA) |
 | Database | PostgreSQL 17 |
 | ORM | Prisma |
 | Auth | Auth.js v5 — credentials (Argon2id) + GitHub/LinkedIn/Google OAuth |
 | Validation | Zod, one schema shared by client and server |
-| PDF | Headless Chromium (Playwright) rendering the same HTML as the live preview |
-| Tests | Vitest (unit), Playwright (e2e + visual + PDF), integration against real Postgres |
+| PDF | Browser print view of the same HTML (`/resumes/[id]/preview`) → Print to PDF |
+| Tests | Vitest (unit + integration); browser E2E run manually for v0.1 |
 | Package manager | npm workspaces |
 | Deployment | Long-lived Node runtime (Docker) + managed Postgres |
 
@@ -71,7 +72,7 @@ no hidden files, no CI, no lockfile. This is a clean greenfield start.
 
 | Tool | Status |
 | --- | --- |
-| Node | v22.22.2 (managed) — good, matches Next.js 15 requirements |
+| Node | v22.22.2 (managed) — good, matches Next.js 16 requirements |
 | npm | 10.9.7 — usable for workspaces |
 | pnpm | **broken** (`corepack` shim points at a missing module). Avoid, or repair before use. |
 | Git | 2.39.5 — repo not yet initialised |
@@ -618,9 +619,10 @@ Route groups in `apps/web/src/app`:
 (app)/portfolios/[id]
 (app)/career             score | goals | gap | roadmap
 (app)/opportunities
-p/[slug]                 public career profile  (public, SSR, indexable)
-u/[slug]                 public portfolio       (public, SSR, indexable)
-api/…                    uploads, PDF, health
+p/[slug]                 public portfolio       (public, SSR, link-only)
+resumes/[id]/preview     standalone print view  (owner only, noindex)
+api/auth/…               Auth.js endpoints
+api/health               liveness/readiness probe
 ```
 
 ---
@@ -629,6 +631,13 @@ api/…                    uploads, PDF, health
 
 Each phase ends with a demonstrable outcome and explicit exit criteria. No phase starts
 before the previous one's criteria are met.
+
+**As built (v0.1):** Phases 0–5 are implemented, with three deliberate scope changes:
+one HTML renderer with layout variants replaces three separate resume templates;
+PDF export is the browser's print dialog on the same HTML rather than headless
+Chromium; and Playwright suites (e2e, visual, PDF) are replaced by unit/integration
+tests plus a manual browser pass. Phase 6 is partially done (CI runs verify and a
+production build; no axe/Playwright automation yet). Phase 7 has not started.
 
 **Phase 0 — Foundation and guardrails**
 Repo init, npm workspaces, TypeScript strict, ESLint with module-boundary rules, Prettier,
@@ -694,19 +703,28 @@ must remain fully functional with AI disabled.
 
 ---
 
-## 9. Open decisions needing sign-off
+## 9. Decisions as built and remaining work
 
-1. **Stack confirmation** — Next.js 15 + Postgres + Prisma as chosen above.
-2. **Repository shape** — npm workspaces with `domain`/`docgen` as separate packages, or a
-   single flat Next.js app to start.
-3. **Deployment target** — a long-lived Node host (required for in-process Chromium PDF
-   rendering). Which provider: Fly.io, Railway, Render, or a VPS.
-4. **Skill taxonomy source** — build our own seeded vocabulary, or adopt an existing open
-   skills taxonomy (e.g. ESCO/O*NET-derived) for the role requirements.
-5. **Resume page constraint** — hard one-page limit with an overflow warning, or free
-   multi-page with an optional "compact to one page" control.
-6. **Design language** — is there an existing brand (logo, palette, type) for NeevPass, or
-   do we define it in Phase 0?
+The proposal's open questions were settled during implementation:
 
-No application code will be written until items 1–3 are settled and this document is
-approved.
+1. **Stack** — Next.js 16, PostgreSQL 17, Prisma 7, npm workspaces.
+2. **Repository shape** — workspace packages for `domain`, `docgen`, `db`, `ui` and
+   `config`; the app in `apps/web`.
+3. **Deployment** — long-lived Node host running the Next.js standalone output via
+   `scripts/start-prod.mjs`, or the included Docker image. No in-process Chromium, so
+   it runs on any Node host.
+4. **Skill taxonomy** — an in-repo seeded vocabulary (`src/seed.ts`) rather than an
+   external taxonomy.
+5. **Resume length** — free multi-page with compact layout/density options; no hard
+   one-page limit.
+6. **Design language** — defined in `@neevpass/ui` (tokens, primitives, dark mode).
+
+Remaining work for the next milestone:
+
+- Automated browser E2E suite (onboarding → profile → resume → publish → career) and
+  an accessibility pass with axe.
+- Rate limiting and a Content-Security-Policy for public/auth routes.
+- Portfolio slug redirects when a student renames their address.
+- Photo upload and object storage (the schema has the relation; there is no UI yet).
+- Optional server-side PDF rendering for users who need a generated file without the
+  print dialog.
