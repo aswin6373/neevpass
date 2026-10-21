@@ -24,7 +24,9 @@
 export * from './document';
 export * from './theme';
 export * from './config';
+export * from './portfolio-config';
 export * from './snapshot';
 export * from './build-document';
 export * from './theme-builder';
-export { renderResumeHtml, renderPortfolioHtml, escapeHtml } from './renderers/html';
+export { renderResumeHtml, escapeHtml } from './renderers/html';
+export { renderPortfolioHtml, type RenderPortfolioInput } from './renderers/portfolio';

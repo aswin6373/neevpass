@@ -1,13 +1,13 @@
 import { SECTION_DEFINITIONS } from '@neevpass/domain';
 import { ensurePortfolio, requireProfileAggregate } from '@neevpass/db';
-import { normaliseResumeConfig } from '@neevpass/docgen';
+import { PORTFOLIO_TEMPLATES, normalisePortfolioConfig } from '@neevpass/docgen';
 import { Alert, PageHeader, buttonVariants } from '@neevpass/ui';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { requireProfile } from '@/lib/session';
 
-import { PortfolioForm } from './portfolio-form';
+import { PortfolioStudio } from './portfolio-studio';
 
 export const metadata: Metadata = {
   title: 'Portfolio',
@@ -15,21 +15,22 @@ export const metadata: Metadata = {
 };
 
 /**
- * Portfolio publishing.
+ * Portfolio studio.
  *
  * One published portfolio per profile, lazily created. The public page renders
  * from a publicOnly snapshot: only entries marked PUBLIC or UNLISTED appear,
  * and private entries never leave the owner's view.
  *
- * The page is arranged as a configuration sheet: current address, what the
- * public sees, then the settings. It is not a promotional landing page for the
- * student's own portfolio.
+ * The live iframe is the main workspace: template, accent, title and hidden
+ * sections are previewed against the real renderer before saving, so the
+ * published page has no visual surprises.
  */
 export default async function PortfoliosPage() {
   const { scope } = await requireProfile();
   const aggregate = await requireProfileAggregate(scope.profileId);
   const portfolio = await ensurePortfolio(scope, `${aggregate.fullName} — portfolio`);
-  const config = normaliseResumeConfig(portfolio.config);
+  const config = normalisePortfolioConfig(portfolio.config, portfolio.templateKey);
+  const sections = SECTION_DEFINITIONS.filter((section) => section.kind !== 'SUMMARY');
 
   const contentSections = [
     aggregate.education,
@@ -46,8 +47,10 @@ export default async function PortfoliosPage() {
     (total, section) => total + section.filter((row) => row.visibility !== 'PRIVATE').length,
     0,
   );
-  const hiddenSectionCount = config.hiddenSections.length;
-  const visibleSectionCount = SECTION_DEFINITIONS.length - hiddenSectionCount;
+  const hiddenSectionCount = config.hiddenSections.filter((kind) =>
+    sections.some((section) => section.kind === kind),
+  ).length;
+  const visibleSectionCount = sections.length - hiddenSectionCount;
   const live = portfolio.published && Boolean(portfolio.publicSlug);
 
   return (
@@ -55,7 +58,7 @@ export default async function PortfoliosPage() {
       <PageHeader
         eyebrow="Portfolio"
         title="Portfolio"
-        description="A public page built only from entries you have marked public or unlisted. Everything else stays in your account."
+        description="A personal site built only from entries you have marked public or unlisted. Pick a template, make it yours, and publish when it feels right."
         actions={
           live && portfolio.publicSlug ? (
             <Link
@@ -103,7 +106,7 @@ export default async function PortfoliosPage() {
               { label: 'Visible entries', value: String(visibleEntryCount) },
               {
                 label: 'Sections shown',
-                value: `${visibleSectionCount}/${SECTION_DEFINITIONS.length}`,
+                value: `${visibleSectionCount}/${sections.length}`,
               },
               { label: 'Hidden', value: String(hiddenSectionCount) },
             ].map((stat) => (
@@ -124,52 +127,65 @@ export default async function PortfoliosPage() {
         </Alert>
       ) : null}
 
-      {/* Settings --------------------------------------------------------- */}
-      <section className="grid gap-8 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)] lg:gap-14">
-        <div>
-          <h2 className="font-display text-[1.6rem] text-content">Publishing settings</h2>
-          <p className="mt-2 text-[12px] leading-relaxed text-content-secondary">
-            The title, address and sections shown on the public page. Changes take effect on the
-            next request.
-          </p>
-
-          <dl className="mt-5 border-t border-line">
-            <div className="border-b border-line py-3">
-              <dt className="text-[10px] text-content-muted">Visibility rule</dt>
-              <dd className="mt-1 text-[11px] leading-relaxed text-content-secondary">
-                Only entries marked Public or Unlisted are rendered. Private entries are never
-                included.
-              </dd>
-            </div>
-            <div className="border-b border-line py-3">
-              <dt className="text-[10px] text-content-muted">Hidden sections</dt>
-              <dd className="mt-1 text-[11px] leading-relaxed text-content-secondary">
-                A ticked section is left out of the public page even when it contains public
-                entries.
-              </dd>
-            </div>
-            <div className="border-b border-line py-3">
-              <dt className="text-[10px] text-content-muted">Email</dt>
-              <dd className="mt-1 text-[11px] leading-relaxed text-content-secondary">
-                Your account email is not shown. It appears only if you add it as a public link.
-              </dd>
-            </div>
-          </dl>
+      {/* Studio ---------------------------------------------------------- */}
+      <section>
+        <div className="mb-5 flex flex-wrap items-end justify-between gap-3 border-b border-line pb-4">
+          <div>
+            <h2 className="font-display text-[1.6rem] text-content">Design &amp; publish</h2>
+            <p className="mt-1 max-w-xl text-[12px] leading-relaxed text-content-secondary">
+              Choose a template, tune the accent and hide anything you would rather not show.
+              The preview on the left is the real page, not a mock-up.
+            </p>
+          </div>
+          <span className="text-[10px] uppercase tracking-[0.14em] text-content-muted">
+            {live ? 'Live' : 'Draft'}
+          </span>
         </div>
 
-        <PortfolioForm
+        <PortfolioStudio
           revision={aggregate.revision}
-          sections={SECTION_DEFINITIONS.map((section) => ({
+          sections={sections.map((section) => ({
             kind: section.kind,
             label: section.label,
+          }))}
+          templates={PORTFOLIO_TEMPLATES.map((template) => ({
+            key: template.key,
+            label: template.label,
+            description: template.description,
+            defaultAccent: template.defaultAccent,
           }))}
           initial={{
             title: portfolio.title,
             publicSlug: portfolio.publicSlug ?? '',
             published: portfolio.published,
+            templateKey: config.templateKey,
+            accentColor: config.accentColor,
             hiddenSections: config.hiddenSections,
           }}
         />
+
+        <dl className="mt-8 grid gap-x-10 gap-y-4 border-t border-line pt-5 sm:grid-cols-3">
+          <div>
+            <dt className="text-[10px] text-content-muted">Visibility rule</dt>
+            <dd className="mt-1 text-[11px] leading-relaxed text-content-secondary">
+              Only entries marked Public or Unlisted are rendered. Private entries are never
+              included.
+            </dd>
+          </div>
+          <div>
+            <dt className="text-[10px] text-content-muted">Links &amp; email</dt>
+            <dd className="mt-1 text-[11px] leading-relaxed text-content-secondary">
+              Your account email is never shown. Add an email link if you want visitors to have
+              it.
+            </dd>
+          </div>
+          <div>
+            <dt className="text-[10px] text-content-muted">Search engines</dt>
+            <dd className="mt-1 text-[11px] leading-relaxed text-content-secondary">
+              The page is not listed in a directory and is sent with a noindex header.
+            </dd>
+          </div>
+        </dl>
       </section>
     </div>
   );

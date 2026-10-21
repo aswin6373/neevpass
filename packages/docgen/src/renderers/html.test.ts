@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { renderResumeHtml, renderPortfolioHtml, escapeHtml } from './html';
+import { renderResumeHtml, escapeHtml } from './html';
 import { buildSnapshot } from '../snapshot';
 import type { ProfileAggregate } from '@neevpass/domain';
 
@@ -70,28 +70,5 @@ describe('renderResumeHtml', () => {
 
     expect(html).not.toContain('"><img');
     expect(html).toContain('&quot;&gt;&lt;img');
-  });
-});
-
-describe('renderPortfolioHtml', () => {
-  it('marks the page as built-with and shows only public content', () => {
-    const snapshot = buildSnapshot({
-      aggregate: aggregate({
-        skills: [
-          { skillId: 'sk1', slug: 'react', name: 'React', proficiency: 4, order: 0, visibility: 'PUBLIC' },
-          { skillId: 'sk2', slug: 'node', name: 'Node.js', proficiency: 3, order: 1, visibility: 'PRIVATE' },
-        ],
-      }),
-      revision: 2,
-      now: new Date('2026-10-11T00:00:00Z'),
-      publicOnly: true,
-    });
-
-    const html = renderPortfolioHtml({ snapshot, config: {}, title: 'Asha Verma — Portfolio' });
-
-    expect(html).toContain('Built with NeevPass');
-    expect(html).toContain('React');
-    expect(html).not.toContain('Node.js');
-    expect(html).not.toMatch(/<script/i);
   });
 });

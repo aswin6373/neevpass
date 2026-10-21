@@ -6,6 +6,7 @@ import {
   requireProfileForUser,
   updatePortfolio,
 } from '@neevpass/db';
+import { normalisePortfolioConfig } from '@neevpass/docgen';
 import { revalidatePath } from 'next/cache';
 
 import { getCurrentUser } from '@/lib/session';
@@ -48,11 +49,22 @@ export async function savePortfolioAction(_prev: FormState, form: FormData): Pro
     // Find-or-create; a portfolio row exists lazily after the first save.
     const portfolio = await ensurePortfolio(writeScope, title);
 
+    const config = normalisePortfolioConfig({
+      templateKey: str(form, 'templateKey'),
+      accentColor: str(form, 'accentColor'),
+      hiddenSections: form.getAll('hiddenSections'),
+    });
+
     const updated = await updatePortfolio(writeScope, portfolio.id, {
       title,
+      templateKey: config.templateKey,
       publicSlug: parsedSlug.data.publicSlug,
       published,
-      config: { hiddenSections: form.getAll('hiddenSections') },
+      config: {
+        templateKey: config.templateKey,
+        accentColor: config.accentColor,
+        hiddenSections: config.hiddenSections,
+      },
     });
 
     revalidatePath('/portfolios');

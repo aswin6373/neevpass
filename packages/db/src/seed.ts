@@ -1300,10 +1300,10 @@ async function seedDemoAccount(): Promise<void> {
     data: {
       profileId: profile.id,
       title: 'Asha Verma — Portfolio',
-      templateKey: 'modern',
+      templateKey: 'STUDIO',
       config: {
         hiddenSections: ['WORKSHOPS', 'LINKS'],
-        accentColor: '#26523f',
+        accentColor: '#c8f169',
       },
       publicSlug: 'asha-verma-demo',
       published: true,

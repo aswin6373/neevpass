@@ -5,8 +5,8 @@
  * tokens inlined as CSS, print styles (for browser "Save as PDF" until the
  * headless Chromium renderer lands) and no JavaScript at all.
  *
- * `renderPortfolioHtml` renders the published public page from the same
- * snapshot: opt-in, link-only, never aggregated into a searchable index.
+ * Portfolio pages have their own renderer and templates in `./portfolio`; the
+ * public profile deliberately does not look like a resume.
  *
  * All escaping is explicit: user content never reaches the browser un-escaped.
  */
@@ -301,28 +301,4 @@ ${model.header.identity.headline ? `<p class="doc-headline">${escapeHtml(model.h
 </header>`;
 
   return documentShell(input.title, cssFor(model), header, renderBody(model, undefined));
-}
-
-/**
- * Renders the published portfolio page from an already visibility-filtered
- * snapshot (`buildSnapshot({ publicOnly: true })`).
- */
-export function renderPortfolioHtml(input: RenderResumeInput & { summary?: string }): string {
-  const model = buildDocumentModel(input.snapshot, input.config);
-
-  const header = `<header class="doc-header">
-<h1 class="doc-name">${escapeHtml(model.header.identity.fullName)}</h1>
-${model.header.identity.headline ? `<p class="doc-headline">${escapeHtml(model.header.identity.headline)}</p>` : ''}
-<p class="doc-identity">${identityMeta(model)}</p>
-${input.summary ? `<p class="doc-summary">${escapeHtml(input.summary)}</p>` : ''}
-</header>`;
-
-  const body = renderBody(model, undefined);
-
-  return documentShell(
-    input.title,
-    `${cssFor(model)}\n.built-with { text-align: center; }\n    .doc-summary { color: var(--muted); }`,
-    header,
-    `${body}\n<p class="built-with">Built with NeevPass</p>`,
-  );
 }

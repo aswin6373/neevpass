@@ -5,7 +5,7 @@ import { buildSnapshot, renderPortfolioHtml } from '@neevpass/docgen';
  * The public portfolio page.
  *
  * A route handler because the portfolio renderer returns a complete document
- * (its own `<html>`, print styles, theme tokens) — wrapping that in the app
+ * (its own `<html>`, template CSS and accent tokens) — wrapping that in the app
  * shell would nest documents. The visibility contract is enforced here: the
  * snapshot is built with `publicOnly: true`, so PRIVATE entries never reach
  * the HTML, regardless of what the portfolio's config says.
@@ -43,6 +43,7 @@ export async function GET(
   const html = renderPortfolioHtml({
     snapshot,
     config: portfolio.config,
+    templateKey: portfolio.templateKey,
     title: portfolio.title,
     summary: aggregate.summary,
   });

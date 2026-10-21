@@ -14,7 +14,7 @@ import { AppError } from '@neevpass/domain';
 
 import type { ProfileScope } from './access';
 
-import { DEFAULT_RESUME_CONFIG } from '@neevpass/docgen';
+import { DEFAULT_PORTFOLIO_CONFIG, DEFAULT_RESUME_CONFIG } from '@neevpass/docgen';
 
 import { assertRevisionCurrent } from './profile';
 import { prisma, type Prisma } from './index';
@@ -153,8 +153,8 @@ export async function ensurePortfolio(scope: ProfileScope, title: string): Promi
     data: {
       profileId: scope.profileId,
       title,
-      templateKey: 'modern',
-      config: { hiddenSections: [] },
+      templateKey: DEFAULT_PORTFOLIO_CONFIG.templateKey,
+      config: DEFAULT_PORTFOLIO_CONFIG as unknown as Prisma.InputJsonValue,
     },
     select: { id: true, profileId: true, title: true, templateKey: true, config: true, publicSlug: true, published: true, publishedAt: true, updatedAt: true },
   });
@@ -196,6 +196,7 @@ function mapPortfolio(row: {
 
 export interface PortfolioUpdate {
   readonly title?: string;
+  readonly templateKey?: string;
   readonly publicSlug?: string;
   readonly published?: boolean;
   readonly config?: unknown;
@@ -211,6 +212,7 @@ export async function updatePortfolio(scope: ProfileScope, portfolioId: string, 
     return await prisma.$transaction(async (tx) => {
       const data: Record<string, unknown> = {};
       if (update.title !== undefined) data.title = update.title;
+      if (update.templateKey !== undefined) data.templateKey = update.templateKey;
       if (update.publicSlug !== undefined) data.publicSlug = update.publicSlug;
       if (update.config !== undefined) data.config = update.config;
       if (update.published !== undefined) {
