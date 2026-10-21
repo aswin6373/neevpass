@@ -64,3 +64,8 @@ export async function disconnectDatabase(): Promise<void> {
 }
 
 export * from './access';
+export * from './profile';
+export * from './taxonomy';
+export * from './career';
+export * from './opportunities';
+export * from './documents';

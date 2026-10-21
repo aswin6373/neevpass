@@ -978,7 +978,7 @@ async function seedDemoAccount(): Promise<void> {
         toDate: monthStart(2026, 6),
         isCurrent: true,
         order: 0,
-        visibility: 'PRIVATE',
+        visibility: 'PUBLIC',
       },
       {
         profileId: profile.id,
@@ -991,7 +991,7 @@ async function seedDemoAccount(): Promise<void> {
         fromDate: monthStart(2020, 6),
         toDate: monthStart(2022, 5),
         order: 1,
-        visibility: 'PRIVATE',
+        visibility: 'PUBLIC',
       },
     ],
   });
@@ -1014,7 +1014,7 @@ async function seedDemoAccount(): Promise<void> {
         'Designed the audit-log schema that every internal tool now writes to.',
       ],
       order: 0,
-      visibility: 'PRIVATE',
+      visibility: 'PUBLIC',
     },
     select: { id: true },
   });
@@ -1030,7 +1030,7 @@ async function seedDemoAccount(): Promise<void> {
       summary: 'Mentor first-year students through introductory web-development exercises on weekends.',
       highlights: [],
       order: 1,
-      visibility: 'PRIVATE',
+      visibility: 'UNLISTED',
     },
     select: { id: true },
   });
@@ -1098,7 +1098,7 @@ async function seedDemoAccount(): Promise<void> {
         repoUrl: project.repoUrl,
         liveUrl: project.liveUrl,
         order: project.order,
-        visibility: 'PRIVATE',
+        visibility: 'PUBLIC',
       },
       select: { id: true },
     });
@@ -1118,7 +1118,7 @@ async function seedDemoAccount(): Promise<void> {
       credentialId: 'AWS-CCP-2025-DEMO',
       credentialUrl: 'https://aws.amazon.com/certification/',
       order: 0,
-      visibility: 'PRIVATE',
+      visibility: 'PUBLIC',
     },
     select: { id: true },
   });
@@ -1132,7 +1132,7 @@ async function seedDemoAccount(): Promise<void> {
       credentialUrl: 'https://www.coursera.org/',
       summary: 'Three-course specialization covering supervised learning, advanced algorithms and unsupervised learning.',
       order: 1,
-      visibility: 'PRIVATE',
+      visibility: 'UNLISTED',
     },
     select: { id: true },
   });
@@ -1156,7 +1156,7 @@ async function seedDemoAccount(): Promise<void> {
         issuedAt: monthStart(2024, 12),
         description: 'Led a five-person team building a grievance-routing prototype for the municipal round.',
         order: 0,
-        visibility: 'PRIVATE',
+        visibility: 'PUBLIC',
       },
       {
         profileId: profile.id,
@@ -1183,7 +1183,7 @@ async function seedDemoAccount(): Promise<void> {
         result: 'Winner, regional round',
         summary: 'A grievance-routing prototype that triaged complaints by category and urgency.',
         order: 0,
-        visibility: 'PRIVATE',
+        visibility: 'PUBLIC',
       },
       {
         profileId: profile.id,
@@ -1212,7 +1212,7 @@ async function seedDemoAccount(): Promise<void> {
         mode: 'REMOTE',
         summary: 'Two-day hands-on workshop on containers and compose.',
         order: 0,
-        visibility: 'PRIVATE',
+        visibility: 'UNLISTED',
       },
       {
         profileId: profile.id,
@@ -1229,9 +1229,9 @@ async function seedDemoAccount(): Promise<void> {
 
   await prisma.profileLink.createMany({
     data: [
-      { profileId: profile.id, label: 'GitHub', url: 'https://github.com/asha-verma-demo', order: 0, visibility: 'PRIVATE' },
-      { profileId: profile.id, label: 'LinkedIn', url: 'https://www.linkedin.com/in/asha-verma-demo', order: 1, visibility: 'PRIVATE' },
-      { profileId: profile.id, label: 'Blog', url: 'https://asha-verma-demo.example.com', order: 2, visibility: 'PRIVATE' },
+      { profileId: profile.id, label: 'GitHub', url: 'https://github.com/asha-verma-demo', order: 0, visibility: 'PUBLIC' },
+      { profileId: profile.id, label: 'LinkedIn', url: 'https://www.linkedin.com/in/asha-verma-demo', order: 1, visibility: 'PUBLIC' },
+      { profileId: profile.id, label: 'Blog', url: 'https://asha-verma-demo.example.com', order: 2, visibility: 'UNLISTED' },
     ],
   });
 
@@ -1257,7 +1257,7 @@ async function seedDemoAccount(): Promise<void> {
       proficiency,
       yearsUsed,
       order: index,
-      visibility: 'PRIVATE',
+      visibility: 'PUBLIC',
     })),
     skipDuplicates: true,
   });
