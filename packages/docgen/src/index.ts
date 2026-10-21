@@ -1,21 +1,30 @@
 /**
  * @neevpass/docgen — document generation.
  *
- * PHASE 0 STATUS: contracts only.
+ * The pipeline:
  *
- * This package currently exports the type contracts for the document pipeline
- * and nothing else. The builders and renderers land in Phase 2:
+ *   Profile (relational rows, mutable, private)
+ *        |  buildSnapshot()
+ *   ProfileSnapshot (immutable, self-contained, revisioned)
+ *        |  buildDocumentModel() with the stored ResumeConfig
+ *   DocumentModel (renderer-agnostic, contains no HTML)
+ *        |  renderResumeHtml / renderPortfolioHtml
+ *   Output (one file per format; PDF arrives with headless Chromium)
  *
- *   buildSnapshot()      Profile rows            -> ProfileSnapshot
- *   applyResumeConfig()  ProfileSnapshot         -> DocumentModel
- *   renderHtml()         DocumentModel + tokens  -> preview HTML
- *   renderPdf()          preview HTML            -> PDF (headless Chromium)
- *   renderPublicPage()   DocumentModel           -> public career page
- *   renderDocx()         DocumentModel           -> .docx (later)
- *
- * It exists now, empty of behaviour, so that the boundary it represents is
- * established before any code is tempted to reach across it.
+ * load-bearing properties:
+ *   - The snapshot carries RESOLVED VALUES, not foreign keys, so a document
+ *     rendered today renders identically in a year.
+ *   - The document model contains NO MARKUP. Renderers decide markup, which is
+ *     what allows several outputs from one model instead of two template
+ *     systems that drift apart.
+ *   - Nothing in this package imports React, Next.js or the database — it is
+ *     exercised as pure functions by unit tests.
  */
 
 export * from './document';
 export * from './theme';
+export * from './config';
+export * from './snapshot';
+export * from './build-document';
+export * from './theme-builder';
+export { renderResumeHtml, renderPortfolioHtml, escapeHtml } from './renderers/html';
