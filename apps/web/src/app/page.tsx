@@ -69,99 +69,13 @@ const PRIVACY_POINTS = [
   'There is no recruiter search, no college admin and no data resale.',
 ] as const;
 
-const PROFILE_ROWS = [
-  {
-    label: 'Education',
-    title: 'B.E. Computer Science',
-    meta: 'PES University · 2022–2026',
-  },
-  {
-    label: 'Experience',
-    title: 'Software Engineering Intern',
-    meta: 'Northwind Labs · May–Jul 2025',
-  },
-  {
-    label: 'Projects',
-    title: 'Ledger, Campus Bus',
-    meta: 'Personal and university projects',
-  },
-  {
-    label: 'Skills',
-    title: 'TypeScript, React, PostgreSQL, Python, Git',
-    meta: 'Five skills marked public',
-  },
-] as const;
-
-function ProfileSheet() {
-  return (
-    <figure className="mx-auto w-full max-w-[28rem] lg:mr-0">
-      <div className="relative">
-        {/* A second sheet, offset by two pixels. A stack of paper is honest
-            depth; a floating card would not be. */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 translate-x-[6px] translate-y-[6px] border border-line bg-surface"
-        />
-        <div className="relative border border-line bg-[#fffdf8] p-6 text-[#191613] shadow-sm sm:p-8">
-          <div className="flex items-start justify-between gap-4 border-b border-[#d8d1c4] pb-5">
-            <div className="min-w-0">
-              <p className="font-display text-[26px] font-medium leading-none tracking-[-0.025em] sm:text-[30px]">
-                Asha Verma
-              </p>
-              <p className="mt-2 text-[11px] leading-relaxed text-[#6b6357]">
-                Final-year computer science · Bengaluru
-              </p>
-            </div>
-            <span className="shrink-0 border border-[#d8d1c4] px-1.5 py-0.5 text-[9px] leading-4 text-[#6b6357]">
-              Profile
-            </span>
-          </div>
-
-          <dl className="mt-1">
-            {PROFILE_ROWS.map((row) => (
-              <div
-                key={row.label}
-                className="grid grid-cols-[4.75rem_1fr] gap-3 border-b border-[#e6e0d4] py-3 last:border-b-0 sm:grid-cols-[6rem_1fr] sm:gap-5"
-              >
-                <dt className="text-[9px] leading-4 text-[#8d8272] sm:text-[10px]">{row.label}</dt>
-                <dd className="min-w-0">
-                  <p className="text-[11px] font-medium leading-4 text-[#191613] sm:text-[12px]">
-                    {row.title}
-                  </p>
-                  <p className="mt-0.5 text-[9px] leading-4 text-[#6b6357] sm:text-[10px]">
-                    {row.meta}
-                  </p>
-                </dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="mt-5 flex items-center justify-between gap-3 border-t border-[#d8d1c4] pt-3 text-[9px] text-[#8d8272]">
-            <span>9 of 11 sections complete</span>
-            <span>Updated 12 Oct 2026</span>
-          </div>
-        </div>
-      </div>
-      <figcaption className="mt-3 flex items-center justify-between gap-4 text-[11px] text-content-muted">
-        <span>The profile record behind every output.</span>
-        <Link
-          href="/p/asha-verma-demo"
-          className="shrink-0 underline decoration-line-strong underline-offset-4 hover:text-content hover:decoration-content"
-        >
-          See it published
-        </Link>
-      </figcaption>
-    </figure>
-  );
-}
-
 export default function LandingPage() {
   return (
     <AppShell user={null}>
       <div className="flex flex-col">
         {/* Hero ------------------------------------------------------------ */}
-        <section className="grid gap-14 border-b border-line pb-14 pt-6 sm:pt-10 lg:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)] lg:items-center lg:gap-16 lg:pb-20 lg:pt-14">
-          <div className="flex flex-col items-start">
+        <section className="border-b border-line pb-14 pt-6 sm:pb-16 sm:pt-10 lg:pb-20 lg:pt-14">
+          <div className="flex max-w-3xl flex-col items-start">
             <p className="text-[13px] text-content-muted">A career profile for students</p>
 
             <h1 className="np-display mt-5 text-[2.65rem] text-content sm:text-[3.6rem] lg:text-[4.1rem]">
@@ -198,8 +112,6 @@ export default function LandingPage() {
               profile is auto-written for you.
             </p>
           </div>
-
-          <ProfileSheet />
         </section>
 
         {/* What it produces ----------------------------------------------- */}
