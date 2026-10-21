@@ -94,8 +94,37 @@ npm run db:seed          # optional: seed data
 **4. Run the app**
 
 ```sh
-npm run dev              # http://localhost:3000
+npm run dev              # development server on http://localhost:3000
 ```
+
+**Production build and run**
+
+```sh
+npm run build            # produces the standalone bundle in .next/standalone
+npm run start            # runs the standalone server (scripts/start-prod.mjs)
+```
+
+`npm run start` runs the standalone artifact with the static assets copied in
+and the monorepo-root `.env` seeded into the environment (existing runtime
+variables win). This is the supported production start command — plain
+`next start` is documented as incompatible with `output: 'standalone'`.
+
+### Deployment
+
+- **Docker** — `docker build -t neevpass .` builds a minimal runtime image from
+  the standalone bundle (non-root user, `HEALTHCHECK`-ready via
+  `/api/health`). Supply configuration as environment variables:
+  `DATABASE_URL`, `AUTH_SECRET`, `AUTH_URL`, `NEXT_PUBLIC_APP_URL`,
+  `LOG_LEVEL`.
+- **Long-lived Node host** — run `npm run build` in CI, ship the repo, and
+  start `node scripts/start-prod.mjs` (or embed the same steps in your
+  process manager). Migrations are applied with `npm run db:deploy`.
+- **CI** — `.github/workflows/ci.yml` runs `npm run verify` (typecheck, lint,
+  tests) plus a production build on every push to `main` and every PR.
+
+The app refuses to start with missing or invalid environment variables —
+the error names the variable and expected shape instead of failing later
+at runtime.
 
 ## Scripts
 
@@ -104,7 +133,7 @@ Run from the repo root:
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Start the web app in dev mode (port 3000) |
-| `npm run build` / `npm run start` | Production build / serve |
+| `npm run build` / `npm run start` | Production build / run the standalone server |
 | `npm run verify` | Typecheck + lint + test across all workspaces |
 | `npm run typecheck` | `tsc --noEmit` in every workspace that defines it |
 | `npm run lint` / `lint:fix` | ESLint across workspaces |

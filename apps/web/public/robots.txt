@@ -1,0 +1,20 @@
+# NeevPass robots.txt
+#
+# Everything under the signed-in application is no-indexed (the pages also set
+# `robots: noindex` in their metadata). Public profile pages under /p/ are
+# opt-in: a student chooses to publish, so crawlers *may* index those pages.
+
+User-agent: *
+Allow: /p/
+Allow: /$
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /resumes
+Disallow: /portfolios
+Disallow: /career
+Disallow: /opportunities
+Disallow: /settings
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /onboarding

@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "npm run dev --workspace @neevpass/web",
     "build": "npm run build --workspace @neevpass/web",
-    "start": "npm run start --workspace @neevpass/web",
+    "start": "node scripts/start-prod.mjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "lint:fix": "npm run lint:fix --workspaces --if-present",
