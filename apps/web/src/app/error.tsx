@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle } from '@neevpass/ui';
+import { Button, buttonVariants, cn } from '@neevpass/ui';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
@@ -10,14 +10,9 @@ import { logger } from '@/lib/logger';
 /**
  * Route-level error boundary.
  *
- * Catches render and data-fetching failures for everything below the root
- * layout, so a broken page never takes down the whole application shell.
- *
- * Two rules this follows:
- *   1. The user sees a message they can act on, never a stack trace or an
- *      internal error string. `getUserMessage` only passes through errors we
- *      constructed deliberately.
- *   2. The failure is still reported. A swallowed error is a bug nobody fixes.
+ * Catches render and data-fetching failures below the root layout, so a broken
+ * page does not take down the application shell. The user gets a message they
+ * can act on, never a stack trace. The failure is still reported.
  */
 export default function RouteError({
   error,
@@ -37,39 +32,50 @@ export default function RouteError({
   const retryable = isRetryable(error);
 
   return (
-    <div className="flex flex-col gap-6">
-      <Alert variant="danger" title="Something went wrong">
+    <div className="max-w-2xl py-8 sm:py-14">
+      <p className="text-[12px] text-content-muted">Error</p>
+      <h1 className="np-display mt-2.5 text-[2.4rem] text-content sm:text-[3rem]">
+        This page stopped loading.
+      </h1>
+      <p className="mt-4 text-[14px] leading-relaxed text-content-secondary" role="alert">
         {getUserMessage(error)}
-      </Alert>
+      </p>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>What you can do</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <ul className="flex list-disc flex-col gap-1 pl-5 text-sm text-content-secondary">
-            {retryable && <li>Trying again often works — the problem may be temporary.</li>}
-            <li>Your saved information is safe. Nothing was lost.</li>
-            <li>If it keeps happening, reload the page or come back in a few minutes.</li>
-          </ul>
+      <ul className="mt-7 border-t border-line">
+        {retryable ? (
+          <li className="border-b border-line py-3 text-[12px] text-content-secondary">
+            Trying again often works. The problem may be temporary.
+          </li>
+        ) : null}
+        <li className="border-b border-line py-3 text-[12px] text-content-secondary">
+          Your saved information is safe. Nothing was lost.
+        </li>
+        <li className="border-b border-line py-3 text-[12px] text-content-secondary">
+          If this keeps happening, come back in a few minutes.
+        </li>
+      </ul>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Button onClick={reset}>Try again</Button>
-            <Link
-              href="/dashboard"
-              className="text-sm font-medium text-brand-text underline-offset-4 hover:underline"
-            >
-              Back to dashboard
-            </Link>
-          </div>
+      <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center">
+        <Button onClick={reset}>Try again</Button>
+        <Link
+          href="/dashboard"
+          className={cn(buttonVariants({ variant: 'secondary' }))}
+        >
+          Back to dashboard
+        </Link>
+        <Link
+          href="/"
+          className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'sm:ml-2')}
+        >
+          Home
+        </Link>
+      </div>
 
-          {error.digest && (
-            <p className="text-xs text-content-muted">
-              Reference for support: <code className="font-mono">{error.digest}</code>
-            </p>
-          )}
-        </CardContent>
-      </Card>
+      {error.digest ? (
+        <p className="mt-6 text-[10px] tabular-nums text-content-muted">
+          Reference: {error.digest}
+        </p>
+      ) : null}
     </div>
   );
 }

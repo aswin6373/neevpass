@@ -1,5 +1,4 @@
 import { findProfileForUser } from '@neevpass/db';
-import { Alert, Card, CardContent, CardDescription, CardHeader, CardTitle, PageHeader } from '@neevpass/ui';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
@@ -13,10 +12,10 @@ export const metadata: Metadata = {
 };
 
 /**
- * Onboarding — the one screen between sign-up and the app.
+ * Onboarding: the one screen between sign-up and the app.
  *
- * Deliberately tiny: full name, a headline and where you are. Everything else
- * is filled in section by section afterwards; making onboarding long is how
+ * Deliberately tiny. Full name, a headline and where you are; everything else
+ * is filled in section by section afterwards. A long onboarding is how
  * students end up with empty accounts.
  */
 export default async function OnboardingPage() {
@@ -28,26 +27,26 @@ export default async function OnboardingPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <PageHeader
-        title="Welcome to NeevPass"
-        description="One structured profile, built once and reused for every resume, portfolio and public page."
-      />
+    <div className="mx-auto w-full max-w-xl py-2 sm:py-8">
+      <p className="text-[12px] text-content-muted">Profile setup</p>
+      <h1 className="np-display mt-2.5 text-[2.4rem] text-content sm:text-[2.8rem]">
+        Start your profile.
+      </h1>
+      <p className="mt-3 max-w-md text-[14px] leading-relaxed text-content-secondary">
+        Three fields now. Education, projects and the rest can wait until you have something to add.
+      </p>
 
-      <Alert variant="info" title="Private by default">
-        Everything you add starts private. You decide later, section by section and entry by
-        entry, what becomes public.
-      </Alert>
+      <div className="mt-7 border-t border-line pt-6">
+        <OnboardingForm defaultName={user.name ?? ''} />
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Start your profile</CardTitle>
-          <CardDescription>You can change all of this at any time.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <OnboardingForm defaultName={user.name ?? ''} />
-        </CardContent>
-      </Card>
+      <p className="mt-6 border-l-2 border-brand/50 pl-3 text-[11px] leading-relaxed text-content-muted">
+        Everything you add starts private. You decide later, entry by entry, what becomes public.
+      </p>
+
+      <p className="mt-6 text-[11px] text-content-muted">
+        Signed in as <span className="text-content-secondary">{user.email}</span>
+      </p>
     </div>
   );
 }

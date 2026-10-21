@@ -35,6 +35,7 @@
   --color-surface-raised: var(--np-surface-raised);
   --color-surface-sunken: var(--np-surface-sunken);
   --color-surface-hover: var(--np-surface-hover);
+  --color-surface-glass: var(--np-surface-glass);
 
   /* Text */
   --color-content: var(--np-text-primary);
@@ -47,12 +48,14 @@
   --color-line-strong: var(--np-border-strong);
   --color-line-subtle: var(--np-border-subtle);
 
-  /* Brand */
+  /* Brand + secondary accent */
   --color-brand: var(--np-primary);
   --color-brand-hover: var(--np-primary-hover);
   --color-brand-subtle: var(--np-primary-subtle);
   --color-brand-foreground: var(--np-primary-foreground);
   --color-brand-text: var(--np-primary-text);
+  --color-accent: var(--np-accent);
+  --color-accent-soft: var(--np-accent-soft);
 
   /* Status */
   --color-success: var(--np-success);
@@ -70,6 +73,7 @@
 
   /* Typography */
   --font-sans: var(--np-font-sans);
+  --font-display: var(--np-font-display);
   --font-mono: var(--np-font-mono);
 
   /* Radii */
@@ -77,6 +81,8 @@
   --radius-md: var(--np-radius-md);
   --radius-lg: var(--np-radius-lg);
   --radius-xl: var(--np-radius-xl);
+  --radius-2xl: var(--np-radius-2xl);
+  --radius-3xl: var(--np-radius-3xl);
 
   /* Elevation */
   --shadow-xs: var(--np-shadow-xs);

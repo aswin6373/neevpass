@@ -11,13 +11,10 @@ import './globals.css';
 /**
  * Last-resort error boundary.
  *
- * Replaces the root layout entirely, so it must render its own `<html>` and
- * `<body>`. This catches failures in the root layout itself — a rare but real
- * class of bug that would otherwise show a blank white page.
- *
- * It is deliberately dependency-light: it imports no data layer, no session and
- * no UI primitives beyond a class-name helper. Anything it imported could be
- * the thing that just failed.
+ * Replaces the root layout entirely, so it renders its own <html> and <body>.
+ * It is deliberately dependency-light: no data layer, no session, and no UI
+ * primitives beyond a class-name helper. Anything it imported could be the
+ * thing that just failed.
  */
 export default function GlobalError({
   error,
@@ -36,31 +33,32 @@ export default function GlobalError({
   return (
     <html lang="en">
       <body className="min-h-dvh bg-background font-sans text-content antialiased">
-        <main className="mx-auto flex min-h-dvh max-w-lg flex-col items-center justify-center gap-6 px-6 text-center">
+        <main className="flex min-h-dvh flex-col items-center justify-center px-6 py-12 text-center">
           <span
             aria-hidden="true"
-            className="flex h-10 w-10 items-center justify-center rounded-md bg-brand text-base font-semibold text-brand-foreground"
+            className="flex h-10 w-10 items-center justify-center rounded-[2px] bg-content font-display text-[18px] font-medium text-background"
           >
             N
           </span>
 
-          <div className="flex flex-col gap-2">
-            <h1 className="text-2xl font-semibold tracking-tight">{APP_NAME} is unavailable</h1>
-            <p className="text-sm text-content-secondary">
-              The application failed to load. Your saved information is safe. Please try again —
-              if the problem continues, come back in a few minutes.
-            </p>
-          </div>
+          <p className="mt-6 text-[12px] text-content-muted">Interrupted</p>
+          <h1 className="np-display mt-2 max-w-lg text-[2.4rem] text-content sm:text-[3rem]">
+            {APP_NAME} could not load.
+          </h1>
+          <p className="mt-4 max-w-md text-[14px] leading-relaxed text-content-secondary">
+            The application failed to start this time. Your saved information is safe. Please try
+            again. If the problem continues, come back in a few minutes.
+          </p>
 
-          <button type="button" onClick={reset} className={cn(buttonVariants({ size: 'lg' }))}>
-            Reload
+          <button type="button" onClick={reset} className={cn(buttonVariants({ size: 'lg' }), 'mt-7')}>
+            Reload the app
           </button>
 
-          {error.digest && (
-            <p className="text-xs text-content-muted">
-              Reference: <code className="font-mono">{error.digest}</code>
+          {error.digest ? (
+            <p className="mt-6 text-[10px] tabular-nums text-content-muted">
+              Reference: {error.digest}
             </p>
-          )}
+          ) : null}
         </main>
       </body>
     </html>

@@ -65,12 +65,15 @@ function notFoundDocument(): string {
 <meta name="robots" content="noindex, nofollow">
 <title>Portfolio not found — NeevPass</title>
 <style>
-  body { font-family: ui-sans-serif, system-ui, sans-serif; margin: 0; min-height: 100vh;
-         display: grid; place-items: center; background: #fafafa; color: #18181b; }
-  main { text-align: center; padding: 2rem; }
-  h1 { font-size: 1.5rem; margin: 0 0 .5rem; }
-  p { color: #52525b; margin: 0 0 1rem; }
-  a { color: #4f46e5; }
+  body { font-family: ui-serif, "New York", Georgia, serif; margin: 0; min-height: 100vh;
+         display: grid; place-items: center; background: #f4efe6; color: #191613; }
+  main { width: min(26rem, calc(100% - 3rem)); padding: 2rem 0;
+         border-top: 1px solid #d8d1c4; border-bottom: 1px solid #d8d1c4; }
+  h1 { font-size: 1.6rem; font-weight: 500; letter-spacing: -0.02em; margin: 0 0 .5rem; }
+  p { color: #6b6357; margin: 0 0 1.25rem; line-height: 1.6; }
+  a { display: inline-block; padding: .5rem .9rem; border-radius: 3px;
+      background: #191613; color: #f4efe6; text-decoration: none;
+      font-family: ui-sans-serif, system-ui, sans-serif; font-size: .8125rem; }
 </style>
 </head>
 <body>

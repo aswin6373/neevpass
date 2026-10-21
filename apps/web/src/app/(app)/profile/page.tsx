@@ -1,19 +1,6 @@
-import {
-  computeProfileCompleteness,
-  SECTION_DEFINITIONS,
-} from '@neevpass/domain';
+import { computeProfileCompleteness, SECTION_DEFINITIONS } from '@neevpass/domain';
 import { requireProfileAggregate } from '@neevpass/db';
-import {
-  Badge,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  PageHeader,
-  buttonVariants,
-  cn,
-} from '@neevpass/ui';
+import { PageHeader, buttonVariants, cn } from '@neevpass/ui';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -27,9 +14,9 @@ export const metadata: Metadata = {
 /**
  * Profile overview.
  *
- * The eleven sections come from the domain's single source of truth, and the
- * completeness figures come from the domain engine — never a hard-coded list
- * here, so this screen cannot fall out of sync with the data model.
+ * A table of contents for the record rather than a gallery of cards. The eleven
+ * sections and the completeness figures both come from the domain, so this page
+ * cannot drift from the data model.
  */
 export default async function ProfilePage() {
   const { user, scope } = await requireProfile();
@@ -37,92 +24,147 @@ export default async function ProfilePage() {
   const completeness = computeProfileCompleteness(aggregate);
 
   const nextSection = SECTION_DEFINITIONS.find(
-    (definition) => !completeness.sections.some(
-      (section) => section.kind === definition.kind && section.filled,
-    ),
+    (definition) =>
+      !completeness.sections.some(
+        (section) => section.kind === definition.kind && section.filled,
+      ),
   );
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       <PageHeader
-        title="Your profile"
-        description="Build it once, then let resumes, portfolios and public pages reuse it."
+        eyebrow="Profile record"
+        title={aggregate.fullName}
+        description={
+          aggregate.headline ??
+          'Add a one-line headline so the profile and every resume open with the same summary.'
+        }
+        actions={
+          <Link
+            href="/profile/summary"
+            className={buttonVariants({ variant: 'secondary', size: 'sm' })}
+          >
+            Edit basics
+          </Link>
+        }
       />
 
-      <Card>
-        <CardHeader>
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <CardTitle>{aggregate.fullName}</CardTitle>
-              <CardDescription>
-                {aggregate.headline ?? user.email}
-              </CardDescription>
-            </div>
-            <Badge variant={completeness.percent === 100 ? 'success' : 'brand'}>
-              {completeness.percent}% complete
-            </Badge>
+      <section className="grid gap-6 border-b border-line pb-6 sm:grid-cols-[minmax(0,1fr)_17rem] sm:items-end sm:gap-10">
+        <div className="flex flex-col gap-1.5">
+          <p className="text-[12px] text-content-secondary">
+            {aggregate.location ? `${aggregate.location} · ` : ''}
+            {user.email}
+          </p>
+          <p className="text-[11px] text-content-muted">
+            Revision {aggregate.revision} · Private unless an entry is marked public
+          </p>
+        </div>
+
+        <div>
+          <div className="flex items-baseline justify-between gap-3">
+            <p className="text-[11px] text-content-secondary">Profile completeness</p>
+            <p className="text-[11px] tabular-nums text-content">
+              {completeness.percent}%
+            </p>
           </div>
-        </CardHeader>
-        <CardContent>
           <div
             role="progressbar"
             aria-valuenow={completeness.percent}
             aria-valuemin={0}
             aria-valuemax={100}
             aria-label="Profile completeness"
-            className="h-2 w-full overflow-hidden rounded-full bg-surface-sunken"
+            className="mt-2 h-1.5 w-full overflow-hidden bg-surface-sunken"
           >
             <div
-              className="h-full rounded-full bg-brand transition-[width]"
+              className="h-full bg-brand transition-[width] duration-300"
               style={{ width: `${completeness.percent}%` }}
             />
           </div>
-          <p className="mt-2 text-sm text-content-secondary">
-            {completeness.filledCount} of {completeness.totalCount} sections filled
-            {nextSection ? <> — next up: <strong className="font-medium text-content">{nextSection.label}</strong>.</> : '.'}
-          </p>
-        </CardContent>
-      </Card>
-
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {SECTION_DEFINITIONS.map((definition) => {
-          const section = completeness.sections.find((entry) => entry.kind === definition.kind);
-          const filled = section?.filled ?? false;
-          const items = section?.items ?? 0;
-
-          return (
-            <li key={definition.kind}>
-              <Link
-                href={`/profile/${definition.slug}`}
-                className={cn(
-                  'flex h-full flex-col gap-2 rounded-lg border bg-surface p-4 transition-colors hover:bg-surface-hover',
-                  filled ? 'border-line' : 'border-dashed border-line',
-                )}
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-medium text-content">{definition.label}</span>
-                  <Badge variant={filled ? 'success' : 'outline'}>
-                    {filled ? (items === 1 ? '1 entry' : `${items} entries`) : 'Empty'}
-                  </Badge>
-                </div>
-                <span className="text-sm text-content-secondary">{definition.description}</span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-line bg-surface-sunken p-4">
-        <div>
-          <p className="text-sm font-medium text-content">Sections reset nothing — you can edit any entry later.</p>
-          <p className="text-sm text-content-secondary">
-            Visibility is set per entry, and self-reported facts are always labelled as self-reported.
+          <p className="mt-2 text-[11px] text-content-muted">
+            {nextSection ? (
+              <>
+                Next up:{' '}
+                <Link
+                  href={`/profile/${nextSection.slug}`}
+                  className="text-content-secondary underline decoration-line-strong underline-offset-2 hover:text-content hover:decoration-content"
+                >
+                  {nextSection.label}
+                </Link>
+              </>
+            ) : (
+              'Every section has at least one entry.'
+            )}
           </p>
         </div>
-        <Link href="/profile/summary" className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}>
-          Edit basics &amp; summary
-        </Link>
-      </div>
+      </section>
+
+      <section aria-labelledby="sections-heading">
+        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-line pb-2.5">
+          <h2 id="sections-heading" className="font-display text-[1.6rem] text-content">
+            Sections
+          </h2>
+          <p className="text-[11px] text-content-muted">
+            {completeness.filledCount} of {completeness.totalCount} filled
+          </p>
+        </div>
+
+        <ol>
+          {SECTION_DEFINITIONS.map((definition, index) => {
+            const section = completeness.sections.find(
+              (entry) => entry.kind === definition.kind,
+            );
+            const filled = section?.filled ?? false;
+            const items = section?.items ?? 0;
+
+            return (
+              <li key={definition.kind} className="border-b border-line">
+                <Link
+                  href={`/profile/${definition.slug}`}
+                  className="group grid grid-cols-[0.5rem_1.25rem_minmax(0,1fr)_auto] items-center gap-3 py-3.5 sm:grid-cols-[0.5rem_2rem_minmax(0,12rem)_minmax(0,1fr)_auto] sm:gap-4"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      'h-1.5 w-1.5',
+                      filled ? 'bg-brand' : 'border border-line-strong bg-transparent',
+                    )}
+                  />
+                  <span className="text-[11px] tabular-nums text-content-muted">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <span
+                    className={cn(
+                      'text-[14px] group-hover:underline group-hover:underline-offset-4',
+                      filled ? 'font-medium text-content' : 'text-content-secondary',
+                    )}
+                  >
+                    {definition.label}
+                  </span>
+                  <span className="hidden truncate text-[11px] text-content-muted sm:block">
+                    {definition.description}
+                  </span>
+                  <span
+                    className={cn(
+                      'text-right text-[11px] tabular-nums',
+                      filled ? 'text-content-secondary' : 'text-content-muted',
+                    )}
+                  >
+                    {filled
+                      ? `${items} ${items === 1 ? 'entry' : 'entries'}`
+                      : 'Add'}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+
+      <p className="max-w-2xl text-[11px] leading-relaxed text-content-muted">
+        Every entry starts private. Visibility is set per entry, and a resume never publishes
+        anything on its own. Only a portfolio page can be seen by someone else, and only when you
+        publish it.
+      </p>
     </div>
   );
 }

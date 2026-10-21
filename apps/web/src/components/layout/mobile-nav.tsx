@@ -4,26 +4,16 @@ import { Button } from '@neevpass/ui';
 import { Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { SidebarNav } from './sidebar';
+import { MobileNavList } from './sidebar';
 
 /**
  * Mobile navigation drawer.
  *
- * Deliberately hand-rolled rather than pulled from a dialog library: it is
- * small, and getting the behaviour right matters more than the abstraction.
- *
- * What "right" means here:
- *   - Escape closes the drawer and returns focus to the trigger, so a keyboard
- *     user is never stranded.
- *   - Background scrolling is locked while open, so the page behind does not
- *     move under the user's finger.
- *   - Focus moves into the panel on open.
- *   - The trigger reports its state with `aria-expanded` and points at the
- *     panel with `aria-controls`.
- *
- * The desktop sidebar is rendered separately and is always visible at `lg` and
- * above, so this component is hidden there — it is never two navigations at
- * once for a screen reader.
+ * The behaviour is the same as any well-built dialog: Escape closes and returns
+ * focus to the trigger, the page behind is locked, focus moves into the panel,
+ * and the trigger exposes its state through `aria-expanded`. It is only
+ * rendered below `lg`; the desktop tabs in the header are hidden there, so a
+ * screen reader never meets two navigation landmarks at once.
  */
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -61,22 +51,19 @@ export function MobileNav() {
         ref={triggerRef}
         variant="ghost"
         size="icon"
-        className="lg:hidden"
+        className="-ml-2 lg:hidden"
         aria-label="Open navigation menu"
         aria-expanded={open}
         aria-controls="mobile-nav-panel"
         onClick={() => setOpen(true)}
       >
-        <Menu size={20} aria-hidden="true" />
+        <Menu size={19} aria-hidden="true" />
       </Button>
 
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Clicking the scrim closes the drawer. It is aria-hidden because it
-              is a redundant way to do what the Escape key and the close button
-              already do. */}
           <div
-            className="absolute inset-0 bg-black/40"
+            className="absolute inset-0 bg-black/45"
             aria-hidden="true"
             onClick={() => setOpen(false)}
           />
@@ -88,13 +75,24 @@ export function MobileNav() {
             role="dialog"
             aria-modal="true"
             aria-label="Navigation"
-            className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col gap-4 border-r border-line bg-surface p-4 shadow-lg"
+            className="absolute inset-y-0 left-0 flex w-[19rem] max-w-[88vw] flex-col border-r border-line bg-background"
           >
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-content">Menu</span>
+            <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-line px-5">
+              <span className="flex items-center gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="flex h-[26px] w-[26px] items-center justify-center rounded-[2px] bg-content font-display text-[14px] font-medium leading-none text-background"
+                >
+                  N
+                </span>
+                <span className="font-display text-[19px] font-medium leading-none tracking-[-0.02em] text-content">
+                  NeevPass
+                </span>
+              </span>
               <Button
                 variant="ghost"
                 size="icon"
+                className="-mr-2"
                 aria-label="Close navigation menu"
                 onClick={() => {
                   setOpen(false);
@@ -105,8 +103,8 @@ export function MobileNav() {
               </Button>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto">
-              <SidebarNav onNavigate={() => setOpen(false)} />
+            <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
+              <MobileNavList onNavigate={() => setOpen(false)} />
             </div>
           </div>
         </div>

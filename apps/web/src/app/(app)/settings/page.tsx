@@ -1,14 +1,5 @@
 import { SELF_REPORTED_NOTICE } from '@neevpass/domain';
-import {
-  Alert,
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  PageHeader,
-} from '@neevpass/ui';
+import { Button, PageHeader } from '@neevpass/ui';
 import type { Metadata } from 'next';
 
 import { signOutAction } from '@/app/actions/auth';
@@ -19,65 +10,97 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+const PRIVACY_POINTS = [
+  'Your profile is private by default and stays private until you publish a page.',
+  'There is no directory of students, and recruiters cannot search for you.',
+  'No achievement is labelled as verified. The work is self-reported.',
+  'Your data stays scoped to your account.',
+] as const;
+
 /**
  * Account settings.
  *
- * Phase 0 scope is deliberately narrow: show who is signed in, and provide the
- * sign-out control. Account deletion, data export and privacy defaults arrive
- * with the profile module, once there is data to export or delete.
+ * Phase 0 scope is deliberately narrow: who is signed in, how the data is
+ * treated, and the sign-out control. No future-feature cards or disabled
+ * controls pretending to be a roadmap.
  */
 export default async function SettingsPage() {
   const user = await requireUser();
 
   return (
-    <div className="flex flex-col gap-6">
-      <PageHeader title="Settings" description="Your account and how your information is handled." />
+    <div className="flex flex-col gap-9">
+      <PageHeader
+        eyebrow="Settings"
+        title="Account"
+        description="The details you signed in with, and how NeevPass treats your information."
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Account</CardTitle>
-          <CardDescription>The details you signed in with.</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <dl className="grid gap-3 sm:grid-cols-2">
-            <div className="flex flex-col gap-0.5">
-              <dt className="text-xs font-medium uppercase tracking-wide text-content-muted">Name</dt>
-              <dd className="text-sm text-content">{user.name ?? 'Not set'}</dd>
+      <section className="grid gap-6 border-b border-line pb-9 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-14">
+        <div>
+          <h2 className="font-display text-[1.5rem] text-content">Account details</h2>
+          <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
+            These come from your sign-in method.
+          </p>
+        </div>
+
+        <div>
+          <dl className="border-t border-line">
+            <div className="grid grid-cols-[7rem_minmax(0,1fr)] gap-4 border-b border-line py-3.5">
+              <dt className="text-[11px] text-content-muted">Name</dt>
+              <dd className="text-[13px] text-content">{user.name ?? 'Not set'}</dd>
             </div>
-            <div className="flex flex-col gap-0.5">
-              <dt className="text-xs font-medium uppercase tracking-wide text-content-muted">Email</dt>
-              <dd className="text-sm text-content">{user.email}</dd>
+            <div className="grid grid-cols-[7rem_minmax(0,1fr)] gap-4 border-b border-line py-3.5">
+              <dt className="text-[11px] text-content-muted">Email</dt>
+              <dd className="break-all text-[13px] text-content">{user.email}</dd>
+            </div>
+            <div className="grid grid-cols-[7rem_minmax(0,1fr)] gap-4 border-b border-line py-3.5">
+              <dt className="text-[11px] text-content-muted">Status</dt>
+              <dd className="text-[13px] text-content">Signed in</dd>
             </div>
           </dl>
 
-          <form action={signOutAction}>
-            <Button type="submit" variant="secondary">
+          <form
+            action={signOutAction}
+            className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+          >
+            <p className="text-[11px] text-content-muted">
+              Signing out leaves every profile entry intact.
+            </p>
+            <Button type="submit" variant="secondary" size="sm">
               Sign out
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Privacy</CardTitle>
-          <CardDescription>What NeevPass does and does not do with your information.</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <ul className="flex flex-col gap-1.5 text-sm text-content-secondary">
-            <li>Your profile is private by default and stays private until you publish it.</li>
-            <li>There is no directory of students, and recruiters cannot search for you.</li>
-            <li>We never state that your achievements are verified.</li>
-            <li>You will be able to export and delete everything you have entered.</li>
+      <section className="grid gap-6 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-14">
+        <div>
+          <h2 className="font-display text-[1.5rem] text-content">Privacy</h2>
+          <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
+            What NeevPass does and does not do with your information.
+          </p>
+        </div>
+
+        <div>
+          <ul className="border-t border-line">
+            {PRIVACY_POINTS.map((point, index) => (
+              <li
+                key={point}
+                className="flex items-start gap-4 border-b border-line py-3.5 text-[13px] leading-relaxed text-content-secondary"
+              >
+                <span className="w-4 shrink-0 pt-0.5 text-[10px] tabular-nums text-content-muted">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                {point}
+              </li>
+            ))}
           </ul>
-          <p className="text-xs text-content-muted">{SELF_REPORTED_NOTICE}</p>
-        </CardContent>
-      </Card>
 
-      <Alert variant="info" title="More settings are coming">
-        Changing your email, deleting your account and managing published pages arrive alongside
-        the profile editor.
-      </Alert>
+          <p className="mt-4 border-l-2 border-brand/50 pl-3 text-[11px] leading-relaxed text-content-muted">
+            {SELF_REPORTED_NOTICE}
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

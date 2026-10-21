@@ -160,7 +160,7 @@ function cssFor(model: DocumentModel): string {
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  background: #eceff3;
+  background: #e9e3d8;
   color: var(--text);
   font-family: ${fontStackFor(model, type.bodyFontKey)};
   font-size: ${baseSize.toFixed(1)}pt;
@@ -169,10 +169,10 @@ body {
 }
 .page {
   background: var(--surface);
-  width: 210mm;
+  width: min(210mm, calc(100% - 32px));
   margin: 24px auto;
-  padding: ${theme.page.marginMm}mm;
-  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.14);
+  padding: clamp(20px, 5vw, ${theme.page.marginMm}mm);
+  box-shadow: 0 1px 3px rgba(25, 22, 19, 0.12);
 }
 .doc-header { border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 14px; }
 .doc-name {
@@ -207,15 +207,17 @@ body {
 ${bulletCss}
 .entry-skills, .entry-links, .entry-tags { margin: 3px 0 0; font-size: ${(baseSize * 0.9).toFixed(1)}pt; }
 .entry-skill, .entry-tag, .chip {
-  display: inline-block; margin: 0 4px 3px 0; padding: 1px 8px; border-radius: 9px;
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  display: inline-block; margin: 0 4px 3px 0; padding: 1px 6px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
   color: var(--text);
 }
 .entry-link { color: var(--accent); }
 .built-with { margin: 22px 0 0; font-size: ${(baseSize * 0.85).toFixed(1)}pt; color: var(--muted); text-align: center; }
 @media print {
   body { background: var(--surface); }
-  .page { width: auto; margin: 0; box-shadow: none; }
+  .page { width: auto; margin: 0; padding: 0; box-shadow: none; }
 }
 @page { size: ${theme.page.size.toLowerCase()}; margin: ${theme.page.marginMm}mm; }`;
 }

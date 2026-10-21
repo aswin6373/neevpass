@@ -28,7 +28,7 @@ export interface FontChoice {
 /** Physical page geometry. Physical units so A4 and US Letter share a code path. */
 export interface PageSetup {
   readonly size: 'A4' | 'LETTER';
-  /** Margin in millimetres. Applied inside the document, not via @page. */
+  /** Margin in millimetres. Page padding on screen; the @page margin in print. */
   readonly marginMm: number;
 }
 

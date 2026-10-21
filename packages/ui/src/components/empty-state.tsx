@@ -15,26 +15,23 @@ export interface EmptyStateProps {
  * Shown when a section has no content yet.
  *
  * Every empty state should say what would go here and offer the action that
- * fills it — an empty screen with no next step is the most common place a
- * student gives up on a profile builder.
+ * fills it. The treatment is a pair of rules, not a framed card or an
+ * illustration: an empty region should look empty, not decorated.
  */
 export function EmptyState({ icon, title, description, action, className }: EmptyStateProps) {
   return (
-    <div
-      className={cn(
-        'flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-line px-6 py-12 text-center',
-        className,
-      )}
-    >
+    <div className={cn('flex flex-col items-start gap-3 border-y border-line py-6', className)}>
       {icon && (
         <span aria-hidden="true" className="text-content-muted">
           {icon}
         </span>
       )}
       <div className="flex flex-col gap-1">
-        <p className="text-sm font-semibold text-content">{title}</p>
+        <p className="text-[14px] font-medium text-content">{title}</p>
         {description && (
-          <p className="mx-auto max-w-md text-sm text-content-secondary">{description}</p>
+          <p className="max-w-lg text-[13px] leading-relaxed text-content-secondary">
+            {description}
+          </p>
         )}
       </div>
       {action}

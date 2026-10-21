@@ -1,9 +1,11 @@
 import { buttonVariants, cn } from '@neevpass/ui';
+import { LogOut } from 'lucide-react';
 import Link from 'next/link';
 
 import { signOutAction } from '@/app/actions/auth';
 
 import { MobileNav } from './mobile-nav';
+import { PrimaryNav } from './sidebar';
 import { ThemeToggle } from './theme-toggle';
 
 export interface TopbarProps {
@@ -13,61 +15,117 @@ export interface TopbarProps {
   } | null;
 }
 
+const GUEST_LINKS = [
+  { href: '/#product', label: 'Product' },
+  { href: '/#how-it-works', label: 'How it works' },
+  { href: '/#privacy', label: 'Privacy' },
+] as const;
+
+function initialsFor(user: NonNullable<TopbarProps['user']>): string {
+  const source = user.name?.trim() || user.email;
+  const parts = source.split(/\s+/).filter(Boolean);
+
+  if (user.name && parts.length > 0) {
+    return parts
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? '')
+      .join('');
+  }
+
+  return source.slice(0, 1).toUpperCase();
+}
+
 /**
  * The application header.
  *
- * A server component: the only interactive parts (the drawer and the theme
- * toggle) are their own client components, so the header itself ships no
- * JavaScript.
- *
- * Navigation links reuse `buttonVariants` rather than wrapping a `<Link>` in a
- * `<Button>`. A button element containing an anchor is invalid HTML and behaves
- * unpredictably with a keyboard — the styling is shared, the element is not.
+ * Signed-in navigation is horizontal, so the page content keeps the full
+ * measure instead of being squeezed beside a permanent sidebar. Below `lg` the
+ * same links move into the drawer. The only client components are the parts
+ * that need state: the active-link marker, the drawer and the theme toggle.
  */
 export function Topbar({ user }: TopbarProps) {
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-surface">
-      <div className="flex h-14 items-center gap-3 px-3 sm:px-4">
+    <header className="sticky top-0 z-40 border-b border-line bg-background">
+      <div className="mx-auto flex h-[60px] w-full max-w-[74rem] items-center gap-3 px-5 sm:px-8">
         {user && <MobileNav />}
 
         <Link
           href={user ? '/dashboard' : '/'}
-          className="flex items-center gap-2 rounded-md px-1 py-1"
+          className="flex shrink-0 items-center gap-2.5"
+          aria-label={user ? 'NeevPass dashboard' : 'NeevPass home'}
         >
-          {/* The mark is decorative; the wordmark carries the name. */}
           <span
             aria-hidden="true"
-            className="flex h-7 w-7 items-center justify-center rounded-md bg-brand text-sm font-semibold text-brand-foreground"
+            className="flex h-[26px] w-[26px] items-center justify-center rounded-[2px] bg-content font-display text-[14px] font-medium leading-none text-background"
           >
             N
           </span>
-          <span className="text-sm font-semibold tracking-tight text-content">NeevPass</span>
+          <span className="font-display text-[19px] font-medium leading-none tracking-[-0.02em] text-content">
+            NeevPass
+          </span>
         </Link>
 
-        <div className="ml-auto flex items-center gap-1 sm:gap-2">
+        {user ? (
+          <PrimaryNav className="ml-6 hidden lg:flex xl:ml-10" />
+        ) : (
+          <nav aria-label="Product" className="ml-8 hidden items-center gap-6 md:flex">
+            {GUEST_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-[13px] text-content-secondary underline-offset-4 transition-colors hover:text-content hover:underline"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        )}
+
+        <div className="ml-auto flex items-center gap-1">
           <ThemeToggle />
 
           {user ? (
             <>
-              <span className="hidden max-w-[14rem] truncate text-sm text-content-secondary sm:block">
-                {user.name ?? user.email}
-              </span>
+              <Link
+                href="/settings"
+                className="hidden items-center gap-2 border-l border-line-subtle py-1 pl-3 lg:flex"
+                title="Account settings"
+              >
+                <span
+                  aria-hidden="true"
+                  className="flex h-6 w-6 items-center justify-center rounded-[2px] border border-line bg-surface text-[10px] font-medium text-content-secondary"
+                >
+                  {initialsFor(user)}
+                </span>
+                <span className="hidden max-w-[10rem] truncate text-[12px] text-content-secondary xl:inline">
+                  {user.name ?? user.email}
+                </span>
+              </Link>
               <form action={signOutAction}>
-                <button type="submit" className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}>
-                  Sign out
+                <button
+                  type="submit"
+                  aria-label="Sign out"
+                  title="Sign out"
+                  className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'ml-1')}
+                >
+                  <LogOut size={16} aria-hidden="true" />
                 </button>
               </form>
             </>
           ) : (
             <>
-              <Link href="/sign-in" className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>
+              <Link
+                href="/sign-in"
+                className="hidden px-3 py-2 text-[13px] text-content-secondary underline-offset-4 hover:text-content hover:underline sm:inline-flex"
+              >
                 Sign in
               </Link>
               <Link
                 href="/sign-up"
-                className={cn(buttonVariants({ variant: 'primary', size: 'sm' }))}
+                className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'ml-1')}
               >
-                Get started
+                <span className="sm:hidden">Start</span>
+                <span className="hidden sm:inline">Create profile</span>
               </Link>
             </>
           )}

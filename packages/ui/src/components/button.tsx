@@ -8,22 +8,25 @@ export const buttonVariants = cva(
   // Note: there is no `focus-visible:outline-none` here. Focus styling comes
   // from the global :focus-visible rule in tokens.css, so every focusable
   // element in the product looks the same and cannot be styled away locally.
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-[3px] font-medium tracking-[-0.005em] transition-colors duration-150 disabled:pointer-events-none disabled:opacity-45',
   {
     variants: {
       variant: {
-        primary: 'bg-brand text-brand-foreground hover:bg-brand-hover',
-        secondary: 'border border-line bg-surface-raised text-content hover:bg-surface-hover',
-        outline: 'border border-line-strong text-content hover:bg-surface-hover',
+        // The primary action is ink, not the accent. Green stays a signal for
+        // links, focus and progress rather than the paint on every button.
+        primary: 'bg-content text-background hover:bg-content/85',
+        secondary:
+          'border border-line-strong bg-surface text-content hover:border-content/40 hover:bg-surface-hover',
+        outline: 'border border-line bg-transparent text-content hover:bg-surface-hover',
         ghost: 'text-content-secondary hover:bg-surface-hover hover:text-content',
-        danger: 'bg-danger text-white hover:opacity-90',
-        link: 'text-brand-text underline-offset-4 hover:underline',
+        danger: 'bg-danger text-background hover:bg-danger/88',
+        link: 'h-auto p-0 text-brand-text underline-offset-4 hover:underline',
       },
       size: {
-        sm: 'h-8 px-3 text-sm',
+        sm: 'h-8 px-3 text-[13px]',
         md: 'h-10 px-4 text-sm',
-        lg: 'h-11 px-6 text-base',
-        icon: 'h-10 w-10',
+        lg: 'h-11 px-5 text-[15px]',
+        icon: 'h-9 w-9',
       },
       block: {
         true: 'w-full',
@@ -74,6 +77,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   );
 });
 
-// The exported binding's name is what most tooling sees; forwardRef would
-// otherwise display the implementation name with a wrapper suffix.
 Button.displayName = 'Button';

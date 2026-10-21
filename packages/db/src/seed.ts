@@ -1303,7 +1303,7 @@ async function seedDemoAccount(): Promise<void> {
       templateKey: 'modern',
       config: {
         hiddenSections: ['WORKSHOPS', 'LINKS'],
-        accentColor: '#4f46e5',
+        accentColor: '#26523f',
       },
       publicSlug: 'asha-verma-demo',
       published: true,

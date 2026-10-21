@@ -54,9 +54,9 @@ export function ResumeConfigForm({ resumeId, revision, sections, initial }: {
 
       <Field label="Layout">
         <Select name="layout" defaultValue={initial.layout}>
-          <option value="CLASSIC">Classic — single column</option>
-          <option value="MODERN">Modern — airy single column</option>
-          <option value="COMPACT">Compact — fit more on a page</option>
+          <option value="CLASSIC">Classic (single column)</option>
+          <option value="MODERN">Modern (airy single column)</option>
+          <option value="COMPACT">Compact (fit more on a page)</option>
           <option value="SIDEBAR_LEFT">Sidebar left</option>
           <option value="SIDEBAR_RIGHT">Sidebar right</option>
         </Select>
@@ -84,24 +84,33 @@ export function ResumeConfigForm({ resumeId, revision, sections, initial }: {
           name="accentColor"
           type="color"
           defaultValue={initial.accentColor}
-          className="h-10 w-20 cursor-pointer p-1"
+          className="h-11 w-20 cursor-pointer p-1"
         />
       </Field>
 
-      <fieldset className="flex flex-col gap-1.5">
-        <legend className="mb-1 text-sm font-medium text-content">Sections to hide</legend>
-        {sections.map((section) => (
-          <label key={section.kind} className="flex items-center gap-2 text-sm text-content-secondary">
-            <input
-              type="checkbox"
-              name="hiddenSections"
-              value={section.kind}
-              defaultChecked={initial.hiddenSections.includes(section.kind)}
-              className="h-4 w-4"
-            />
-            {section.label}
-          </label>
-        ))}
+      <fieldset>
+        <legend className="text-[13px] font-medium text-content">Sections to hide</legend>
+        <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
+          Ticked sections are left out of this document. Hiding one here does not delete it from
+          your profile.
+        </p>
+        <div className="mt-2 border-t border-line-subtle">
+          {sections.map((section) => (
+            <label
+              key={section.kind}
+              className="flex items-center gap-2.5 border-b border-line-subtle py-2 text-[12px] text-content-secondary transition-colors last:border-b-0 hover:text-content"
+            >
+              <input
+                type="checkbox"
+                name="hiddenSections"
+                value={section.kind}
+                defaultChecked={initial.hiddenSections.includes(section.kind)}
+                className="h-3.5 w-3.5 accent-[var(--np-primary)]"
+              />
+              {section.label}
+            </label>
+          ))}
+        </div>
       </fieldset>
 
       <div className="flex justify-end">

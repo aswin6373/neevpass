@@ -4,8 +4,9 @@ import {
   opportunityFeedback,
   requireProfileAggregate,
 } from '@neevpass/db';
-import { Badge, Card, PageHeader } from '@neevpass/ui';
+import { EmptyState, PageHeader, buttonVariants, cn } from '@neevpass/ui';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import { requireProfile } from '@/lib/session';
 
@@ -25,17 +26,21 @@ const TYPE_LABELS: Readonly<Record<string, string>> = {
   WORKSHOP: 'Workshop',
 };
 
-const FEEDBACK_LABELS: Readonly<Record<string, string>> = {
-  SAVED: 'Saved',
-  APPLIED: 'Applied',
-};
+function closingLabel(days: number | undefined): string {
+  if (days === undefined) return 'Rolling deadline';
+  if (days <= 0) return 'Closes today';
+  if (days === 1) return 'Closes tomorrow';
+  if (days > 60) return 'Open for a while';
+  return `Closes in ${days} days`;
+}
 
 /**
  * Opportunities.
  *
- * Ranking is the domain engine's job (`recommendOpportunities`): fit with your
- * skills first, deadline proximity as a tiebreaker. Links point OUT — NeevPass
- * never hosts an application; it keeps the student's own progress marks here.
+ * Ranking is the domain engine's job: fit with the profile's skills first,
+ * deadline proximity as a tiebreaker. This page presents the result as a
+ * ranked list with the reason visible, not as a wall of promotional cards.
+ * Links point out; NeevPass never hosts an application.
  */
 export default async function OpportunitiesPage() {
   const { scope } = await requireProfile();
@@ -56,60 +61,121 @@ export default async function OpportunitiesPage() {
     now: new Date(),
   });
 
+  const appliedCount = recommendations.filter(
+    (recommendation) => recommendation.savedStatus === 'APPLIED',
+  ).length;
+  const savedCount = recommendations.filter(
+    (recommendation) => recommendation.savedStatus === 'SAVED',
+  ).length;
+
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <PageHeader
-        title="Opportunities"
-        description="Ranked by fit with your skills and how soon they close. Dismissed listings stay out of your way."
+        eyebrow="Opportunities"
+        title="Open listings"
+        description="Ranked by the skills already on your profile, then by how soon they close. Each row says why it appears."
+        actions={
+          <div className="flex items-center gap-4 text-[11px] text-content-muted">
+            <span>
+              <strong className="font-medium text-content">{recommendations.length}</strong> open
+            </span>
+            <span>
+              <strong className="font-medium text-content">{appliedCount}</strong> applied
+            </span>
+            <span>
+              <strong className="font-medium text-content">{savedCount}</strong> saved
+            </span>
+          </div>
+        }
       />
 
       {recommendations.length === 0 ? (
-        <Card>
-          <p className="p-6 text-center text-sm text-content-muted">
-            Nothing ranks in yet — each listing needs to touch at least one skill on your profile.
-            As your skills grow, more will appear here.
-          </p>
-        </Card>
+        <EmptyState
+          title="No listings match yet"
+          description="A listing appears here when it touches at least one skill on your profile. Add a few skills, or check back when new listings are published."
+          action={
+            <Link href="/profile/skills" className={buttonVariants({ variant: 'secondary', size: 'sm' })}>
+              Add skills
+            </Link>
+          }
+        />
       ) : (
-        <ul className="flex flex-col gap-4">
-          {recommendations.map((recommendation) => {
+        <ol>
+          {recommendations.map((recommendation, index) => {
             const opportunity = recommendation.opportunity;
+            const applied = recommendation.savedStatus === 'APPLIED';
+
             return (
-              <li key={opportunity.id} className="rounded-lg border border-line bg-surface p-4">
-                <div className="flex flex-wrap items-start justify-between gap-3">
+              <li key={opportunity.id} className="border-b border-line py-5 sm:py-6">
+                <div className="grid gap-4 md:grid-cols-[2rem_minmax(0,1fr)_15rem] md:items-start md:gap-6">
+                  <span className="pt-0.5 text-[11px] tabular-nums text-content-muted">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+
                   <div className="min-w-0">
-                    <p className="flex flex-wrap items-center gap-2 font-medium text-content">
-                      {opportunity.title}
-                      <Badge variant="neutral">{TYPE_LABELS[opportunity.type] ?? opportunity.type}</Badge>
+                    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1.5">
+                      <h2 className="text-[16px] font-medium leading-snug text-content">
+                        {opportunity.title}
+                      </h2>
                       {recommendation.savedStatus ? (
-                        <Badge variant="success">{FEEDBACK_LABELS[recommendation.savedStatus] ?? recommendation.savedStatus}</Badge>
+                        <span
+                          className={cn(
+                            'border px-1.5 py-0.5 text-[10px] leading-4',
+                            applied
+                              ? 'border-success/40 bg-success-subtle text-success-text'
+                              : 'border-line bg-surface-sunken/60 text-content-secondary',
+                          )}
+                        >
+                          {applied ? 'Applied' : 'Saved'}
+                        </span>
                       ) : null}
-                    </p>
-                    <p className="mt-0.5 text-sm text-content-secondary">
+                    </div>
+
+                    <p className="mt-1 text-[12px] text-content-secondary">
                       {opportunity.organiser}
-                      {opportunity.location ? ` · ${opportunity.location}` : ''}
-                      {opportunity.workMode ? ` · ${opportunity.workMode.toLowerCase()}` : ''}
-                      {opportunity.compensation ? ` · ${opportunity.compensation}` : ''}
+                      <span className="text-content-muted">
+                        {' · '}
+                        {TYPE_LABELS[opportunity.type] ?? opportunity.type}
+                        {opportunity.location ? ` · ${opportunity.location}` : ''}
+                        {opportunity.workMode ? ` · ${opportunity.workMode.toLowerCase()}` : ''}
+                        {opportunity.compensation ? ` · ${opportunity.compensation}` : ''}
+                      </span>
                     </p>
-                    <p className="mt-1 text-sm text-content-muted">{recommendation.reason}</p>
+
+                    <p className="mt-2 max-w-2xl text-[12px] leading-relaxed text-content-muted">
+                      {recommendation.reason}
+                    </p>
+
                     {recommendation.matchedSkillNames.length > 0 ? (
-                      <p className="mt-2 flex flex-wrap gap-1.5">
-                        {recommendation.matchedSkillNames.map((name) => (
-                          <Badge key={name} variant="outline">{name}</Badge>
-                        ))}
+                      <p className="mt-2 text-[11px] leading-relaxed text-content-secondary">
+                        <span className="text-content-muted">Matched: </span>
+                        {recommendation.matchedSkillNames.join(', ')}
                       </p>
                     ) : null}
                   </div>
 
-                  <div className="flex shrink-0 flex-col items-end gap-2">
+                  <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3 md:flex-col md:items-end md:justify-start">
+                    <div className="text-right">
+                      <p className="font-display text-[1.35rem] leading-none text-content">
+                        {recommendation.score}
+                        <span className="ml-1 font-sans text-[10px] font-normal text-content-muted">
+                          fit
+                        </span>
+                      </p>
+                      <p className="mt-1 text-[10px] text-content-muted">
+                        {closingLabel(recommendation.daysUntilDeadline)}
+                      </p>
+                    </div>
+
                     <a
                       href={opportunity.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm font-medium text-brand underline-offset-2 hover:underline"
+                      className="text-[12px] text-brand-text underline decoration-brand/40 underline-offset-4 hover:decoration-brand"
                     >
-                      Open listing ↗
+                      Open listing
                     </a>
+
                     <OpportunityFeedbackForm
                       opportunityId={opportunity.id}
                       currentStatus={recommendation.savedStatus}
@@ -119,8 +185,13 @@ export default async function OpportunitiesPage() {
               </li>
             );
           })}
-        </ul>
+        </ol>
       )}
+
+      <p className="text-[11px] leading-relaxed text-content-muted">
+        Listings are external. NeevPass does not submit applications and does not track whether an
+        employer receives one. The saved and applied marks are only for you.
+      </p>
     </div>
   );
 }

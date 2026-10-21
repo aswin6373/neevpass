@@ -52,7 +52,7 @@ export function buildTheme(config: ResumeConfig): ThemeTokens {
   const density = DENSITY[config.density];
   const accent = ACCENT_FORMAT.test(config.accentColor.trim())
     ? config.accentColor.trim()
-    : '#4f46e5';
+    : '#26523f';
 
   const layoutVariant = config.layout;
   const serif = layoutVariant === 'CLASSIC';
@@ -63,10 +63,10 @@ export function buildTheme(config: ResumeConfig): ThemeTokens {
     page: { size: 'A4', marginMm: density.marginMm },
     color: {
       accent,
-      text: '#111827',
-      muted: '#4b5563',
-      surface: '#ffffff',
-      rule: '#d1d5db',
+      text: '#191613',
+      muted: '#5f584d',
+      surface: '#fffdf8',
+      rule: '#d8d1c4',
     },
     typography: {
       headingFontKey,

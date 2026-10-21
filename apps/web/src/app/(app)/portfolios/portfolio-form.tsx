@@ -70,30 +70,43 @@ export function PortfolioForm({ revision, sections, initial }: {
         </Field>
       </div>
 
-      <label className="flex items-center gap-2.5 rounded-md border border-line bg-surface-sunken px-3 py-2.5 text-sm text-content">
-        <input type="checkbox" name="published" defaultChecked={initial.published} className="h-4 w-4" />
+      <label className="flex items-start gap-3 border-y border-line py-3">
+        <input
+          type="checkbox"
+          name="published"
+          defaultChecked={initial.published}
+          className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--np-primary)]"
+        />
         <span>
-          Published
-          <span className="block text-xs text-content-muted">
-            Unticking takes the page offline immediately; the address is kept for later.
+          <span className="block text-[13px] font-medium text-content">Published</span>
+          <span className="mt-0.5 block text-[11px] leading-relaxed text-content-muted">
+            Unticking takes the page offline immediately. The address is kept for later.
           </span>
         </span>
       </label>
 
-      <fieldset className="flex flex-col gap-1.5">
-        <legend className="mb-1 text-sm font-medium text-content">Sections to hide</legend>
-        {sections.map((section) => (
-          <label key={section.kind} className="flex items-center gap-2 text-sm text-content-secondary">
-            <input
-              type="checkbox"
-              name="hiddenSections"
-              value={section.kind}
-              defaultChecked={initial.hiddenSections.includes(section.kind)}
-              className="h-4 w-4"
-            />
-            {section.label}
-          </label>
-        ))}
+      <fieldset>
+        <legend className="text-[13px] font-medium text-content">Sections to hide</legend>
+        <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
+          These sections are left out of the public page, even if they contain public entries.
+        </p>
+        <div className="mt-2 grid gap-x-8 border-t border-line-subtle sm:grid-cols-2">
+          {sections.map((section) => (
+            <label
+              key={section.kind}
+              className="flex items-center gap-2.5 border-b border-line-subtle py-2 text-[12px] text-content-secondary transition-colors hover:text-content"
+            >
+              <input
+                type="checkbox"
+                name="hiddenSections"
+                value={section.kind}
+                defaultChecked={initial.hiddenSections.includes(section.kind)}
+                className="h-3.5 w-3.5 accent-[var(--np-primary)]"
+              />
+              {section.label}
+            </label>
+          ))}
+        </div>
       </fieldset>
 
       <div className="flex justify-end">

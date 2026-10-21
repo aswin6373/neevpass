@@ -2,7 +2,6 @@
 
 import { PASSWORD_POLICY_DESCRIPTION, checkPasswordStrength } from '@neevpass/domain';
 import { Alert, Button, Field, Input } from '@neevpass/ui';
-import Link from 'next/link';
 import { useActionState, useState } from 'react';
 
 import { signUpAction, type AuthActionState } from '../actions';
@@ -80,13 +79,6 @@ export function SignUpForm() {
       <Button type="submit" isLoading={isPending} loadingLabel="Creating account" block>
         Create account
       </Button>
-
-      <p className="text-center text-sm text-content-secondary">
-        Already have an account?{' '}
-        <Link href="/sign-in" className="font-medium text-brand-text underline-offset-4 hover:underline">
-          Sign in
-        </Link>
-      </p>
     </form>
   );
 }

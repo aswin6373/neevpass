@@ -1,7 +1,6 @@
 'use client';
 
 import { Alert, Button, Field, Input } from '@neevpass/ui';
-import Link from 'next/link';
 import { useActionState } from 'react';
 
 import { signInAction, type AuthActionState } from '../actions';
@@ -43,13 +42,6 @@ export function SignInForm() {
       <Button type="submit" isLoading={isPending} loadingLabel="Signing in" block>
         Sign in
       </Button>
-
-      <p className="text-center text-sm text-content-secondary">
-        No account yet?{' '}
-        <Link href="/sign-up" className="font-medium text-brand-text underline-offset-4 hover:underline">
-          Create one
-        </Link>
-      </p>
     </form>
   );
 }

@@ -43,7 +43,7 @@ export const DEFAULT_RESUME_CONFIG: ResumeConfig = {
   itemLimits: {},
   layout: 'CLASSIC',
   headerStyle: 'BANNER',
-  accentColor: '#4f46e5',
+  accentColor: '#26523f',
   density: 'NORMAL',
 };
 

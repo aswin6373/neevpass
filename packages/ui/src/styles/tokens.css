@@ -1,5 +1,5 @@
 /* ==========================================================================
-   NeevPass design tokens
+   NeevPass design tokens — "Paper & Ink"
    ==========================================================================
 
    These are the tokens for the APPLICATION CHROME — buttons, navigation,
@@ -12,104 +12,106 @@
    screen. Conflating the two would mean a student's choice of resume accent
    colour could break the contrast of the app's own navigation.
 
-   Document theme tokens live in packages/docgen (Phase 2).
+   Document theme tokens live in packages/docgen.
+
+   Direction: warm paper, dark ink, a single deep green accent. Thin rules
+   instead of floating cards, a serif for display type, and almost no shadow.
+   The interface should read like a well-set document, not a dashboard demo.
 
    Contrast: every text/background pairing below targets WCAG 2.2 AA
    (4.5:1 for body text, 3:1 for large text and UI borders).
    ========================================================================== */
 
 :root {
-  /* --- Brand ramps ------------------------------------------------------ */
-  /* Kept as raw values so future features (charts, resume accents) can reach
-     for a specific step without inventing a new colour. */
-  --np-indigo-50: #eef0ff;
-  --np-indigo-100: #e0e3ff;
-  --np-indigo-300: #a5b4fc;
-  --np-indigo-500: #6366f1;
-  --np-indigo-600: #4f46e5;
-  --np-indigo-700: #4338ca;
-  --np-indigo-800: #3730a3;
+  /* --- Raw ramps -------------------------------------------------------- */
+  --np-forest-50: #eef3ef;
+  --np-forest-100: #dfe8e1;
+  --np-forest-300: #9bb9a5;
+  --np-forest-500: #3f6f57;
+  --np-forest-600: #26523f;
+  --np-forest-700: #1c4132;
+  --np-forest-800: #153327;
+  --np-forest-900: #0f261d;
 
-  --np-teal-500: #14b8a6;
-  --np-teal-700: #0f766e;
+  --np-paper-0: #fffefb;
+  --np-paper-25: #fbf9f4;
+  --np-paper-50: #f6f3ec;
+  --np-paper-100: #f0ece3;
+  --np-paper-200: #e6e0d4;
+  --np-paper-300: #d8d1c4;
+  --np-paper-400: #b6ab99;
+  --np-paper-500: #8d8272;
+  --np-paper-600: #6b6357;
+  --np-paper-700: #514b43;
+  --np-paper-800: #2f2b26;
+  --np-paper-900: #1b1815;
+  --np-paper-950: #11100e;
 
-  --np-green-600: #16a34a;
-  --np-green-700: #15803d;
-  --np-amber-600: #d97706;
-  --np-amber-700: #b45309;
-  --np-red-600: #dc2626;
-  --np-red-700: #b91c1c;
-
-  --np-neutral-0: #ffffff;
-  --np-neutral-25: #fcfcfd;
-  --np-neutral-50: #f6f7f9;
-  --np-neutral-100: #eceef2;
-  --np-neutral-200: #e4e6eb;
-  --np-neutral-300: #cdd1da;
-  --np-neutral-400: #9aa1b1;
-  --np-neutral-500: #6b7385;
-  --np-neutral-600: #5a6072;
-  --np-neutral-700: #3d4252;
-  --np-neutral-800: #232733;
-  --np-neutral-900: #12141a;
-  --np-neutral-950: #0b0d12;
+  --np-clay-500: #8f4b37;
+  --np-clay-600: #7a3b2e;
 
   /* --- Semantic: surfaces ----------------------------------------------- */
-  --np-background: var(--np-neutral-50);
-  --np-surface: var(--np-neutral-0);
-  --np-surface-raised: var(--np-neutral-0);
-  --np-surface-sunken: var(--np-neutral-100);
-  --np-surface-hover: var(--np-neutral-50);
+  --np-background: #f5f2eb;
+  --np-surface: #fbf9f4;
+  --np-surface-raised: #fffefb;
+  --np-surface-sunken: #ebe6dc;
+  --np-surface-hover: #f0ece3;
+  --np-surface-glass: rgb(251 249 244 / 0.9);
 
   /* --- Semantic: text --------------------------------------------------- */
-  --np-text-primary: var(--np-neutral-900);
-  --np-text-secondary: var(--np-neutral-600);
-  --np-text-muted: var(--np-neutral-500);
-  --np-text-inverted: var(--np-neutral-0);
+  --np-text-primary: #191613;
+  --np-text-secondary: #544e46;
+  --np-text-muted: #6b6357;
+  --np-text-inverted: #fffdf8;
 
   /* --- Semantic: borders ------------------------------------------------ */
-  --np-border: var(--np-neutral-200);
-  --np-border-strong: var(--np-neutral-300);
-  --np-border-subtle: var(--np-neutral-100);
+  --np-border: #d8d1c4;
+  --np-border-strong: #8d8272;
+  --np-border-subtle: #e6e0d4;
 
   /* --- Semantic: interactive -------------------------------------------- */
-  --np-primary: var(--np-indigo-700);
-  --np-primary-hover: var(--np-indigo-800);
-  --np-primary-active: var(--np-indigo-800);
-  --np-primary-subtle: var(--np-indigo-50);
-  --np-primary-foreground: var(--np-neutral-0);
-  --np-primary-text: var(--np-indigo-700);
+  --np-primary: var(--np-forest-600);
+  --np-primary-hover: var(--np-forest-700);
+  --np-primary-active: var(--np-forest-800);
+  --np-primary-subtle: var(--np-forest-50);
+  --np-primary-foreground: var(--np-paper-0);
+  --np-primary-text: var(--np-forest-700);
+
+  /* Secondary, used only for the rare secondary mark. */
+  --np-accent: var(--np-clay-600);
+  --np-accent-soft: #f5eae6;
 
   /* --- Semantic: status ------------------------------------------------- */
-  --np-success: var(--np-green-700);
-  --np-success-subtle: #ecfdf3;
-  --np-success-text: #05603a;
+  --np-success: #2c6a47;
+  --np-success-subtle: #e9f1eb;
+  --np-success-text: #225438;
 
-  --np-warning: var(--np-amber-700);
-  --np-warning-subtle: #fffaeb;
-  --np-warning-text: #93370d;
+  --np-warning: #8a5a12;
+  --np-warning-subtle: #f6edda;
+  --np-warning-text: #6f480d;
 
-  --np-danger: var(--np-red-700);
-  --np-danger-subtle: #fef3f2;
-  --np-danger-text: #912018;
+  --np-danger: #96362f;
+  --np-danger-subtle: #f7e9e7;
+  --np-danger-text: #7c2b25;
 
-  --np-info: var(--np-teal-700);
-  --np-info-subtle: #f0fdfa;
-  --np-info-text: #115e59;
+  --np-info: #2f5670;
+  --np-info-subtle: #e8eef2;
+  --np-info-text: #284a61;
 
   /* --- Focus ------------------------------------------------------------ */
-  /* Always visible and never removed — a keyboard user must be able to see
-     where they are at all times. */
-  --np-focus-ring: var(--np-indigo-600);
-  --np-focus-ring-offset: var(--np-surface);
+  --np-focus-ring: var(--np-forest-600);
+  --np-focus-ring-offset: var(--np-background);
 
   /* --- Typography ------------------------------------------------------- */
-  /* System stack only. No web-font request on the critical path: it keeps
-     first paint fast and means the app never shifts layout when a font
-     arrives late. Document fonts are handled separately in Phase 2. */
-  --np-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --np-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+  /* No web-font request on the critical path. Display type uses the operating
+     system's serif — New York on Apple platforms, Georgia elsewhere — which
+     gives the product an editorial voice without a render-blocking download.
+     Document fonts are handled separately in docgen. */
+  --np-font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --np-font-display: ui-serif, "New York", "Iowan Old Style", "Palatino Linotype",
+    Palatino, "Book Antiqua", Georgia, serif;
+  --np-font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
     "Liberation Mono", monospace;
 
   --np-text-xs: 0.75rem;
@@ -120,10 +122,13 @@
   --np-text-2xl: 1.5rem;
   --np-text-3xl: 1.875rem;
   --np-text-4xl: 2.25rem;
+  --np-text-5xl: 3rem;
+  --np-text-6xl: 3.75rem;
 
-  --np-leading-tight: 1.25;
-  --np-leading-normal: 1.5;
-  --np-leading-relaxed: 1.65;
+  --np-leading-tight: 1.1;
+  --np-leading-snug: 1.3;
+  --np-leading-normal: 1.55;
+  --np-leading-relaxed: 1.7;
 
   /* --- Spacing scale ---------------------------------------------------- */
   --np-space-1: 0.25rem;
@@ -136,24 +141,29 @@
   --np-space-10: 2.5rem;
   --np-space-12: 3rem;
   --np-space-16: 4rem;
+  --np-space-20: 5rem;
+  --np-space-24: 6rem;
 
   /* --- Radii ------------------------------------------------------------ */
-  --np-radius-sm: 0.375rem;
-  --np-radius-md: 0.5rem;
-  --np-radius-lg: 0.75rem;
-  --np-radius-xl: 1rem;
+  /* Small radii are intentional: paper does not have 24px corners. */
+  --np-radius-sm: 2px;
+  --np-radius-md: 3px;
+  --np-radius-lg: 4px;
+  --np-radius-xl: 5px;
+  --np-radius-2xl: 6px;
+  --np-radius-3xl: 8px;
   --np-radius-full: 9999px;
 
   /* --- Elevation -------------------------------------------------------- */
-  --np-shadow-xs: 0 1px 2px 0 rgb(16 24 40 / 0.05);
-  --np-shadow-sm: 0 1px 3px 0 rgb(16 24 40 / 0.1), 0 1px 2px -1px rgb(16 24 40 / 0.06);
-  --np-shadow-md: 0 4px 8px -2px rgb(16 24 40 / 0.1), 0 2px 4px -2px rgb(16 24 40 / 0.06);
-  --np-shadow-lg: 0 12px 16px -4px rgb(16 24 40 / 0.08), 0 4px 6px -2px rgb(16 24 40 / 0.03);
+  /* Depth is a last resort. Most surfaces are separated by a rule. */
+  --np-shadow-xs: 0 1px 1px 0 rgb(25 22 19 / 0.04);
+  --np-shadow-sm: 0 1px 2px 0 rgb(25 22 19 / 0.06), 0 1px 1px -1px rgb(25 22 19 / 0.04);
+  --np-shadow-md: 0 2px 6px -2px rgb(25 22 19 / 0.08);
+  --np-shadow-lg: 0 12px 32px -12px rgb(25 22 19 / 0.14);
 
   /* --- Layout ----------------------------------------------------------- */
-  --np-sidebar-width: 16rem;
-  --np-topbar-height: 3.5rem;
-  --np-content-max-width: 72rem;
+  --np-topbar-height: 3.75rem;
+  --np-content-max-width: 74rem;
 }
 
 /* ==========================================================================
@@ -163,52 +173,54 @@
    ========================================================================== */
 
 .dark {
-  --np-background: var(--np-neutral-950);
-  --np-surface: #14171f;
-  --np-surface-raised: #1b1f29;
-  --np-surface-sunken: #0f1218;
-  --np-surface-hover: #1f2430;
+  --np-background: #12110f;
+  --np-surface: #181714;
+  --np-surface-raised: #1c1b18;
+  --np-surface-sunken: #0d0c0b;
+  --np-surface-hover: #23221e;
+  --np-surface-glass: rgb(24 23 20 / 0.9);
 
-  --np-text-primary: #f2f4f8;
-  --np-text-secondary: #a8b0c0;
-  --np-text-muted: #8b93a5;
-  --np-text-inverted: var(--np-neutral-950);
+  --np-text-primary: #efe9dd;
+  --np-text-secondary: #b8b0a3;
+  --np-text-muted: #8c8477;
+  --np-text-inverted: #12110f;
 
-  --np-border: #2a2f3c;
-  --np-border-strong: #3a4150;
-  --np-border-subtle: #1f2430;
+  --np-border: #34322c;
+  --np-border-strong: #6b665b;
+  --np-border-subtle: #26241f;
 
-  /* Indigo 300 reads clearly on near-black; indigo 700 does not. */
-  --np-primary: var(--np-indigo-300);
-  --np-primary-hover: #c7d0fd;
-  --np-primary-active: #d8defe;
-  --np-primary-subtle: #1e2140;
-  --np-primary-foreground: var(--np-neutral-950);
-  --np-primary-text: var(--np-indigo-300);
+  --np-primary: #8db7a0;
+  --np-primary-hover: #a6c9b4;
+  --np-primary-active: #bfd8c8;
+  --np-primary-subtle: #1b2a22;
+  --np-primary-foreground: #10120f;
+  --np-primary-text: #a6c9b4;
 
-  --np-success: #4ade80;
-  --np-success-subtle: #052e1b;
-  --np-success-text: #86efac;
+  --np-accent: #c98b77;
+  --np-accent-soft: #2a1d18;
 
-  --np-warning: #fbbf24;
-  --np-warning-subtle: #2e1f05;
-  --np-warning-text: #fcd34d;
+  --np-success: #7fbf9a;
+  --np-success-subtle: #16271d;
+  --np-success-text: #9ed4b3;
 
-  --np-danger: #f87171;
-  --np-danger-subtle: #2e0f0f;
-  --np-danger-text: #fca5a5;
+  --np-warning: #d9a04a;
+  --np-warning-subtle: #2a2113;
+  --np-warning-text: #e6bb77;
 
-  --np-info: #5eead4;
-  --np-info-subtle: #042f2a;
-  --np-info-text: #99f6e4;
+  --np-danger: #d98a82;
+  --np-danger-subtle: #2b1917;
+  --np-danger-text: #e7a59e;
 
-  --np-focus-ring: var(--np-indigo-300);
-  --np-focus-ring-offset: var(--np-background);
+  --np-info: #8fb4cb;
+  --np-info-subtle: #17232b;
+  --np-info-text: #b0cddd;
 
-  --np-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.4);
-  --np-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.4);
-  --np-shadow-md: 0 4px 8px -2px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.4);
-  --np-shadow-lg: 0 12px 16px -4px rgb(0 0 0 / 0.5), 0 4px 6px -2px rgb(0 0 0 / 0.3);
+  --np-focus-ring: #a6c9b4;
+
+  --np-shadow-xs: 0 1px 1px 0 rgb(0 0 0 / 0.3);
+  --np-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.35);
+  --np-shadow-md: 0 2px 8px -2px rgb(0 0 0 / 0.45);
+  --np-shadow-lg: 0 16px 40px -16px rgb(0 0 0 / 0.6);
 }
 
 /* ==========================================================================
@@ -223,6 +235,7 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -234,6 +247,12 @@ body {
   line-height: var(--np-leading-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--np-primary) 22%, transparent);
+  color: var(--np-text-primary);
 }
 
 /* A single, consistent focus treatment everywhere. Never `outline: none`. */
@@ -241,6 +260,19 @@ body {
   outline: 2px solid var(--np-focus-ring);
   outline-offset: 2px;
   border-radius: var(--np-radius-sm);
+}
+
+/* Display type. Used for page titles and marketing headlines only — never for
+   body copy or form labels. */
+.np-display {
+  font-family: var(--np-font-display);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.np-tabular {
+  font-variant-numeric: tabular-nums;
 }
 
 /* Respect a user's motion preference. */

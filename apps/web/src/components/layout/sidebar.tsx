@@ -1,27 +1,49 @@
 'use client';
 
-import { Badge, cn } from '@neevpass/ui';
+import { cn } from '@neevpass/ui';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { Icon } from './icon';
 import { isActivePath, PRIMARY_NAV, SECONDARY_NAV, type NavItem } from './nav-items';
 
 /**
- * The navigation list.
+ * The primary navigation.
  *
- * A client component because it reads the current path to mark the active item.
- * It is shared verbatim by the desktop sidebar and the mobile drawer so the two
- * can never drift apart.
- *
- * Accessibility notes:
- *   - `<nav aria-label>` gives screen reader users a way to jump between
- *     landmarks when there is more than one navigation region.
- *   - The active item carries `aria-current="page"`, which is announced. The
- *     visual treatment is a background and weight change, never colour alone.
+ * On desktop this is a horizontal set of tabs sitting on the header's bottom
+ * rule. On mobile it becomes a plain vertical list inside the drawer. Both
+ * variants come from the same data and mark the current route with
+ * `aria-current="page"`, so the visual and announced states cannot drift.
  */
+export function PrimaryNav({ className }: { className?: string }) {
+  const pathname = usePathname();
 
-function NavLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => void }) {
+  return (
+    <nav aria-label="Main" className={cn('flex items-stretch gap-5 xl:gap-7', className)}>
+      {PRIMARY_NAV.map((item) => {
+        const active = isActivePath(pathname, item.href);
+
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            aria-current={active ? 'page' : undefined}
+            className={cn(
+              'relative flex h-[60px] items-center whitespace-nowrap text-[13px] transition-colors',
+              'after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:transition-colors',
+              active
+                ? 'font-medium text-content after:bg-content'
+                : 'text-content-secondary after:bg-transparent hover:text-content',
+            )}
+          >
+            {item.label}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
+function MobileLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => void }) {
   const pathname = usePathname();
   const active = isActivePath(pathname, item.href);
 
@@ -31,49 +53,40 @@ function NavLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => void 
       onClick={onNavigate}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
+        'block border-l-2 py-3 pl-3.5 pr-2 text-[14px] transition-colors',
         active
-          ? 'bg-brand-subtle font-medium text-brand-text'
-          : 'text-content-secondary hover:bg-surface-hover hover:text-content',
+          ? 'border-content bg-surface-sunken/60 font-medium text-content'
+          : 'border-transparent text-content-secondary hover:border-line-strong hover:text-content',
       )}
     >
-      <Icon
-        name={item.icon}
-        className={cn('shrink-0', active ? 'text-brand-text' : 'text-content-muted')}
-      />
-      <span className="flex-1 truncate">{item.label}</span>
-      {item.comingSoon && (
-        <Badge variant="outline" className="shrink-0">
-          Soon
-        </Badge>
-      )}
+      {item.label}
     </Link>
   );
 }
 
-export interface SidebarNavProps {
-  /** Called after a link is followed — used to close the mobile drawer. */
+export interface MobileNavListProps {
   onNavigate?: () => void;
   className?: string;
 }
 
-export function SidebarNav({ onNavigate, className }: SidebarNavProps) {
+export function MobileNavList({ onNavigate, className }: MobileNavListProps) {
   return (
-    <div className={cn('flex h-full flex-col gap-6', className)}>
-      <nav aria-label="Main" className="flex flex-col gap-1">
-        <h2 className="px-3 pb-1 text-xs font-medium uppercase tracking-wide text-content-muted">
-          Workspace
-        </h2>
+    <div className={cn('flex h-full flex-col', className)}>
+      <nav aria-label="Main" className="flex flex-col">
         {PRIMARY_NAV.map((item) => (
-          <NavLink key={item.href} item={item} onNavigate={onNavigate} />
+          <MobileLink key={item.href} item={item} onNavigate={onNavigate} />
         ))}
       </nav>
 
-      <nav aria-label="Account" className="mt-auto flex flex-col gap-1">
+      <nav aria-label="Account" className="mt-6 flex flex-col border-t border-line pt-4">
         {SECONDARY_NAV.map((item) => (
-          <NavLink key={item.href} item={item} onNavigate={onNavigate} />
+          <MobileLink key={item.href} item={item} onNavigate={onNavigate} />
         ))}
       </nav>
+
+      <p className="mt-auto border-t border-line-subtle px-1 pt-4 text-[11px] leading-relaxed text-content-muted">
+        Your profile stays private until you publish it. There is no recruiter search.
+      </p>
     </div>
   );
 }

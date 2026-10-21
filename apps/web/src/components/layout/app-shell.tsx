@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 
-import { SidebarNav } from './sidebar';
 import { Topbar } from './topbar';
 
 export interface AppShellProps {
@@ -12,45 +11,43 @@ export interface AppShellProps {
 }
 
 /**
- * The application chrome: skip link, header, sidebar and main region.
+ * The application chrome: skip link, masthead and main region.
  *
- * The skip link is the first focusable element on the page. Without it a
- * keyboard user has to tab through the entire navigation on every single page
- * before reaching the content — the single highest-value accessibility feature
- * in an application shell.
+ * There is no sidebar. Navigation lives in the masthead, which gives every
+ * page the full page measure and keeps the interface closer to a document than
+ * a dashboard of panels.
  *
- * The sidebar is hidden below `lg` and replaced by the drawer in the header, so
- * there is only ever one navigation landmark exposed at a time.
+ * The skip link is the first focusable element. Without it a keyboard user tabs
+ * through every navigation link on every page before reaching the content.
  */
 export function AppShell({ user, children }: AppShellProps) {
   return (
-    <div className="min-h-dvh bg-background">
+    <div className="flex min-h-dvh flex-col">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-surface focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-content focus:shadow-md"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-[3px] focus:border focus:border-line focus:bg-surface focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-content"
       >
         Skip to main content
       </a>
 
       <Topbar user={user} />
 
-      <div className="mx-auto flex w-full max-w-[100rem]">
-        {user && (
-          <aside className="sticky top-14 hidden h-[calc(100dvh-3.5rem)] w-64 shrink-0 overflow-y-auto border-r border-line bg-surface p-4 lg:block">
-            <SidebarNav />
-          </aside>
-        )}
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="mx-auto w-full max-w-[74rem] flex-1 px-5 py-9 sm:px-8 sm:py-12"
+      >
+        {children}
+      </main>
 
-        <main
-          id="main-content"
-          // Focusable so the skip link actually moves focus, not just scroll.
-          // -1 keeps it out of the normal tab order.
-          tabIndex={-1}
-          className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8"
-        >
-          <div className="mx-auto w-full max-w-5xl">{children}</div>
-        </main>
-      </div>
+      {user && (
+        <footer className="border-t border-line-subtle">
+          <div className="mx-auto flex w-full max-w-[74rem] flex-col gap-1 px-5 py-5 text-[11px] text-content-muted sm:flex-row sm:items-center sm:justify-between sm:px-8">
+            <span className="font-display text-[13px] text-content-secondary">NeevPass</span>
+            <span>Private by default. Your profile is visible only when you publish it.</span>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }

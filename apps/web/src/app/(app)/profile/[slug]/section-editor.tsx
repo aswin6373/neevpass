@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Badge, Button, Field, Input, Select, Textarea } from '@neevpass/ui';
+import { Alert, Button, Field, Input, Select, Textarea, cn } from '@neevpass/ui';
 import { useActionState, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { removeEntryAction, saveEntryAction } from '../actions';
@@ -43,18 +43,27 @@ export interface SectionEditorProps {
  */
 export function SectionEditor({ kind, slug, revision, skillOptions, entries, skillNamesByEntryId }: SectionEditorProps) {
   return (
-    <div className="flex flex-col gap-6">
-      {entries.map((entry) => (
-        <EntryCard
-          key={entry.id}
-          kind={kind}
-          slug={slug}
-          revision={revision}
-          entry={entry}
-          skillOptions={skillOptions}
-          skillNames={skillNamesByEntryId[entry.id] ?? []}
-        />
-      ))}
+    <div>
+      {entries.length === 0 ? (
+        <p className="border-y border-line py-5 text-[13px] text-content-secondary">
+          No entries yet. Add the first one below. It stays private until you change its
+          visibility.
+        </p>
+      ) : (
+        <div className="border-t border-line">
+          {entries.map((entry) => (
+            <EntryCard
+              key={entry.id}
+              kind={kind}
+              slug={slug}
+              revision={revision}
+              entry={entry}
+              skillOptions={skillOptions}
+              skillNames={skillNamesByEntryId[entry.id] ?? []}
+            />
+          ))}
+        </div>
+      )}
 
       <AddEntry kind={kind} slug={slug} revision={revision} skillOptions={skillOptions} />
     </div>
@@ -72,22 +81,27 @@ function AddEntry({ kind, slug, revision, skillOptions }: {
   const start = useCallback(() => setOpen(true), []);
 
   return (
-    <div className="rounded-lg border border-dashed border-line bg-surface p-4">
+    <div className="mt-7 border-y border-line py-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-content-secondary">Add a new entry to this section.</p>
+        <div>
+          <p className="text-[13px] font-medium text-content">Add an entry</p>
+          <p className="mt-0.5 text-[11px] text-content-muted">
+            It starts private and can be changed later.
+          </p>
+        </div>
         {open ? (
-          <Button type="button" variant="secondary" size="sm" onClick={close}>
+          <Button type="button" variant="ghost" size="sm" onClick={close}>
             Hide form
           </Button>
         ) : (
-          <Button type="button" variant="primary" size="sm" onClick={start}>
+          <Button type="button" variant="secondary" size="sm" onClick={start}>
             Add entry
           </Button>
         )}
       </div>
 
       {open ? (
-        <div className="mt-4">
+        <div className="mt-5 border-t border-line pt-5">
           <EntryForm
             kind={kind}
             slug={slug}
@@ -112,25 +126,37 @@ function EntryCard({ kind, slug, revision, entry, skillOptions, skillNames }: {
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
 
-  const skills = skillNames.length > 0 ? (
-    <p className="mt-2 flex flex-wrap gap-1.5">
-      {skillNames.map((name) => (
-        <Badge key={name} variant="neutral">{name}</Badge>
-      ))}
-    </p>
-  ) : null;
-
   return (
-    <div className="rounded-lg border border-line bg-surface p-4">
+    <div className="border-b border-line py-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className="truncate font-medium text-content">{entryTitle(entry)}</p>
-          {entryMeta(entry) && <p className="mt-0.5 text-sm text-content-secondary">{entryMeta(entry)}</p>}
-          {skills}
+          <p className="truncate text-[14px] font-medium text-content">{entryTitle(entry)}</p>
+          {entryMeta(entry) && (
+            <p className="mt-0.5 text-[11px] text-content-muted">{entryMeta(entry)}</p>
+          )}
+          {skillNames.length > 0 && (
+            <p className="mt-1 text-[11px] leading-relaxed text-content-secondary">
+              <span className="text-content-muted">Skills: </span>
+              {skillNames.join(', ')}
+            </p>
+          )}
         </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <Badge variant="outline">{visibilityLabel(String(entry.visibility ?? 'PRIVATE'))}</Badge>
-          <Button type="button" variant="secondary" size="sm" aria-expanded={open} onClick={() => setOpen((was) => !was)}>
+        <div className="flex shrink-0 items-center gap-3">
+          <span
+            className={cn(
+              'text-[10px]',
+              visibilityTone(String(entry.visibility ?? 'PRIVATE')),
+            )}
+          >
+            {visibilityLabel(String(entry.visibility ?? 'PRIVATE'))}
+          </span>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            aria-expanded={open}
+            onClick={() => setOpen((was) => !was)}
+          >
             {open ? 'Close' : 'Edit'}
           </Button>
         </div>
@@ -160,7 +186,7 @@ function RemoveEntry({ slug, entryId }: { slug: string; entryId: string }) {
   if (state.ok) return null; // removed: the card unmounts with the first render
 
   return (
-    <form action={formAction} className="flex flex-wrap items-center justify-between gap-3 border-t border-dashed border-line pt-3">
+    <form action={formAction} className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3">
       <input type="hidden" name="section" value={slug} />
       <input type="hidden" name="entryId" value={entryId} />
       <span className="text-sm text-content-muted">
@@ -220,7 +246,7 @@ function EntryForm({ kind, slug, revision, skillOptions, initial, onSuccess }: {
         </Alert>
       ) : null}
 
-      <div className="grid gap-x-4 gap-y-1 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         {(fields as readonly FieldSpec[]).map((spec) => (
           <FieldRow
             key={spec.name}
@@ -270,7 +296,13 @@ function FieldRow({ spec, state, initial, skillOptions }: {
       );
     case 'textarea':
       return (
-        <Field label={spec.label} error={error} required={spec.required} description={spec.hint}>
+        <Field
+          label={spec.label}
+          error={error}
+          required={spec.required}
+          description={spec.hint}
+          className="sm:col-span-2"
+        >
           <Textarea
             name={spec.name}
             required={spec.required}
@@ -306,16 +338,20 @@ function FieldRow({ spec, state, initial, skillOptions }: {
       );
     case 'checkbox':
       return (
-        <label className="flex items-center gap-2.5 rounded-md border border-line bg-surface-sunken px-3 py-2.5 text-sm text-content">
+        <label className="flex items-start gap-2.5 border-y border-line py-2.5 text-[13px] text-content sm:col-span-2">
           <input
             type="checkbox"
             name={spec.name}
-            className="h-4 w-4"
+            className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--np-primary)]"
             defaultChecked={Boolean(scalar(initial, spec.name))}
           />
           <span>
             {spec.label}
-            {spec.hint ? <span className="block text-xs text-content-muted">{spec.hint}</span> : null}
+            {spec.hint ? (
+              <span className="mt-0.5 block text-[11px] leading-relaxed text-content-muted">
+                {spec.hint}
+              </span>
+            ) : null}
           </span>
         </label>
       );
@@ -400,10 +436,14 @@ function SkillPicker({ error, initial, options }: {
   }, [filtered]);
 
   return (
-    <Field label="Skills shown in this entry" error={error} description="Tick every skill the entry demonstrates.">
-      <div className="rounded-md border border-line bg-surface-sunken p-3">
+    <Field
+      label="Skills shown in this entry"
+      error={error}
+      description="Tick every skill the entry demonstrates."
+    >
+      <div className="border-y border-line py-2">
         {options.length === 0 ? (
-          <p className="text-sm text-content-muted">Loading skills…</p>
+          <p className="py-2 text-[12px] text-content-muted">Loading skills…</p>
         ) : (
           <>
             <Input
@@ -412,21 +452,26 @@ function SkillPicker({ error, initial, options }: {
               value={filter}
               onChange={(event) => setFilter(event.target.value)}
               aria-label="Filter skills"
-              className="mb-2"
+              className="mb-2 h-9"
             />
             <div className="max-h-56 overflow-y-auto pr-1">
               {grouped.map(([category, list]) => (
                 <fieldset key={category} className="mb-2 last:mb-0">
-                  <legend className="mb-1 text-xs font-medium uppercase tracking-wide text-content-muted">{category}</legend>
-                  <div className="flex flex-col gap-1">
+                  <legend className="mb-1 text-[10px] font-medium text-content-muted">
+                    {category}
+                  </legend>
+                  <div className="flex flex-col">
                     {list.map((option) => (
-                      <label key={option.id} className="flex items-center gap-2 text-sm text-content">
+                      <label
+                        key={option.id}
+                        className="flex items-center gap-2 py-1 text-[12px] text-content-secondary hover:text-content"
+                      >
                         <input
                           type="checkbox"
                           name="skillIds"
                           value={option.id}
                           defaultChecked={selectedIds.has(option.id)}
-                          className="h-4 w-4"
+                          className="h-3.5 w-3.5 accent-[var(--np-primary)]"
                         />
                         {option.name}
                       </label>
@@ -435,8 +480,10 @@ function SkillPicker({ error, initial, options }: {
                 </fieldset>
               ))}
             </div>
-            <p className="mt-1 text-xs text-content-muted">
-              {selectedIds.size > 0 ? `${selectedIds.size} selected — scroll or filter to change.` : 'Unticked adds no skills.'}
+            <p className="mt-1 text-[10px] text-content-muted">
+              {selectedIds.size > 0
+                ? `${selectedIds.size} selected. Scroll or filter to change.`
+                : 'Unticked adds no skills.'}
             </p>
           </>
         )}
@@ -498,4 +545,10 @@ function visibilityLabel(value: string): string {
   if (value === 'UNLISTED') return 'Link only';
   if (value === 'PUBLIC') return 'Public';
   return 'Private';
+}
+
+function visibilityTone(value: string): string {
+  if (value === 'PUBLIC') return 'text-success-text';
+  if (value === 'UNLISTED') return 'text-warning-text';
+  return 'text-content-muted';
 }

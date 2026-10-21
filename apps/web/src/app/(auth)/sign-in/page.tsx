@@ -1,4 +1,4 @@
-import { Alert, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neevpass/ui';
+import { Alert } from '@neevpass/ui';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -42,15 +42,14 @@ export default async function SignInPage({
     : null;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle as="h1" className="text-xl">
-          Welcome back
-        </CardTitle>
-        <CardDescription>Sign in to continue building your profile.</CardDescription>
-      </CardHeader>
+    <div className="flex flex-col">
+      <p className="text-[12px] text-content-muted">NeevPass account</p>
+      <h1 className="np-display mt-2.5 text-[2.25rem] text-content">Sign in</h1>
+      <p className="mt-3 text-[14px] leading-relaxed text-content-secondary">
+        Your profile, resumes and career plan are where you left them.
+      </p>
 
-      <CardContent className="flex flex-col gap-5">
+      <div className="mt-7 flex flex-col gap-5 border-t border-line pt-6">
         {oauthErrorMessage && (
           <Alert variant="danger" title="Sign-in problem">
             {oauthErrorMessage}
@@ -62,19 +61,29 @@ export default async function SignInPage({
         {providers.length > 0 && <AuthDivider />}
 
         <SignInForm />
+      </div>
 
-        <p className="text-center text-xs text-content-muted">
-          By signing in you agree to our{' '}
-          <Link href="/terms" className="underline underline-offset-4">
-            terms
-          </Link>{' '}
-          and{' '}
-          <Link href="/privacy" className="underline underline-offset-4">
-            privacy policy
-          </Link>
-          .
-        </p>
-      </CardContent>
-    </Card>
+      <p className="mt-6 text-[13px] text-content-secondary">
+        New to NeevPass?{' '}
+        <Link
+          href="/sign-up"
+          className="text-brand-text underline decoration-brand/40 underline-offset-4 hover:decoration-brand"
+        >
+          Create an account
+        </Link>
+      </p>
+
+      <p className="mt-8 border-t border-line-subtle pt-4 text-[11px] leading-relaxed text-content-muted">
+        By signing in you agree to the{' '}
+        <Link href="/terms" className="underline underline-offset-2">
+          terms
+        </Link>{' '}
+        and{' '}
+        <Link href="/privacy" className="underline underline-offset-2">
+          privacy policy
+        </Link>
+        .
+      </p>
+    </div>
   );
 }

@@ -27,8 +27,8 @@ export const viewport: Viewport = {
   // Matches the token values so the browser chrome does not flash white in
   // dark mode on mobile.
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f6f7f9' },
-    { media: '(prefers-color-scheme: dark)', color: '#0b0d12' },
+    { media: '(prefers-color-scheme: light)', color: '#f6f2ec' },
+    { media: '(prefers-color-scheme: dark)', color: '#08080a' },
   ],
 };
 

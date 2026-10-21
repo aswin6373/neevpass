@@ -2,6 +2,7 @@ import type { ProfileAggregate, SectionKind } from '@neevpass/domain';
 import { SECTION_DEFINITIONS } from '@neevpass/domain';
 import { listTaxonomySkills, requireProfileAggregate } from '@neevpass/db';
 import { PageHeader } from '@neevpass/ui';
+import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -33,12 +34,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 /**
  * One section editor page: `/profile/[slug]`.
  *
- * The section is resolved from the domain's SECTION_DEFINITIONS — an unknown
+ * The section is resolved from the domain's SECTION_DEFINITIONS; an unknown
  * slug is a 404, not a blank editor. The page loads the aggregate and taxonomy,
- * reshapes rows into the one shape the client editor submits (`EntryLike`),
- * and dispatches to the bespoke editors for SUMMARY and SKILLS or the shared
- * editor for the rest. Everything handed to the client is plain serialisable
- * data.
+ * reshapes rows into the shape the client editor submits, and dispatches to the
+ * bespoke editors for SUMMARY and SKILLS or the shared editor for the rest.
  */
 export default async function SectionPage({ params }: PageProps) {
   const { slug } = await params;
@@ -77,32 +76,77 @@ export default async function SectionPage({ params }: PageProps) {
           slug={definition.slug}
           revision={aggregate.revision}
           skillOptions={await skillOptions()}
-          // Rows are plain aggregate objects, read by field name through the
-          // declarative spec table; the cast marks that intentional looseness
-          // at the server→client boundary.
           entries={entriesFor(definition.kind, aggregate) as readonly EntryLike[]}
           skillNamesByEntryId={skillNamesByEntry(definition.kind, aggregate)}
         />
       );
 
-  return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <Link href="/profile" className="inline-flex items-center gap-1.5 text-sm text-content-secondary hover:text-content">
-          ← All sections
-        </Link>
-      </div>
+  const sectionNumber = SECTION_DEFINITIONS.findIndex(
+    (candidate) => candidate.slug === definition.slug,
+  );
+  const entryCount = countEntriesFor(definition.kind, aggregate);
 
-      <PageHeader title={definition.label} description={definition.description} />
+  return (
+    <div className="flex flex-col gap-7">
+      <Link
+        href="/profile"
+        className="inline-flex w-fit items-center gap-1.5 text-[12px] text-content-secondary underline decoration-line-strong underline-offset-4 hover:text-content hover:decoration-content"
+      >
+        <ArrowLeft size={13} aria-hidden="true" />
+        All sections
+      </Link>
+
+      <PageHeader
+        eyebrow={`Profile · Section ${String(sectionNumber + 1).padStart(2, '0')}`}
+        title={definition.label}
+        description={definition.description}
+        actions={
+          <p className="text-[11px] text-content-muted">
+            {definition.kind === 'SUMMARY'
+              ? 'Profile basics'
+              : entryCount === 1
+                ? '1 entry'
+                : `${entryCount} entries`}
+          </p>
+        }
+      />
 
       {body}
 
-      <p className="text-xs text-content-muted">
-        Every entry starts private. Visibility per entry: Private stays yours; Unlisted shares only
-        through a link; Public appears on pages you publish.
+      <p className="max-w-2xl border-t border-line pt-4 text-[11px] leading-relaxed text-content-muted">
+        Every entry starts private. Private stays yours, unlisted travels only by a direct link, and
+        public appears on portfolio pages you publish. Resumes are never public.
       </p>
     </div>
   );
+}
+
+/** How many entries a section currently holds. Summary is one object. */
+function countEntriesFor(kind: SectionKind, aggregate: ProfileAggregate): number {
+  switch (kind) {
+    case 'SUMMARY':
+      return aggregate.fullName ? 1 : 0;
+    case 'SKILLS':
+      return aggregate.skills.length;
+    case 'EDUCATION':
+      return aggregate.education.length;
+    case 'EXPERIENCE':
+      return aggregate.experience.filter((entry) => entry.type !== 'INTERNSHIP').length;
+    case 'INTERNSHIPS':
+      return aggregate.experience.filter((entry) => entry.type === 'INTERNSHIP').length;
+    case 'PROJECTS':
+      return aggregate.projects.length;
+    case 'CERTIFICATES':
+      return aggregate.certificates.length;
+    case 'ACHIEVEMENTS':
+      return aggregate.achievements.length;
+    case 'HACKATHONS':
+      return aggregate.hackathons.length;
+    case 'WORKSHOPS':
+      return aggregate.workshops.length;
+    case 'LINKS':
+      return aggregate.links.length;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -169,7 +213,7 @@ function entriesFor(kind: SectionKind, aggregate: ProfileAggregate): readonly ob
   }
 }
 
-/** Taxonomy skill names per entry id, for the editor's chips. */
+/** Taxonomy skill names per entry id, for the editor's inline skill text. */
 function skillNamesByEntry(
   kind: SectionKind,
   aggregate: ProfileAggregate,

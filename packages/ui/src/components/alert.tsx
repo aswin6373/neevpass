@@ -3,14 +3,14 @@ import type { HTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '../lib/cn';
 
-const alertVariants = cva('flex gap-3 rounded-md border p-4 text-sm', {
+const alertVariants = cva('flex gap-3 rounded-[3px] border p-3.5 text-[13px] leading-relaxed', {
   variants: {
     variant: {
       info: 'border-info/30 bg-info-subtle text-info-text',
       success: 'border-success/30 bg-success-subtle text-success-text',
-      warning: 'border-warning/30 bg-warning-subtle text-warning-text',
-      danger: 'border-danger/30 bg-danger-subtle text-danger-text',
-      neutral: 'border-line bg-surface-sunken text-content-secondary',
+      warning: 'border-warning/35 bg-warning-subtle text-warning-text',
+      danger: 'border-danger/35 bg-danger-subtle text-danger-text',
+      neutral: 'border-line bg-surface-sunken/70 text-content-secondary',
     },
   },
   defaultVariants: { variant: 'neutral' },
@@ -45,7 +45,7 @@ export function Alert({ className, variant, title, icon, children, ...props }: A
         </span>
       )}
       <div className="flex flex-col gap-1">
-        {title && <p className="font-semibold">{title}</p>}
+        {title && <p className="font-semibold text-current">{title}</p>}
         {children && <div className="[&_a]:underline">{children}</div>}
       </div>
     </div>
