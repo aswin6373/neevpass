@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+
+# Environment — never commit real secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Local Postgres cluster (dev only, no Docker on this machine)
+.pgdata/
+*.log
+
+# Prisma
+packages/db/prisma/migrations/dev.db*
+# Prisma 7 emits TypeScript source into the repo; it is regenerated on install.
+packages/db/src/generated/
+
+# Testing
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Tooling caches
+.eslintcache
+.turbo/
+.vercel
+
+# Local tool state
+.workbuddy-ai/

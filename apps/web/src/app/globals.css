@@ -1,0 +1,86 @@
+/* ==========================================================================
+   NeevPass application stylesheet
+   ==========================================================================
+
+   Tailwind CSS v4 is configured in CSS, not in a JavaScript config file.
+
+   Three layers, in order:
+     1. Tailwind itself.
+     2. The design tokens from @neevpass/ui — raw values, plus the light and
+        dark palettes and the base layer.
+     3. `@theme inline`, which maps those raw token values onto Tailwind's
+        theme so utilities like `bg-surface` and `text-content` exist and stay
+        wired to the live token value (that is what `inline` buys us: the
+        utility emits `var(--np-surface)`, so switching `.dark` re-themes the
+        whole app without re-generating any CSS).
+   ========================================================================== */
+
+@import 'tailwindcss';
+@import '../../../../packages/ui/src/styles/tokens.css';
+
+/* Tailwind's `dark:` variant follows the OS preference by default. NeevPass
+   uses an explicit class so the user can override the system setting, and so
+   the server can render the correct theme without a flash. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* The design system lives outside this app, so Tailwind has to be told to scan
+   it for class names. Without this, classes used only in packages/ui would be
+   tree-shaken out of the stylesheet. */
+@source '../../../../packages/ui/src';
+
+@theme inline {
+  /* Surfaces */
+  --color-background: var(--np-background);
+  --color-surface: var(--np-surface);
+  --color-surface-raised: var(--np-surface-raised);
+  --color-surface-sunken: var(--np-surface-sunken);
+  --color-surface-hover: var(--np-surface-hover);
+
+  /* Text */
+  --color-content: var(--np-text-primary);
+  --color-content-secondary: var(--np-text-secondary);
+  --color-content-muted: var(--np-text-muted);
+  --color-content-inverted: var(--np-text-inverted);
+
+  /* Borders */
+  --color-line: var(--np-border);
+  --color-line-strong: var(--np-border-strong);
+  --color-line-subtle: var(--np-border-subtle);
+
+  /* Brand */
+  --color-brand: var(--np-primary);
+  --color-brand-hover: var(--np-primary-hover);
+  --color-brand-subtle: var(--np-primary-subtle);
+  --color-brand-foreground: var(--np-primary-foreground);
+  --color-brand-text: var(--np-primary-text);
+
+  /* Status */
+  --color-success: var(--np-success);
+  --color-success-subtle: var(--np-success-subtle);
+  --color-success-text: var(--np-success-text);
+  --color-warning: var(--np-warning);
+  --color-warning-subtle: var(--np-warning-subtle);
+  --color-warning-text: var(--np-warning-text);
+  --color-danger: var(--np-danger);
+  --color-danger-subtle: var(--np-danger-subtle);
+  --color-danger-text: var(--np-danger-text);
+  --color-info: var(--np-info);
+  --color-info-subtle: var(--np-info-subtle);
+  --color-info-text: var(--np-info-text);
+
+  /* Typography */
+  --font-sans: var(--np-font-sans);
+  --font-mono: var(--np-font-mono);
+
+  /* Radii */
+  --radius-sm: var(--np-radius-sm);
+  --radius-md: var(--np-radius-md);
+  --radius-lg: var(--np-radius-lg);
+  --radius-xl: var(--np-radius-xl);
+
+  /* Elevation */
+  --shadow-xs: var(--np-shadow-xs);
+  --shadow-sm: var(--np-shadow-sm);
+  --shadow-md: var(--np-shadow-md);
+  --shadow-lg: var(--np-shadow-lg);
+}

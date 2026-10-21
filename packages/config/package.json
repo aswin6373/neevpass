@@ -1,0 +1,15 @@
+{
+  "name": "@neevpass/config",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared TypeScript and ESLint configuration for NeevPass.",
+  "files": [
+    "tsconfig",
+    "eslint"
+  ],
+  "devDependencies": {
+    "eslint": "10.12.0",
+    "typescript-eslint": "8.71.1"
+  }
+}

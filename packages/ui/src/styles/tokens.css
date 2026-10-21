@@ -1,0 +1,256 @@
+/* ==========================================================================
+   NeevPass design tokens
+   ==========================================================================
+
+   These are the tokens for the APPLICATION CHROME — buttons, navigation,
+   forms, surfaces. They are NOT the tokens used inside a generated resume or
+   portfolio.
+
+   That separation is deliberate. Document themes are print-oriented (physical
+   units, fixed page geometry, fonts that must be embedded in a PDF) and are
+   user-selectable per resume. Application chrome is fixed and optimised for
+   screen. Conflating the two would mean a student's choice of resume accent
+   colour could break the contrast of the app's own navigation.
+
+   Document theme tokens live in packages/docgen (Phase 2).
+
+   Contrast: every text/background pairing below targets WCAG 2.2 AA
+   (4.5:1 for body text, 3:1 for large text and UI borders).
+   ========================================================================== */
+
+:root {
+  /* --- Brand ramps ------------------------------------------------------ */
+  /* Kept as raw values so future features (charts, resume accents) can reach
+     for a specific step without inventing a new colour. */
+  --np-indigo-50: #eef0ff;
+  --np-indigo-100: #e0e3ff;
+  --np-indigo-300: #a5b4fc;
+  --np-indigo-500: #6366f1;
+  --np-indigo-600: #4f46e5;
+  --np-indigo-700: #4338ca;
+  --np-indigo-800: #3730a3;
+
+  --np-teal-500: #14b8a6;
+  --np-teal-700: #0f766e;
+
+  --np-green-600: #16a34a;
+  --np-green-700: #15803d;
+  --np-amber-600: #d97706;
+  --np-amber-700: #b45309;
+  --np-red-600: #dc2626;
+  --np-red-700: #b91c1c;
+
+  --np-neutral-0: #ffffff;
+  --np-neutral-25: #fcfcfd;
+  --np-neutral-50: #f6f7f9;
+  --np-neutral-100: #eceef2;
+  --np-neutral-200: #e4e6eb;
+  --np-neutral-300: #cdd1da;
+  --np-neutral-400: #9aa1b1;
+  --np-neutral-500: #6b7385;
+  --np-neutral-600: #5a6072;
+  --np-neutral-700: #3d4252;
+  --np-neutral-800: #232733;
+  --np-neutral-900: #12141a;
+  --np-neutral-950: #0b0d12;
+
+  /* --- Semantic: surfaces ----------------------------------------------- */
+  --np-background: var(--np-neutral-50);
+  --np-surface: var(--np-neutral-0);
+  --np-surface-raised: var(--np-neutral-0);
+  --np-surface-sunken: var(--np-neutral-100);
+  --np-surface-hover: var(--np-neutral-50);
+
+  /* --- Semantic: text --------------------------------------------------- */
+  --np-text-primary: var(--np-neutral-900);
+  --np-text-secondary: var(--np-neutral-600);
+  --np-text-muted: var(--np-neutral-500);
+  --np-text-inverted: var(--np-neutral-0);
+
+  /* --- Semantic: borders ------------------------------------------------ */
+  --np-border: var(--np-neutral-200);
+  --np-border-strong: var(--np-neutral-300);
+  --np-border-subtle: var(--np-neutral-100);
+
+  /* --- Semantic: interactive -------------------------------------------- */
+  --np-primary: var(--np-indigo-700);
+  --np-primary-hover: var(--np-indigo-800);
+  --np-primary-active: var(--np-indigo-800);
+  --np-primary-subtle: var(--np-indigo-50);
+  --np-primary-foreground: var(--np-neutral-0);
+  --np-primary-text: var(--np-indigo-700);
+
+  /* --- Semantic: status ------------------------------------------------- */
+  --np-success: var(--np-green-700);
+  --np-success-subtle: #ecfdf3;
+  --np-success-text: #05603a;
+
+  --np-warning: var(--np-amber-700);
+  --np-warning-subtle: #fffaeb;
+  --np-warning-text: #93370d;
+
+  --np-danger: var(--np-red-700);
+  --np-danger-subtle: #fef3f2;
+  --np-danger-text: #912018;
+
+  --np-info: var(--np-teal-700);
+  --np-info-subtle: #f0fdfa;
+  --np-info-text: #115e59;
+
+  /* --- Focus ------------------------------------------------------------ */
+  /* Always visible and never removed — a keyboard user must be able to see
+     where they are at all times. */
+  --np-focus-ring: var(--np-indigo-600);
+  --np-focus-ring-offset: var(--np-surface);
+
+  /* --- Typography ------------------------------------------------------- */
+  /* System stack only. No web-font request on the critical path: it keeps
+     first paint fast and means the app never shifts layout when a font
+     arrives late. Document fonts are handled separately in Phase 2. */
+  --np-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --np-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  --np-text-xs: 0.75rem;
+  --np-text-sm: 0.875rem;
+  --np-text-base: 1rem;
+  --np-text-lg: 1.125rem;
+  --np-text-xl: 1.25rem;
+  --np-text-2xl: 1.5rem;
+  --np-text-3xl: 1.875rem;
+  --np-text-4xl: 2.25rem;
+
+  --np-leading-tight: 1.25;
+  --np-leading-normal: 1.5;
+  --np-leading-relaxed: 1.65;
+
+  /* --- Spacing scale ---------------------------------------------------- */
+  --np-space-1: 0.25rem;
+  --np-space-2: 0.5rem;
+  --np-space-3: 0.75rem;
+  --np-space-4: 1rem;
+  --np-space-5: 1.25rem;
+  --np-space-6: 1.5rem;
+  --np-space-8: 2rem;
+  --np-space-10: 2.5rem;
+  --np-space-12: 3rem;
+  --np-space-16: 4rem;
+
+  /* --- Radii ------------------------------------------------------------ */
+  --np-radius-sm: 0.375rem;
+  --np-radius-md: 0.5rem;
+  --np-radius-lg: 0.75rem;
+  --np-radius-xl: 1rem;
+  --np-radius-full: 9999px;
+
+  /* --- Elevation -------------------------------------------------------- */
+  --np-shadow-xs: 0 1px 2px 0 rgb(16 24 40 / 0.05);
+  --np-shadow-sm: 0 1px 3px 0 rgb(16 24 40 / 0.1), 0 1px 2px -1px rgb(16 24 40 / 0.06);
+  --np-shadow-md: 0 4px 8px -2px rgb(16 24 40 / 0.1), 0 2px 4px -2px rgb(16 24 40 / 0.06);
+  --np-shadow-lg: 0 12px 16px -4px rgb(16 24 40 / 0.08), 0 4px 6px -2px rgb(16 24 40 / 0.03);
+
+  /* --- Layout ----------------------------------------------------------- */
+  --np-sidebar-width: 16rem;
+  --np-topbar-height: 3.5rem;
+  --np-content-max-width: 72rem;
+}
+
+/* ==========================================================================
+   Dark theme
+   Applied by the `.dark` class on <html>. Set from the user's stored
+   preference, falling back to prefers-color-scheme before hydration.
+   ========================================================================== */
+
+.dark {
+  --np-background: var(--np-neutral-950);
+  --np-surface: #14171f;
+  --np-surface-raised: #1b1f29;
+  --np-surface-sunken: #0f1218;
+  --np-surface-hover: #1f2430;
+
+  --np-text-primary: #f2f4f8;
+  --np-text-secondary: #a8b0c0;
+  --np-text-muted: #8b93a5;
+  --np-text-inverted: var(--np-neutral-950);
+
+  --np-border: #2a2f3c;
+  --np-border-strong: #3a4150;
+  --np-border-subtle: #1f2430;
+
+  /* Indigo 300 reads clearly on near-black; indigo 700 does not. */
+  --np-primary: var(--np-indigo-300);
+  --np-primary-hover: #c7d0fd;
+  --np-primary-active: #d8defe;
+  --np-primary-subtle: #1e2140;
+  --np-primary-foreground: var(--np-neutral-950);
+  --np-primary-text: var(--np-indigo-300);
+
+  --np-success: #4ade80;
+  --np-success-subtle: #052e1b;
+  --np-success-text: #86efac;
+
+  --np-warning: #fbbf24;
+  --np-warning-subtle: #2e1f05;
+  --np-warning-text: #fcd34d;
+
+  --np-danger: #f87171;
+  --np-danger-subtle: #2e0f0f;
+  --np-danger-text: #fca5a5;
+
+  --np-info: #5eead4;
+  --np-info-subtle: #042f2a;
+  --np-info-text: #99f6e4;
+
+  --np-focus-ring: var(--np-indigo-300);
+  --np-focus-ring-offset: var(--np-background);
+
+  --np-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --np-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --np-shadow-md: 0 4px 8px -2px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --np-shadow-lg: 0 12px 16px -4px rgb(0 0 0 / 0.5), 0 4px 6px -2px rgb(0 0 0 / 0.3);
+}
+
+/* ==========================================================================
+   Base layer
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--np-background);
+  color: var(--np-text-primary);
+  font-family: var(--np-font-sans);
+  font-size: var(--np-text-base);
+  line-height: var(--np-leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* A single, consistent focus treatment everywhere. Never `outline: none`. */
+:focus-visible {
+  outline: 2px solid var(--np-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--np-radius-sm);
+}
+
+/* Respect a user's motion preference. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
