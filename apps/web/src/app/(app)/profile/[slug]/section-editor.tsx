@@ -45,9 +45,8 @@ export function SectionEditor({ kind, slug, revision, skillOptions, entries, ski
   return (
     <div>
       {entries.length === 0 ? (
-        <p className="border-y border-line py-5 text-[13px] text-content-secondary">
-          No entries yet. Add the first one below. It stays private until you change its
-          visibility.
+        <p className="border-y border-line py-4 text-[12px] text-content-secondary">
+          No entries yet.
         </p>
       ) : (
         <div className="border-t border-line">
@@ -83,12 +82,7 @@ function AddEntry({ kind, slug, revision, skillOptions }: {
   return (
     <div className="mt-7 border-y border-line py-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="text-[13px] font-medium text-content">Add an entry</p>
-          <p className="mt-0.5 text-[11px] text-content-muted">
-            It starts private and can be changed later.
-          </p>
-        </div>
+        <p className="text-[12px] font-medium text-content">Add an entry</p>
         {open ? (
           <Button type="button" variant="ghost" size="sm" onClick={close}>
             Hide form
@@ -189,8 +183,8 @@ function RemoveEntry({ slug, entryId }: { slug: string; entryId: string }) {
     <form action={formAction} className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3">
       <input type="hidden" name="section" value={slug} />
       <input type="hidden" name="entryId" value={entryId} />
-      <span className="text-sm text-content-muted">
-        {state.error ?? 'Removal is soft: your data is kept for a while before deletion.'}
+      <span className="text-[11px] text-content-muted">
+        {state.error ?? 'Remove this entry?'}
       </span>
       {armed ? (
         <Button type="submit" variant="danger" size="sm" isLoading={pending} loadingLabel="Removing">
@@ -326,7 +320,7 @@ function FieldRow({ spec, state, initial, skillOptions }: {
       );
     case 'date':
       return (
-        <Field label={spec.label} error={error} required={spec.required} description="Month and year.">
+        <Field label={spec.label} error={error} required={spec.required}>
           <Input
             name={spec.name}
             type="month"
@@ -377,7 +371,7 @@ function FieldRow({ spec, state, initial, skillOptions }: {
       );
     case 'visibility':
       return (
-        <Field label={spec.label} description="Change this per entry at any time.">
+        <Field label={spec.label}>
           <Select name={spec.name} defaultValue={scalar(initial, spec.name) ?? 'PRIVATE'}>
             {VISIBILITY_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
@@ -439,7 +433,6 @@ function SkillPicker({ error, initial, options }: {
     <Field
       label="Skills shown in this entry"
       error={error}
-      description="Tick every skill the entry demonstrates."
     >
       <div className="border-y border-line py-2">
         {options.length === 0 ? (

@@ -112,19 +112,15 @@ export function PortfolioStudio({
         <div className="overflow-hidden border border-line bg-surface">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3 py-2">
             <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true" />
-              <span className="text-[11px] font-medium text-content-secondary">Live preview</span>
-              <span className="border border-line px-1.5 py-0.5 text-[9px] uppercase tracking-[0.14em] text-content-muted">
+              <span className="text-[11px] font-medium text-content">Preview</span>
+              <span className="np-mono text-[10px] text-content-muted">
                 {activeTemplate?.label ?? 'Template'}
               </span>
             </div>
-            <span className="text-[10px] text-content-muted">
-              Draft · updates before you publish
-            </span>
           </div>
 
           <div className="bg-surface-sunken p-2 sm:p-4">
-            <div className="mx-auto overflow-hidden border border-line bg-white shadow-sm">
+            <div className="mx-auto overflow-hidden border border-line bg-white">
               <iframe
                 title="Live portfolio preview"
                 src={previewSrc}
@@ -135,11 +131,6 @@ export function PortfolioStudio({
             </div>
           </div>
         </div>
-
-        <p className="mt-2.5 max-w-2xl text-[10.5px] leading-relaxed text-content-muted">
-          The preview uses the same public-only snapshot as the live page. Private entries never
-          appear here, and template changes are not saved until you press Save portfolio.
-        </p>
       </div>
 
       {/* Controls -------------------------------------------------------- */}
@@ -159,11 +150,8 @@ export function PortfolioStudio({
           ) : null}
 
           <fieldset>
-            <legend className="text-[13px] font-medium text-content">Template</legend>
-            <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
-              Four starting points. You can change this at any time.
-            </p>
-            <div className="mt-3 border-t border-line">
+            <legend className="text-[12px] font-medium text-content">Template</legend>
+            <div className="mt-2 border-t border-line">
               {templates.map((template) => {
                 const active = template.key === templateKey;
                 return (
@@ -196,7 +184,7 @@ export function PortfolioStudio({
           </fieldset>
 
           <div className="flex flex-col gap-4">
-            <Field label="Title" description="Shown in the browser tab and page metadata.">
+            <Field label="Title">
               <Input
                 name="title"
                 value={title}
@@ -208,7 +196,7 @@ export function PortfolioStudio({
             <Field
               label="Public address"
               error={state.fieldErrors?.publicSlug}
-              description="Lowercase letters, numbers and hyphens, e.g. asha-verma."
+              description="Lowercase letters, numbers and hyphens."
             >
               <Input
                 name="publicSlug"
@@ -223,14 +211,7 @@ export function PortfolioStudio({
 
             <Field
               label="Accent colour"
-              description={
-                <>
-                  Used for highlights, chips and links.{' '}
-                  <span className="tabular-nums text-content-muted">
-                    {accentColor.toUpperCase()}
-                  </span>
-                </>
-              }
+              description={accentColor.toUpperCase()}
             >
               <Input
                 name="accentColor"
@@ -250,18 +231,15 @@ export function PortfolioStudio({
               className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--np-primary)]"
             />
             <span>
-              <span className="block text-[13px] font-medium text-content">Published</span>
-              <span className="mt-0.5 block text-[11px] leading-relaxed text-content-muted">
-                Unticking takes the page offline immediately. The address and template are kept.
+              <span className="block text-[12px] font-medium text-content">Published</span>
+              <span className="mt-0.5 block text-[10px] leading-relaxed text-content-muted">
+                Unticking takes the page offline.
               </span>
             </span>
           </label>
 
           <fieldset>
-            <legend className="text-[13px] font-medium text-content">Sections to hide</legend>
-            <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
-              These are left out even when they contain public entries.
-            </p>
+            <legend className="text-[12px] font-medium text-content">Sections to hide</legend>
             <div className="mt-2 border-t border-line-subtle">
               {sections.map((section) => (
                 <label

@@ -5,28 +5,26 @@ import { cn } from '../lib/cn';
 import { Spinner } from './spinner';
 
 export const buttonVariants = cva(
-  // Note: there is no `focus-visible:outline-none` here. Focus styling comes
-  // from the global :focus-visible rule in tokens.css, so every focusable
-  // element in the product looks the same and cannot be styled away locally.
-  'inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-[3px] font-medium tracking-[-0.005em] transition-colors duration-150 disabled:pointer-events-none disabled:opacity-45',
+  // Focus styling comes from the global :focus-visible rule in tokens.css, so
+  // every focusable element in the product looks the same.
+  'inline-flex select-none items-center justify-center gap-1.5 whitespace-nowrap rounded-[3px] font-medium tracking-[-0.005em] transition-colors duration-100 disabled:pointer-events-none disabled:opacity-40',
   {
     variants: {
       variant: {
-        // The primary action is ink, not the accent. Green stays a signal for
-        // links, focus and progress rather than the paint on every button.
-        primary: 'bg-content text-background hover:bg-content/85',
+        // Black is the primary action. There is no brand colour to spend.
+        primary: 'bg-brand text-brand-foreground hover:bg-brand-hover',
         secondary:
-          'border border-line-strong bg-surface text-content hover:border-content/40 hover:bg-surface-hover',
+          'border border-line-strong bg-surface text-content hover:border-content hover:bg-surface-hover',
         outline: 'border border-line bg-transparent text-content hover:bg-surface-hover',
         ghost: 'text-content-secondary hover:bg-surface-hover hover:text-content',
-        danger: 'bg-danger text-background hover:bg-danger/88',
-        link: 'h-auto p-0 text-brand-text underline-offset-4 hover:underline',
+        danger: 'border border-danger/30 bg-danger-subtle text-danger-text hover:border-danger/60',
+        link: 'h-auto p-0 text-content underline decoration-line-strong underline-offset-4 hover:decoration-content',
       },
       size: {
-        sm: 'h-8 px-3 text-[13px]',
-        md: 'h-10 px-4 text-sm',
-        lg: 'h-11 px-5 text-[15px]',
-        icon: 'h-9 w-9',
+        sm: 'h-7 px-2.5 text-[12px]',
+        md: 'h-8 px-3 text-[12.5px]',
+        lg: 'h-10 px-4 text-[13px]',
+        icon: 'h-8 w-8',
       },
       block: {
         true: 'w-full',

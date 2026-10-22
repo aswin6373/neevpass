@@ -34,16 +34,16 @@ export function OnboardingForm({ defaultName }: { defaultName: string }) {
         <Input name="fullName" defaultValue={defaultName} autoComplete="name" placeholder="Asha Verma" required />
       </Field>
 
-      <Field label="Headline" error={state.fieldErrors?.headline} description="One line about what you do or study">
+      <Field label="Headline" error={state.fieldErrors?.headline}>
         <Input
           name="headline"
-          placeholder="Final-year CS student · Bengaluru"
+          placeholder="Final-year CS student, Bengaluru"
           maxLength={120}
           autoComplete="organization-title"
         />
       </Field>
 
-      <Field label="Where are you based?" description="Optional — shown only where you publish it">
+      <Field label="Location">
         <Input name="location" placeholder="Bengaluru, India" maxLength={120} />
       </Field>
 

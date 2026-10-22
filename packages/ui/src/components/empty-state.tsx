@@ -14,27 +14,24 @@ export interface EmptyStateProps {
 /**
  * Shown when a section has no content yet.
  *
- * Every empty state should say what would go here and offer the action that
- * fills it. The treatment is a pair of rules, not a framed card or an
- * illustration: an empty region should look empty, not decorated.
+ * A ruled block, not a framed illustration. The title says what is missing and
+ * the action says what to do about it.
  */
 export function EmptyState({ icon, title, description, action, className }: EmptyStateProps) {
   return (
-    <div className={cn('flex flex-col items-start gap-3 border-y border-line py-6', className)}>
+    <div className={cn('flex flex-col items-start gap-2 border-y border-line py-6', className)}>
       {icon && (
-        <span aria-hidden="true" className="text-content-muted">
+        <span aria-hidden="true" className="mb-1 text-content-muted">
           {icon}
         </span>
       )}
-      <div className="flex flex-col gap-1">
-        <p className="text-[14px] font-medium text-content">{title}</p>
-        {description && (
-          <p className="max-w-lg text-[13px] leading-relaxed text-content-secondary">
-            {description}
-          </p>
-        )}
-      </div>
-      {action}
+      <p className="text-[13px] font-medium text-content">{title}</p>
+      {description && (
+        <p className="max-w-[55ch] text-[12px] leading-relaxed text-content-secondary">
+          {description}
+        </p>
+      )}
+      {action && <div className="mt-2">{action}</div>}
     </div>
   );
 }

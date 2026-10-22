@@ -3,18 +3,21 @@ import type { HTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '../lib/cn';
 
-const alertVariants = cva('flex gap-3 rounded-[3px] border p-3.5 text-[13px] leading-relaxed', {
-  variants: {
-    variant: {
-      info: 'border-info/30 bg-info-subtle text-info-text',
-      success: 'border-success/30 bg-success-subtle text-success-text',
-      warning: 'border-warning/35 bg-warning-subtle text-warning-text',
-      danger: 'border-danger/35 bg-danger-subtle text-danger-text',
-      neutral: 'border-line bg-surface-sunken/70 text-content-secondary',
+const alertVariants = cva(
+  'flex gap-2.5 rounded-[2px] border border-l-2 p-3 text-[12px] leading-relaxed',
+  {
+    variants: {
+      variant: {
+        info: 'border-line border-l-content-muted bg-surface text-content-secondary',
+        success: 'border-success/20 border-l-success bg-success-subtle text-success-text',
+        warning: 'border-warning/25 border-l-warning bg-warning-subtle text-warning-text',
+        danger: 'border-danger/25 border-l-danger bg-danger-subtle text-danger-text',
+        neutral: 'border-line border-l-line-strong bg-surface text-content-secondary',
+      },
     },
+    defaultVariants: { variant: 'neutral' },
   },
-  defaultVariants: { variant: 'neutral' },
-});
+);
 
 export interface AlertProps
   extends HTMLAttributes<HTMLDivElement>,
@@ -27,8 +30,7 @@ export interface AlertProps
  * An inline message.
  *
  * `role` is chosen from the variant: problems interrupt the user (assertive),
- * everything else waits its turn (polite). Using `alert` for a success message
- * would be rude to a screen reader user mid-sentence.
+ * everything else waits its turn (polite).
  */
 export function Alert({ className, variant, title, icon, children, ...props }: AlertProps) {
   const isUrgent = variant === 'danger' || variant === 'warning';
@@ -44,7 +46,7 @@ export function Alert({ className, variant, title, icon, children, ...props }: A
           {icon}
         </span>
       )}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-0.5">
         {title && <p className="font-semibold text-current">{title}</p>}
         {children && <div className="[&_a]:underline">{children}</div>}
       </div>

@@ -32,7 +32,7 @@ export function SignUpForm() {
       )}
 
       <Field label="Full name" error={state.fieldErrors?.name} required>
-        <Input name="name" type="text" autoComplete="name" placeholder="Asha Verma" required />
+        <Input name="name" type="text" autoComplete="name" placeholder="Your full name" required />
       </Field>
 
       <Field label="Email" error={state.fieldErrors?.email} required>

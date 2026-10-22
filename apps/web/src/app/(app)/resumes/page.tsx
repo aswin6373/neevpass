@@ -1,5 +1,6 @@
 import { listResumes } from '@neevpass/db';
 import { EmptyState, PageHeader } from '@neevpass/ui';
+import { ArrowUpRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -18,84 +19,68 @@ export const metadata: Metadata = {
  *
  * A resume is generated from the profile at view time, so an old resume always
  * reflects the current record plus whatever trimming its own config declares.
- * The list is a document index: name, date, action. No thumbnails pretending to
- * be the rendered file.
  */
 export default async function ResumesPage() {
   const { user, scope } = await requireProfile();
   const resumes = await listResumes(scope.profileId);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-9">
       <PageHeader
-        eyebrow="Resumes"
         title="Resumes"
-        description="Every resume renders from the live profile. Hide sections or trim entries for one document without changing the record itself."
-        actions={
-          <p className="text-[11px] text-content-muted">
-            {resumes.length} {resumes.length === 1 ? 'document' : 'documents'}
-          </p>
-        }
+        description="Generated from your profile. Hide sections per document."
       />
 
-      <section className="grid gap-5 border-y border-line py-5 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:items-end lg:gap-12">
-        <div>
-          <h2 className="text-[13px] font-medium text-content">New resume</h2>
-          <p className="mt-1 max-w-sm text-[11px] leading-relaxed text-content-muted">
-            Give it a name you will recognise later. You will land on the preview with the template
-            controls beside it.
-          </p>
-        </div>
+      <section aria-labelledby="new-resume-heading" className="border-y border-line py-5">
+        <h2 id="new-resume-heading" className="mb-3 text-[12px] font-semibold text-content">
+          New resume
+        </h2>
         <CreateResumeForm defaultTitle={`${user.name ?? 'My'} — resume`} />
       </section>
 
       <section aria-labelledby="resume-list-heading">
-        <div className="flex items-baseline justify-between gap-4 border-b border-line pb-2.5">
-          <h2 id="resume-list-heading" className="font-display text-[1.6rem] text-content">
-            Your documents
+        <div className="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+          <h2 id="resume-list-heading" className="text-[12px] font-semibold text-content">
+            Documents
           </h2>
-          <p className="text-[11px] text-content-muted">Newest first</p>
+          <span className="np-mono text-[10px] text-content-muted">
+            {resumes.length} total
+          </span>
         </div>
 
         {resumes.length === 0 ? (
           <EmptyState
-            className="mt-5"
-            title="No resumes yet"
-            description="Create the first one above. It will pull the entries you have marked public or unlisted, then let you trim the document."
+            title="No documents yet"
+            description="Create the first one above. It will pull the entries on your profile."
           />
         ) : (
           <ul>
-            {resumes.map((resume) => (
-              <li key={resume.id} className="border-b border-line">
+            {resumes.map((resume, index) => (
+              <li key={resume.id}>
                 <Link
                   href={`/resumes/${resume.id}`}
-                  className="group grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-3 py-4 sm:grid-cols-[minmax(0,1fr)_10rem_4rem] sm:gap-5"
+                  className="group grid grid-cols-[1.5rem_minmax(0,1fr)_auto_1rem] items-baseline gap-3 border-b border-line py-3.5 transition-colors hover:bg-surface-hover"
                 >
-                  <span className="min-w-0">
-                    <span className="block truncate text-[14px] font-medium text-content group-hover:underline group-hover:underline-offset-4">
-                      {resume.title}
-                    </span>
-                    <span className="mt-0.5 block text-[10px] text-content-muted sm:hidden">
-                      Updated {formatDate(resume.updatedAt)}
-                    </span>
+                  <span className="np-mono text-[10px] text-content-muted">
+                    {String(index + 1).padStart(2, '0')}
                   </span>
-                  <span className="hidden text-[11px] text-content-muted sm:block">
-                    Updated {formatDate(resume.updatedAt)}
+                  <span className="min-w-0 truncate text-[13px] font-medium text-content">
+                    {resume.title}
                   </span>
-                  <span className="justify-self-end text-[11px] text-content-secondary group-hover:text-content">
-                    Open
+                  <span className="np-mono shrink-0 text-[10px] text-content-muted">
+                    {formatDate(resume.updatedAt)}
                   </span>
+                  <ArrowUpRight
+                    size={13}
+                    aria-hidden="true"
+                    className="text-content-muted transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-content"
+                  />
                 </Link>
               </li>
             ))}
           </ul>
         )}
       </section>
-
-      <p className="max-w-2xl text-[11px] leading-relaxed text-content-muted">
-        Resumes are private to your account. The print view is a normal web page, so the browser’s
-        print dialog is what produces the PDF.
-      </p>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
-import { Alert, Badge, Button, Field, Select, Input } from '@neevpass/ui';
-import { useActionState } from 'react';
+import { Alert, Button, Field, Select, Input } from '@neevpass/ui';
+import { useActionState, useState } from 'react';
 
 import type { FormState } from '@/lib/forms';
 
@@ -60,49 +60,72 @@ export function GoalForm({ roles, currentRoleId, revision }: {
         <Button type="submit" variant={currentRoleId ? 'secondary' : 'primary'} isLoading={pending} loadingLabel="Saving">
           {currentRoleId ? 'Switch goal' : 'Set goal'}
         </Button>
-      </div>
-    </form>
+      </div>    </form>
   );
 }
 
 /**
  * Per-item roadmap status control.
  *
- * A select plus button, deliberately not auto-submitting on change: the status
- * change is a data write, and the button keeps it explicit.
+ * The select submits on change. A separate Update button would repeat eleven
+ * times down the page without adding a decision the user has not already made.
  */
-export function RoadmapStatusForm({ skillId, status }: { skillId: string; status: string }) {
+export function RoadmapStatusForm({
+  skillId,
+  skillName,
+  status,
+}: {
+  skillId: string;
+  skillName: string;
+  status: string;
+}) {
   const [state, formAction, pending] = useActionState(updateRoadmapItemStatusAction, EMPTY_STATE);
+  // Controlled so React's post-action form reset does not restore the old
+  // status before the refreshed server tree renders.
+  const [value, setValue] = useState(status);
 
   return (
-    <form action={formAction} className="flex items-center gap-2">
+    <form
+      action={formAction}
+      onReset={(event) => event.preventDefault()}
+      className="flex flex-col items-stretch gap-1"
+    >
       <input type="hidden" name="skillId" value={skillId} />
-      <Select name="status" defaultValue={status} aria-label="Roadmap item status" className="h-9 w-40">
+      <Select
+        name="status"
+        value={value}
+        onChange={(event) => {
+          setValue(event.target.value);
+          event.currentTarget.form?.requestSubmit();
+        }}
+        aria-label={`Status for ${skillName}`}
+        disabled={pending}
+        className="h-8 w-32 text-[11px]"
+      >
         <option value="TODO">To do</option>
         <option value="IN_PROGRESS">In progress</option>
         <option value="DONE">Done</option>
         <option value="SKIPPED">Skip</option>
       </Select>
-      <Button type="submit" variant="outline" size="sm" isLoading={pending} loadingLabel="Saving">
-        Update
-      </Button>
-      {state.error ? <Badge variant="danger">{state.error}</Badge> : null}
-      {state.ok && state.message ? <Badge variant="success">{state.message}</Badge> : null}
+      <span role="status" className="sr-only">
+        {pending ? 'Saving' : (state.message ?? '')}
+      </span>
+      {state.error ? <span className="text-[10px] text-danger-text">{state.error}</span> : null}
     </form>
   );
 }
 
 /** Records a score snapshot. The chart is the history list the page renders. */
-export function RecordSnapshotButton({ score }: { score: number }) {
+export function RecordSnapshotButton() {
   const [state, formAction, pending] = useActionState(recordSnapshotAction, EMPTY_STATE);
 
   return (
     <form action={formAction} className="flex flex-wrap items-center gap-2">
       <Button type="submit" variant="secondary" size="sm" isLoading={pending} loadingLabel="Recording">
-        Record score snapshot ({score}/100)
+        Record score
       </Button>
-      {state.error ? <span className="text-sm text-danger">{state.error}</span> : null}
-      {state.ok && state.message ? <span className="text-sm text-success">{state.message}</span> : null}
+      {state.error ? <span className="text-[10px] text-danger-text">{state.error}</span> : null}
+      {state.ok && state.message ? <span className="text-[10px] text-success-text">{state.message}</span> : null}
     </form>
   );
 }

@@ -1,6 +1,7 @@
 import { computeProfileCompleteness, SECTION_DEFINITIONS } from '@neevpass/domain';
 import { requireProfileAggregate } from '@neevpass/db';
-import { PageHeader, buttonVariants, cn } from '@neevpass/ui';
+import { buttonVariants, cn } from '@neevpass/ui';
+import { ArrowUpRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -16,86 +17,123 @@ export const metadata: Metadata = {
 /**
  * Profile overview.
  *
- * A table of contents for the record rather than a gallery of cards. The eleven
- * sections and the completeness figures both come from the domain, so this page
- * cannot drift from the data model.
+ * The index of the record: every section in one ruled list, with the
+ * completeness figure and the photo controls in a narrow margin. Deliberately
+ * not a gallery of cards.
  */
 export default async function ProfilePage() {
   const { user, scope } = await requireProfile();
   const aggregate = await requireProfileAggregate(scope.profileId);
   const completeness = computeProfileCompleteness(aggregate);
 
-  const nextSection = SECTION_DEFINITIONS.find(
-    (definition) =>
-      !completeness.sections.some(
-        (section) => section.kind === definition.kind && section.filled,
-      ),
-  );
+  const nextSection = completeness.sections.find((section) => !section.filled);
 
   return (
-    <div className="flex flex-col gap-7">
-      <PageHeader
-        eyebrow="Profile record"
-        title={aggregate.fullName}
-        description={
-          aggregate.headline ??
-          'Add a one-line headline so the profile and every resume open with the same summary.'
-        }
-        actions={
-          <Link
-            href="/profile/summary"
-            className={buttonVariants({ variant: 'secondary', size: 'sm' })}
-          >
-            Edit basics
-          </Link>
-        }
-      />
+    <div className="flex flex-col gap-9">
+      <header className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
+        <div className="min-w-0">
+          <h1 className="text-[1.5rem] font-semibold leading-tight tracking-[-0.03em] text-content sm:text-[1.8rem]">
+            {aggregate.fullName}
+          </h1>
+          <p className="mt-1 max-w-[55ch] text-[12.5px] leading-relaxed text-content-secondary">
+            {aggregate.headline ??
+              'Add a headline so every resume and portfolio opens with the same line.'}
+          </p>
+          <p className="np-mono mt-3 text-[10px] text-content-muted">
+            {[aggregate.location, user.email].filter(Boolean).join('  /  ')}
+          </p>
+        </div>
+        <Link
+          href="/profile/summary"
+          className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'self-start')}
+        >
+          Edit basics
+        </Link>
+      </header>
 
-      <section className="grid gap-7 border-b border-line pb-6 lg:grid-cols-[13rem_minmax(0,1fr)] lg:items-start lg:gap-10">
-        <ProfilePhoto
-          fullName={aggregate.fullName}
-          photoUrl={aggregate.photoUrl}
-          revision={aggregate.revision}
-        />
-
-        <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_17rem] sm:items-end sm:gap-10">
-          <div className="flex flex-col gap-1.5">
-            <p className="text-[12px] text-content-secondary">
-              {aggregate.location ? `${aggregate.location} · ` : ''}
-              {user.email}
-            </p>
-            <p className="text-[11px] text-content-muted">
-              Revision {aggregate.revision} · Private unless an entry is marked public
-            </p>
+      <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-16">
+        {/* Section index -------------------------------------------------- */}
+        <section aria-labelledby="sections-heading">
+          <div className="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+            <h2 id="sections-heading" className="text-[12px] font-semibold text-content">
+              Sections
+            </h2>
+            <span className="np-mono text-[10px] text-content-muted">
+              {completeness.filledCount}/{completeness.totalCount} filled
+            </span>
           </div>
 
-          <div>
-            <div className="flex items-baseline justify-between gap-3">
-              <p className="text-[11px] text-content-secondary">Profile completeness</p>
-              <p className="text-[11px] tabular-nums text-content">
-                {completeness.percent}%
-              </p>
-            </div>
+          <ol>
+            {completeness.sections.map((section, index) => {
+              const definition = sectionDefinition(section.kind);
+              return (
+                <li key={section.kind}>
+                  <Link
+                    href={`/profile/${definition?.slug ?? ''}`}
+                    className="group grid grid-cols-[1.5rem_minmax(0,1fr)_auto_1rem] items-baseline gap-3 border-b border-line py-3.5 transition-colors hover:bg-surface-hover"
+                  >
+                    <span className="np-mono text-[10px] text-content-muted">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <span
+                      className={
+                        section.filled
+                          ? 'text-[13px] font-medium text-content'
+                          : 'text-[13px] text-content-secondary'
+                      }
+                    >
+                      {section.label}
+                    </span>
+                    <span className="np-mono text-[10px] text-content-muted">
+                      {section.filled ? `${section.items} entr${section.items === 1 ? 'y' : 'ies'}` : 'empty'}
+                    </span>
+                    <ArrowUpRight
+                      size={13}
+                      aria-hidden="true"
+                      className="text-content-muted transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-content"
+                    />
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+
+        {/* Margin --------------------------------------------------------- */}
+        <aside className="flex flex-col gap-8">
+          <section aria-labelledby="completeness-heading">
+            <h2
+              id="completeness-heading"
+              className="border-b border-line pb-2 text-[12px] font-semibold text-content"
+            >
+              Completeness
+            </h2>
+            <p className="np-tabular mt-4 text-[2.6rem] font-medium leading-none tracking-[-0.05em] text-content">
+              {completeness.percent}
+              <span className="ml-0.5 align-baseline text-[0.95rem] font-normal text-content-muted">
+                %
+              </span>
+            </p>
             <div
               role="progressbar"
               aria-valuenow={completeness.percent}
               aria-valuemin={0}
               aria-valuemax={100}
               aria-label="Profile completeness"
-              className="mt-2 h-1.5 w-full overflow-hidden bg-surface-sunken"
+              className="mt-4 h-px w-full bg-line"
             >
               <div
-                className="h-full bg-brand transition-[width] duration-300"
+                className="h-px bg-content"
                 style={{ width: `${completeness.percent}%` }}
               />
             </div>
-            <p className="mt-2 text-[11px] text-content-muted">
+            <p className="mt-3 text-[11px] leading-relaxed text-content-muted">
               {nextSection ? (
                 <>
-                  Next up:{' '}
+                  Next:{' '}
                   <Link
-                    href={`/profile/${nextSection.slug}`}
-                    className="text-content-secondary underline decoration-line-strong underline-offset-2 hover:text-content hover:decoration-content"
+                    href={`/profile/${sectionDefinition(nextSection.kind)?.slug ?? ''}`}
+                    className="text-content underline decoration-line-strong underline-offset-2 hover:decoration-content"
                   >
                     {nextSection.label}
                   </Link>
@@ -104,77 +142,29 @@ export default async function ProfilePage() {
                 'Every section has at least one entry.'
               )}
             </p>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      <section aria-labelledby="sections-heading">
-        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-line pb-2.5">
-          <h2 id="sections-heading" className="font-display text-[1.6rem] text-content">
-            Sections
-          </h2>
-          <p className="text-[11px] text-content-muted">
-            {completeness.filledCount} of {completeness.totalCount} filled
-          </p>
-        </div>
-
-        <ol>
-          {SECTION_DEFINITIONS.map((definition, index) => {
-            const section = completeness.sections.find(
-              (entry) => entry.kind === definition.kind,
-            );
-            const filled = section?.filled ?? false;
-            const items = section?.items ?? 0;
-
-            return (
-              <li key={definition.kind} className="border-b border-line">
-                <Link
-                  href={`/profile/${definition.slug}`}
-                  className="group grid grid-cols-[0.5rem_1.25rem_minmax(0,1fr)_auto] items-center gap-3 py-3.5 sm:grid-cols-[0.5rem_2rem_minmax(0,12rem)_minmax(0,1fr)_auto] sm:gap-4"
-                >
-                  <span
-                    aria-hidden="true"
-                    className={cn(
-                      'h-1.5 w-1.5',
-                      filled ? 'bg-brand' : 'border border-line-strong bg-transparent',
-                    )}
-                  />
-                  <span className="text-[11px] tabular-nums text-content-muted">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <span
-                    className={cn(
-                      'text-[14px] group-hover:underline group-hover:underline-offset-4',
-                      filled ? 'font-medium text-content' : 'text-content-secondary',
-                    )}
-                  >
-                    {definition.label}
-                  </span>
-                  <span className="hidden truncate text-[11px] text-content-muted sm:block">
-                    {definition.description}
-                  </span>
-                  <span
-                    className={cn(
-                      'text-right text-[11px] tabular-nums',
-                      filled ? 'text-content-secondary' : 'text-content-muted',
-                    )}
-                  >
-                    {filled
-                      ? `${items} ${items === 1 ? 'entry' : 'entries'}`
-                      : 'Add'}
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ol>
-      </section>
-
-      <p className="max-w-2xl text-[11px] leading-relaxed text-content-muted">
-        Every entry starts private. Visibility is set per entry, and a resume never publishes
-        anything on its own. Only a portfolio page can be seen by someone else, and only when you
-        publish it.
-      </p>
+          <section aria-labelledby="photo-heading">
+            <h2
+              id="photo-heading"
+              className="border-b border-line pb-2 text-[12px] font-semibold text-content"
+            >
+              Photo
+            </h2>
+            <div className="mt-4">
+              <ProfilePhoto
+                fullName={aggregate.fullName}
+                photoUrl={aggregate.photoUrl}
+                revision={aggregate.revision}
+              />
+            </div>
+          </section>
+        </aside>
+      </div>
     </div>
   );
+}
+
+function sectionDefinition(kind: string) {
+  return SECTION_DEFINITIONS.find((definition) => definition.kind === kind);
 }

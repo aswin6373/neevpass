@@ -2,45 +2,35 @@
 
 import { Button } from '@neevpass/ui';
 import { Moon, Sun } from 'lucide-react';
-import { useSyncExternalStore } from 'react';
+import { useEffect, useState } from 'react';
 
 import { THEME_STORAGE_KEY, type Theme } from '@/lib/theme';
 
 /**
- * The documentElement's `dark` class is an external store: the inline boot
- * script writes it before hydration, and the toggle writes it on click.
+ * The documentElement's `dark` class is applied by the inline boot script
+ * before first paint. The toggle reads that class after mount rather than
+ * during render: the server cannot know the theme, and reading it on the first
+ * client render would produce a hydration mismatch.
  *
- * `useSyncExternalStore` subscribes React to that class without chasing it
- * with effects. The server snapshot is `null` — the theme class is unknown at
- * render time without causing a hydration mismatch — so the server-rendered
- * markup is the neutral placeholder, and hydration swaps in the real value.
+ * The placeholder on the server has the same footprint as the icon, so the
+ * header does not shift when hydration completes.
  */
-const MUTATED_ATTRIBUTES: MutationObserverInit = { attributes: true, attributeFilter: ['class'] };
-
-function subscribeToThemeClass(onStoreChange: () => void): () => void {
-  const observer = new MutationObserver(onStoreChange);
-  observer.observe(document.documentElement, MUTATED_ATTRIBUTES);
-  return () => observer.disconnect();
-}
-
-function getThemeSnapshot(): Theme {
-  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-}
-
-function getThemeServerSnapshot(): Theme | null {
-  return null;
-}
-
 export function ThemeToggle() {
-  const theme = useSyncExternalStore(subscribeToThemeClass, getThemeSnapshot, getThemeServerSnapshot);
+  const [theme, setTheme] = useState<Theme | null>(null);
+
+  useEffect(() => {
+    // The boot script has already applied the stored theme to <html>; reading it
+    // after mount is the only way to avoid guessing on the server.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  }, []);
 
   function toggle() {
     const next: Theme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
 
-    // Mutating the external store is enough: the subscription notifies React
-    // and the snapshot change re-renders the toggle.
     document.documentElement.classList.toggle('dark', next === 'dark');
     document.documentElement.style.colorScheme = next;
+    setTheme(next);
 
     try {
       localStorage.setItem(THEME_STORAGE_KEY, next);

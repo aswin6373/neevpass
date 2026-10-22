@@ -92,9 +92,6 @@ export function ResumeConfigForm({
                 <span className="min-w-0">
                   <span className="flex items-center gap-2">
                     <span className="text-[12px] font-medium text-content">{template.label}</span>
-                    <span className="rounded-[2px] border border-line-strong px-1 py-px text-[8px] font-semibold uppercase tracking-[0.08em] text-content-muted">
-                      ATS
-                    </span>
                   </span>
                   <span className="mt-1 block text-[10px] leading-relaxed text-content-muted">
                     {template.description}
@@ -116,11 +113,7 @@ export function ResumeConfigForm({
       </Field>
 
       <fieldset>
-        <legend className="text-[13px] font-medium text-content">Sections to hide</legend>
-        <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
-          Ticked sections are left out of this document. Hiding one here does not delete it from
-          your profile.
-        </p>
+        <legend className="text-[12px] font-medium text-content">Sections to hide</legend>
         <div className="mt-2 border-t border-line-subtle">
           {sections.map((section) => (
             <label
@@ -222,7 +215,7 @@ export function DeleteResumeButton({ resumeId, revision, title }: {
 
       {armed ? (
         <>
-          <span className="text-sm text-content-secondary">Delete “{title}”?</span>
+          <span className="text-[11px] text-content-secondary">Delete “{title}”?</span>
           <Button type="submit" variant="danger" size="sm" isLoading={pending} loadingLabel="Deleting">
             Yes, delete
           </Button>

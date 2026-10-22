@@ -92,24 +92,21 @@ export default async function SectionPage({ params }: PageProps) {
     <div className="flex flex-col gap-7">
       <Link
         href="/profile"
-        className="inline-flex w-fit items-center gap-1.5 text-[12px] text-content-secondary underline decoration-line-strong underline-offset-4 hover:text-content hover:decoration-content"
+        className="inline-flex w-fit items-center gap-1.5 text-[12px] text-content-secondary hover:text-content"
       >
         <ArrowLeft size={13} aria-hidden="true" />
-        All sections
+        Profile
       </Link>
 
       <PageHeader
-        eyebrow={`Profile · Section ${String(sectionNumber + 1).padStart(2, '0')}`}
         title={definition.label}
         description={definition.description}
         actions={
-          <p className="text-[11px] text-content-muted">
-            {definition.kind === 'SUMMARY'
-              ? 'Profile basics'
-              : entryCount === 1
-                ? '1 entry'
-                : `${entryCount} entries`}
-          </p>
+          definition.kind === 'SUMMARY' ? null : (
+            <span className="np-mono text-[10px] text-content-muted">
+              {entryCount} {entryCount === 1 ? 'entry' : 'entries'}
+            </span>
+          )
         }
       />
 
@@ -117,39 +114,28 @@ export default async function SectionPage({ params }: PageProps) {
 
       <nav
         aria-label="Profile section navigation"
-        className="flex flex-col gap-4 border-t border-line pt-5 sm:flex-row sm:items-center sm:justify-between"
+        className="flex items-center justify-between gap-4 border-t border-line pt-6"
       >
         <div>
           {previousSection ? (
             <Link
               href={`/profile/${previousSection.slug}`}
-              className={buttonVariants({ variant: 'secondary', size: 'sm' })}
+              className={buttonVariants({ variant: 'ghost', size: 'sm' })}
             >
-              <ArrowLeft size={13} aria-hidden="true" />
-              {`Back: ${previousSection.label}`}
+              <ArrowLeft size={14} aria-hidden="true" />
+              {previousSection.label}
             </Link>
           ) : null}
         </div>
 
-        <p className="text-[11px] tabular-nums text-content-muted">
-          Section {sectionNumber + 1} of {SECTION_DEFINITIONS.length}
-        </p>
-
-        <div className="flex justify-end">
-          <Link
-            href={nextSection ? `/profile/${nextSection.slug}` : '/profile'}
-            className={buttonVariants({ variant: 'primary', size: 'sm' })}
-          >
-            {nextSection ? `Next: ${nextSection.label}` : 'Finish profile'}
-            <ArrowRight size={13} aria-hidden="true" />
-          </Link>
-        </div>
+        <Link
+          href={nextSection ? `/profile/${nextSection.slug}` : '/profile'}
+          className={buttonVariants({ variant: 'secondary', size: 'sm' })}
+        >
+          {nextSection ? nextSection.label : 'Finish profile'}
+          <ArrowRight size={14} aria-hidden="true" />
+        </Link>
       </nav>
-
-      <p className="max-w-2xl pt-1 text-[11px] leading-relaxed text-content-muted">
-        Every entry starts private. Private stays yours, unlisted travels only by a direct link, and
-        public appears on portfolio pages you publish. Resumes are never public.
-      </p>
     </div>
   );
 }

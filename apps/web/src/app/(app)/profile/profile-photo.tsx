@@ -1,8 +1,8 @@
 'use client';
 
-import { Alert, Button, Label } from '@neevpass/ui';
+import { Alert, Button } from '@neevpass/ui';
 import Image from 'next/image';
-import { useActionState } from 'react';
+import { useActionState, useRef, useState } from 'react';
 
 import type { FormState } from '@/lib/forms';
 
@@ -32,6 +32,9 @@ export interface ProfilePhotoProps {
  * sees here is exactly what a visitor will see.
  */
 export function ProfilePhoto({ fullName, photoUrl, revision }: ProfilePhotoProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+
   const [uploadState, uploadAction, uploading] = useActionState(
     uploadProfilePhotoAction,
     EMPTY_STATE,
@@ -42,59 +45,78 @@ export function ProfilePhoto({ fullName, photoUrl, revision }: ProfilePhotoProps
   );
 
   return (
-    <section aria-labelledby="profile-photo-heading" className="flex min-w-0 flex-col gap-3">
-      <div className="flex items-baseline justify-between gap-2">
-        <h2 id="profile-photo-heading" className="text-[13px] font-medium text-content">
-          Profile photo
-        </h2>
-        <span className="text-[10px] uppercase tracking-[0.08em] text-content-muted">Optional</span>
+    <div className="flex flex-col gap-3">
+      <div className="flex items-start gap-3">
+        <div className="relative aspect-[4/5] w-16 shrink-0 overflow-hidden rounded-[1px] border border-line bg-surface-sunken">
+          {photoUrl ? (
+            <Image
+              src={photoUrl}
+              alt={`${fullName} profile photo`}
+              fill
+              sizes="4rem"
+              unoptimized
+              className="object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 grid place-items-center">
+              <span className="np-mono text-[11px] text-content-muted">{initials(fullName)}</span>
+            </div>
+          )}
+        </div>
+
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <form action={uploadAction} className="flex flex-col gap-1.5">
+            <input type="hidden" name="revision" value={revision} />
+            <input
+              ref={inputRef}
+              name="photo"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={(event) => setFileName(event.target.files?.[0]?.name ?? null)}
+            />
+
+            <div className="flex flex-wrap items-center gap-1.5">
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => inputRef.current?.click()}
+              >
+                {photoUrl ? 'Replace' : 'Choose photo'}
+              </Button>
+
+              {fileName ? (
+                <Button type="submit" size="sm" isLoading={uploading} loadingLabel="Uploading">
+                  Upload
+                </Button>
+              ) : null}
+            </div>
+
+            {fileName ? (
+              <p className="max-w-[10rem] truncate font-mono text-[10px] text-content-muted">
+                {fileName}
+              </p>
+            ) : null}
+          </form>
+
+          {photoUrl ? (
+            <form action={removeAction}>
+              <input type="hidden" name="revision" value={revision} />
+              <Button
+                type="submit"
+                size="sm"
+                variant="ghost"
+                isLoading={removing}
+                loadingLabel="Removing"
+                className="-ml-2"
+              >
+                Remove
+              </Button>
+            </form>
+          ) : null}
+        </div>
       </div>
-
-      <div className="relative aspect-[4/5] w-full max-w-[13rem] overflow-hidden rounded-[2px] border border-line bg-surface-sunken">
-        {photoUrl ? (
-          <Image
-            src={photoUrl}
-            alt={`${fullName} profile photo`}
-            fill
-            sizes="13rem"
-            unoptimized
-            className="object-cover"
-          />
-        ) : (
-          <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(circle_at_30%_20%,var(--color-surface-hover),var(--color-surface-sunken))]">
-            <span className="grid size-16 place-items-center rounded-full border border-line-strong bg-surface font-display text-xl text-content-secondary">
-              {initials(fullName)}
-            </span>
-          </div>
-        )}
-      </div>
-
-      <p className="text-[11px] leading-relaxed text-content-muted">
-        Used by the Portrait portfolio template. JPEG, PNG or WebP, up to 5 MB.
-      </p>
-
-      <form action={uploadAction} className="flex flex-col gap-2">
-        <input type="hidden" name="revision" value={revision} />
-        <Label htmlFor="profile-photo-file" className="sr-only">
-          Choose a profile photo
-        </Label>
-        <input
-          id="profile-photo-file"
-          name="photo"
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          className="block w-full min-w-0 text-[11px] text-content-secondary file:mr-2 file:cursor-pointer file:rounded-[3px] file:border file:border-line-strong file:bg-surface file:px-2.5 file:py-1.5 file:text-[11px] file:font-medium file:text-content hover:file:bg-surface-hover"
-        />
-        <Button
-          type="submit"
-          size="sm"
-          variant="secondary"
-          isLoading={uploading}
-          loadingLabel="Uploading"
-        >
-          {photoUrl ? 'Replace photo' : 'Upload photo'}
-        </Button>
-      </form>
 
       {uploadState.error ? (
         <Alert variant="danger" title="Could not upload">
@@ -106,22 +128,6 @@ export function ProfilePhoto({ fullName, photoUrl, revision }: ProfilePhotoProps
         </Alert>
       ) : null}
 
-      {photoUrl ? (
-        <form action={removeAction}>
-          <input type="hidden" name="revision" value={revision} />
-          <Button
-            type="submit"
-            size="sm"
-            variant="ghost"
-            isLoading={removing}
-            loadingLabel="Removing"
-            className="w-full"
-          >
-            Remove photo
-          </Button>
-        </form>
-      ) : null}
-
       {removeState.error ? (
         <Alert variant="danger" title="Could not remove">
           {removeState.error}
@@ -131,6 +137,6 @@ export function ProfilePhoto({ fullName, photoUrl, revision }: ProfilePhotoProps
           {removeState.message}
         </Alert>
       ) : null}
-    </section>
+    </div>
   );
 }

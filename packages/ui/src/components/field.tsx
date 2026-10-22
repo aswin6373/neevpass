@@ -1,5 +1,3 @@
-'use client';
-
 import { cloneElement, useId, type ReactElement, type ReactNode } from 'react';
 
 import { cn } from '../lib/cn';
@@ -74,7 +72,7 @@ export function Field({
       </Label>
 
       {description && (
-        <p id={descriptionId} className="text-xs text-content-secondary">
+        <p id={descriptionId} className="-mt-0.5 text-[11px] leading-relaxed text-content-muted">
           {description}
         </p>
       )}

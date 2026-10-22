@@ -30,14 +30,7 @@ export function SummarySection({ revision, initial }: { revision: number; initia
 
   return (
     <div className="max-w-3xl">
-      <div className="border-b border-line pb-2.5">
-        <h2 className="text-[13px] font-medium text-content">Basics and summary</h2>
-        <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
-          The name and summary here open every resume and portfolio you generate.
-        </p>
-      </div>
-
-      <form action={formAction} className="mt-5 flex flex-col gap-4">
+      <form action={formAction} className="flex flex-col gap-4">
         <input type="hidden" name="revision" value={revision} />
 
         {state.error ? (
@@ -55,15 +48,11 @@ export function SummarySection({ revision, initial }: { revision: number; initia
             <Input name="fullName" defaultValue={initial.fullName} required maxLength={120} />
           </Field>
 
-          <Field label="Email" description="Set on your account. Shown only if you publish it.">
+          <Field label="Email">
             <Input value={initial.email} readOnly disabled />
           </Field>
 
-          <Field
-            label="Headline"
-            error={state.fieldErrors?.headline}
-            description="One line. For example: Final-year CS student, Bengaluru."
-          >
+          <Field label="Headline" error={state.fieldErrors?.headline}>
             <Input name="headline" defaultValue={initial.headline ?? ''} maxLength={120} />
           </Field>
 
@@ -76,20 +65,12 @@ export function SummarySection({ revision, initial }: { revision: number; initia
             />
           </Field>
 
-          <Field
-            label="Phone"
-            error={state.fieldErrors?.phone}
-            description="Empty by default. Add it only when it should appear on resumes."
-          >
+          <Field label="Phone" error={state.fieldErrors?.phone}>
             <Input name="phone" type="tel" defaultValue={initial.phone ?? ''} maxLength={40} />
           </Field>
         </div>
 
-        <Field
-          label="Professional summary"
-          error={state.fieldErrors?.summary}
-          description="Three or four lines: who you are, what you are strong at, and what you are looking for."
-        >
+        <Field label="Professional summary" error={state.fieldErrors?.summary}>
           <Textarea name="summary" defaultValue={initial.summary ?? ''} rows={5} maxLength={1200} />
         </Field>
 

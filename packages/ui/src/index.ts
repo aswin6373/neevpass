@@ -25,7 +25,12 @@ export { EmptyState, type EmptyStateProps } from './components/empty-state';
 export { Field, type FieldControlProps, type FieldProps } from './components/field';
 export { Input, type InputProps } from './components/input';
 export { Label, type LabelProps } from './components/label';
-export { PageHeader, type PageHeaderProps } from './components/page-header';
+export {
+  PageHeader,
+  SectionHeader,
+  type PageHeaderProps,
+  type SectionHeaderProps,
+} from './components/page-header';
 export { Select, type SelectProps } from './components/select';
 export { SelfReportedNotice, type SelfReportedNoticeProps } from './components/self-reported-notice';
 export { Separator, type SeparatorProps } from './components/separator';

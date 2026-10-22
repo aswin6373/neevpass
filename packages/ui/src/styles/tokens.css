@@ -1,116 +1,92 @@
 /* ==========================================================================
-   NeevPass design tokens — "Paper & Ink"
+   NeevPass design tokens — "Precision"
    ==========================================================================
 
-   These are the tokens for the APPLICATION CHROME — buttons, navigation,
-   forms, surfaces. They are NOT the tokens used inside a generated resume or
-   portfolio.
+   Application chrome only. Document themes (resumes, portfolios) live in
+   packages/docgen and remain separate by design.
 
-   That separation is deliberate. Document themes are print-oriented (physical
-   units, fixed page geometry, fonts that must be embedded in a PDF) and are
-   user-selectable per resume. Application chrome is fixed and optimised for
-   screen. Conflating the two would mean a student's choice of resume accent
-   colour could break the contrast of the app's own navigation.
+   Direction: near-black ink on white, one grey rule, no decorative colour.
+   Dense typographic hierarchy, small radii, no shadows. Metadata is set in a
+   monospace face so figures and labels read as data rather than decoration.
 
-   Document theme tokens live in packages/docgen.
-
-   Direction: warm paper, dark ink, a single deep green accent. Thin rules
-   instead of floating cards, a serif for display type, and almost no shadow.
-   The interface should read like a well-set document, not a dashboard demo.
-
-   Contrast: every text/background pairing below targets WCAG 2.2 AA
-   (4.5:1 for body text, 3:1 for large text and UI borders).
+   Contrast: every text/background pairing targets WCAG 2.2 AA.
    ========================================================================== */
 
 :root {
   /* --- Raw ramps -------------------------------------------------------- */
-  --np-forest-50: #eef3ef;
-  --np-forest-100: #dfe8e1;
-  --np-forest-300: #9bb9a5;
-  --np-forest-500: #3f6f57;
-  --np-forest-600: #26523f;
-  --np-forest-700: #1c4132;
-  --np-forest-800: #153327;
-  --np-forest-900: #0f261d;
-
-  --np-paper-0: #fffefb;
-  --np-paper-25: #fbf9f4;
-  --np-paper-50: #f6f3ec;
-  --np-paper-100: #f0ece3;
-  --np-paper-200: #e6e0d4;
-  --np-paper-300: #d8d1c4;
-  --np-paper-400: #b6ab99;
-  --np-paper-500: #8d8272;
-  --np-paper-600: #6b6357;
-  --np-paper-700: #514b43;
-  --np-paper-800: #2f2b26;
-  --np-paper-900: #1b1815;
-  --np-paper-950: #11100e;
-
-  --np-clay-500: #8f4b37;
-  --np-clay-600: #7a3b2e;
+  --np-ink-0: #ffffff;
+  --np-ink-25: #fcfcfc;
+  --np-ink-50: #f7f7f8;
+  --np-ink-100: #f0f0f1;
+  --np-ink-200: #e4e4e7;
+  --np-ink-300: #d4d4d8;
+  --np-ink-400: #a1a1aa;
+  --np-ink-500: #71717a;
+  --np-ink-600: #52525b;
+  --np-ink-700: #3f3f46;
+  --np-ink-800: #27272a;
+  --np-ink-900: #18181b;
+  --np-ink-950: #09090b;
 
   /* --- Semantic: surfaces ----------------------------------------------- */
-  --np-background: #f5f2eb;
-  --np-surface: #fbf9f4;
-  --np-surface-raised: #fffefb;
-  --np-surface-sunken: #ebe6dc;
-  --np-surface-hover: #f0ece3;
-  --np-surface-glass: rgb(251 249 244 / 0.9);
+  --np-background: #fafafa;
+  --np-surface: #ffffff;
+  --np-surface-raised: #ffffff;
+  --np-surface-sunken: #f4f4f5;
+  --np-surface-hover: #f4f4f5;
+  --np-surface-glass: rgb(255 255 255 / 0.88);
 
   /* --- Semantic: text --------------------------------------------------- */
-  --np-text-primary: #191613;
-  --np-text-secondary: #544e46;
-  --np-text-muted: #6b6357;
-  --np-text-inverted: #fffdf8;
+  --np-text-primary: #09090b;
+  --np-text-secondary: #52525b;
+  --np-text-muted: #71717a;
+  --np-text-inverted: #ffffff;
 
   /* --- Semantic: borders ------------------------------------------------ */
-  --np-border: #d8d1c4;
-  --np-border-strong: #8d8272;
-  --np-border-subtle: #e6e0d4;
+  --np-border: #e4e4e7;
+  /* Strong borders are also the visible boundary of inputs and secondary
+     buttons, so they meet the 3:1 non-text contrast requirement. */
+  --np-border-strong: #8e8e96;
+  --np-border-subtle: #efeff1;
 
   /* --- Semantic: interactive -------------------------------------------- */
-  --np-primary: var(--np-forest-600);
-  --np-primary-hover: var(--np-forest-700);
-  --np-primary-active: var(--np-forest-800);
-  --np-primary-subtle: var(--np-forest-50);
-  --np-primary-foreground: var(--np-paper-0);
-  --np-primary-text: var(--np-forest-700);
+  --np-primary: #09090b;
+  --np-primary-hover: #27272a;
+  --np-primary-active: #3f3f46;
+  --np-primary-subtle: #f4f4f5;
+  --np-primary-foreground: #ffffff;
+  --np-primary-text: #18181b;
 
-  /* Secondary, used only for the rare secondary mark. */
-  --np-accent: var(--np-clay-600);
-  --np-accent-soft: #f5eae6;
+  /* Secondary marks are neutral: black is the only accent. */
+  --np-accent: #52525b;
+  --np-accent-soft: #f4f4f5;
 
   /* --- Semantic: status ------------------------------------------------- */
-  --np-success: #2c6a47;
-  --np-success-subtle: #e9f1eb;
-  --np-success-text: #225438;
+  /* Status colours are functional signals, not decoration. */
+  --np-success: #15803d;
+  --np-success-subtle: #f3faf5;
+  --np-success-text: #166534;
 
-  --np-warning: #8a5a12;
-  --np-warning-subtle: #f6edda;
-  --np-warning-text: #6f480d;
+  --np-warning: #a16207;
+  --np-warning-subtle: #fdf9ee;
+  --np-warning-text: #854d0e;
 
-  --np-danger: #96362f;
-  --np-danger-subtle: #f7e9e7;
-  --np-danger-text: #7c2b25;
+  --np-danger: #b91c1c;
+  --np-danger-subtle: #fdf4f4;
+  --np-danger-text: #991b1b;
 
-  --np-info: #2f5670;
-  --np-info-subtle: #e8eef2;
-  --np-info-text: #284a61;
+  --np-info: #3f3f46;
+  --np-info-subtle: #f4f4f5;
+  --np-info-text: #27272a;
 
   /* --- Focus ------------------------------------------------------------ */
-  --np-focus-ring: var(--np-forest-600);
+  --np-focus-ring: #09090b;
   --np-focus-ring-offset: var(--np-background);
 
   /* --- Typography ------------------------------------------------------- */
-  /* No web-font request on the critical path. Display type uses the operating
-     system's serif — New York on Apple platforms, Georgia elsewhere — which
-     gives the product an editorial voice without a render-blocking download.
-     Document fonts are handled separately in docgen. */
   --np-font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --np-font-display: ui-serif, "New York", "Iowan Old Style", "Palatino Linotype",
-    Palatino, "Book Antiqua", Georgia, serif;
+  --np-font-display: var(--np-font-sans);
   --np-font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
     "Liberation Mono", monospace;
 
@@ -125,9 +101,9 @@
   --np-text-5xl: 3rem;
   --np-text-6xl: 3.75rem;
 
-  --np-leading-tight: 1.1;
-  --np-leading-snug: 1.3;
-  --np-leading-normal: 1.55;
+  --np-leading-tight: 1.15;
+  --np-leading-snug: 1.35;
+  --np-leading-normal: 1.6;
   --np-leading-relaxed: 1.7;
 
   /* --- Spacing scale ---------------------------------------------------- */
@@ -145,82 +121,81 @@
   --np-space-24: 6rem;
 
   /* --- Radii ------------------------------------------------------------ */
-  /* Small radii are intentional: paper does not have 24px corners. */
+  /* Small radii are intentional: this is a document tool, not a toy. */
   --np-radius-sm: 2px;
   --np-radius-md: 3px;
   --np-radius-lg: 4px;
-  --np-radius-xl: 5px;
-  --np-radius-2xl: 6px;
-  --np-radius-3xl: 8px;
+  --np-radius-xl: 6px;
+  --np-radius-2xl: 8px;
+  --np-radius-3xl: 10px;
   --np-radius-full: 9999px;
 
   /* --- Elevation -------------------------------------------------------- */
-  /* Depth is a last resort. Most surfaces are separated by a rule. */
-  --np-shadow-xs: 0 1px 1px 0 rgb(25 22 19 / 0.04);
-  --np-shadow-sm: 0 1px 2px 0 rgb(25 22 19 / 0.06), 0 1px 1px -1px rgb(25 22 19 / 0.04);
-  --np-shadow-md: 0 2px 6px -2px rgb(25 22 19 / 0.08);
-  --np-shadow-lg: 0 12px 32px -12px rgb(25 22 19 / 0.14);
+  /* Depth is expressed with rules, not shadows. */
+  --np-shadow-xs: none;
+  --np-shadow-sm: 0 1px 2px 0 rgb(9 9 11 / 0.04);
+  --np-shadow-md: 0 8px 24px -16px rgb(9 9 11 / 0.16);
+  --np-shadow-lg: 0 24px 48px -24px rgb(9 9 11 / 0.22);
 
   /* --- Layout ----------------------------------------------------------- */
-  --np-topbar-height: 3.75rem;
-  --np-content-max-width: 74rem;
+  --np-topbar-height: 3.5rem;
+  --np-sidebar-width: 15rem;
+  --np-content-max-width: 72rem;
 }
 
 /* ==========================================================================
    Dark theme
-   Applied by the `.dark` class on <html>. Set from the user's stored
-   preference, falling back to prefers-color-scheme before hydration.
    ========================================================================== */
 
 .dark {
-  --np-background: #12110f;
-  --np-surface: #181714;
-  --np-surface-raised: #1c1b18;
-  --np-surface-sunken: #0d0c0b;
-  --np-surface-hover: #23221e;
-  --np-surface-glass: rgb(24 23 20 / 0.9);
+  --np-background: #09090b;
+  --np-surface: #0e0e10;
+  --np-surface-raised: #121214;
+  --np-surface-sunken: #18181b;
+  --np-surface-hover: #18181b;
+  --np-surface-glass: rgb(14 14 16 / 0.88);
 
-  --np-text-primary: #efe9dd;
-  --np-text-secondary: #b8b0a3;
-  --np-text-muted: #8c8477;
-  --np-text-inverted: #12110f;
+  --np-text-primary: #fafafa;
+  --np-text-secondary: #a1a1aa;
+  --np-text-muted: #8b8b94;
+  --np-text-inverted: #09090b;
 
-  --np-border: #34322c;
-  --np-border-strong: #6b665b;
-  --np-border-subtle: #26241f;
+  --np-border: #27272a;
+  --np-border-strong: #62626b;
+  --np-border-subtle: #1c1c1f;
 
-  --np-primary: #8db7a0;
-  --np-primary-hover: #a6c9b4;
-  --np-primary-active: #bfd8c8;
-  --np-primary-subtle: #1b2a22;
-  --np-primary-foreground: #10120f;
-  --np-primary-text: #a6c9b4;
+  --np-primary: #fafafa;
+  --np-primary-hover: #e4e4e7;
+  --np-primary-active: #d4d4d8;
+  --np-primary-subtle: #18181b;
+  --np-primary-foreground: #09090b;
+  --np-primary-text: #fafafa;
 
-  --np-accent: #c98b77;
-  --np-accent-soft: #2a1d18;
+  --np-accent: #a1a1aa;
+  --np-accent-soft: #18181b;
 
-  --np-success: #7fbf9a;
-  --np-success-subtle: #16271d;
-  --np-success-text: #9ed4b3;
+  --np-success: #4ade80;
+  --np-success-subtle: #0e1f15;
+  --np-success-text: #86efac;
 
-  --np-warning: #d9a04a;
-  --np-warning-subtle: #2a2113;
-  --np-warning-text: #e6bb77;
+  --np-warning: #facc15;
+  --np-warning-subtle: #211b0b;
+  --np-warning-text: #fde047;
 
-  --np-danger: #d98a82;
-  --np-danger-subtle: #2b1917;
-  --np-danger-text: #e7a59e;
+  --np-danger: #f87171;
+  --np-danger-subtle: #241112;
+  --np-danger-text: #fca5a5;
 
-  --np-info: #8fb4cb;
-  --np-info-subtle: #17232b;
-  --np-info-text: #b0cddd;
+  --np-info: #d4d4d8;
+  --np-info-subtle: #18181b;
+  --np-info-text: #e4e4e7;
 
-  --np-focus-ring: #a6c9b4;
+  --np-focus-ring: #fafafa;
 
-  --np-shadow-xs: 0 1px 1px 0 rgb(0 0 0 / 0.3);
-  --np-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.35);
-  --np-shadow-md: 0 2px 8px -2px rgb(0 0 0 / 0.45);
-  --np-shadow-lg: 0 16px 40px -16px rgb(0 0 0 / 0.6);
+  --np-shadow-xs: none;
+  --np-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --np-shadow-md: 0 12px 32px -16px rgb(0 0 0 / 0.7);
+  --np-shadow-lg: 0 28px 56px -24px rgb(0 0 0 / 0.8);
 }
 
 /* ==========================================================================
@@ -251,8 +226,13 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--np-primary) 22%, transparent);
-  color: var(--np-text-primary);
+  background: #09090b;
+  color: #ffffff;
+}
+
+.dark ::selection {
+  background: #fafafa;
+  color: #09090b;
 }
 
 /* A single, consistent focus treatment everywhere. Never `outline: none`. */
@@ -262,17 +242,23 @@ body {
   border-radius: var(--np-radius-sm);
 }
 
-/* Display type. Used for page titles and marketing headlines only — never for
-   body copy or form labels. */
+/* Display type: tight sans, used for page titles and marketing headlines. */
 .np-display {
   font-family: var(--np-font-display);
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  line-height: 1.08;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
 }
 
 .np-tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/* Metadata: figures, counts, timestamps, table headers. */
+.np-mono {
+  font-family: var(--np-font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
 }
 
 /* Respect a user's motion preference. */

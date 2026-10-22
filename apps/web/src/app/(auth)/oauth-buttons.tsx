@@ -44,7 +44,7 @@ export function AuthDivider({ label = 'or' }: { label?: string }) {
   return (
     <div className="flex items-center gap-3">
       <span className="h-px flex-1 bg-line" aria-hidden="true" />
-      <span className="text-[11px] text-content-muted">{label}</span>
+      <span className="text-xs text-content-muted">{label}</span>
       <span className="h-px flex-1 bg-line" aria-hidden="true" />
     </div>
   );

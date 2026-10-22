@@ -1,52 +1,63 @@
 'use client';
 
-import { Badge, Button } from '@neevpass/ui';
-import { useActionState } from 'react';
+import { Select } from '@neevpass/ui';
+import { useActionState, useState } from 'react';
+
+import type { FormState } from '@/lib/forms';
 
 import { setOpportunityFeedbackAction } from './actions';
-import type { FormState } from '@/lib/forms';
 
 const EMPTY_STATE: FormState = {};
 
 /**
- * One feedback control per listing: save, applied, dismiss — or undo the mark.
- * The status travels on the clicked button's `value`, so one action serves all
- * four states.
+ * Tracking control for one listing.
+ *
+ * A single select rather than four buttons: the list can be long, and a row of
+ * Save / Applied / Not for me buttons repeated sixteen times is noise. Choosing
+ * an option submits immediately.
  */
-export function OpportunityFeedbackForm({ opportunityId, currentStatus }: {
+export function OpportunityFeedbackForm({
+  opportunityId,
+  currentStatus,
+}: {
   opportunityId: string;
   currentStatus?: 'SAVED' | 'APPLIED' | 'DISMISSED';
 }) {
   const [state, formAction, pending] = useActionState(setOpportunityFeedbackAction, EMPTY_STATE);
+  // Controlled so React's post-action form reset cannot snap the select back to
+  // its previous value while the server tree revalidates.
+  const [status, setStatus] = useState(currentStatus ?? 'REMOVE');
 
   return (
-    <form action={formAction} className="flex flex-wrap items-center justify-end gap-2">
+    <form
+      action={formAction}
+      onReset={(event) => event.preventDefault()}
+      className="flex flex-col items-stretch gap-1"
+    >
       <input type="hidden" name="opportunityId" value={opportunityId} />
 
-      {state.error ? <Badge variant="danger">{state.error}</Badge> : null}
-      {state.ok && state.message ? <Badge variant="success">{state.message}</Badge> : null}
+      <Select
+        name="status"
+        value={status}
+        onChange={(event) => {
+          setStatus(event.target.value);
+          event.currentTarget.form?.requestSubmit();
+        }}
+        aria-label="Tracking status"
+        disabled={pending}
+        className="h-7 w-32 text-[11px]"
+      >
+        <option value="REMOVE">Not tracked</option>
+        <option value="SAVED">Saved</option>
+        <option value="APPLIED">Applied</option>
+        <option value="DISMISSED">Not for me</option>
+      </Select>
 
-      {currentStatus !== 'SAVED' ? (
-        <Button type="submit" name="status" value="SAVED" variant="secondary" size="sm" disabled={pending}>
-          Save
-        </Button>
-      ) : null}
+      <span role="status" className="sr-only">
+        {pending ? 'Saving' : (state.message ?? '')}
+      </span>
 
-      {currentStatus !== 'APPLIED' ? (
-        <Button type="submit" name="status" value="APPLIED" variant="primary" size="sm" disabled={pending}>
-          I applied
-        </Button>
-      ) : null}
-
-      {currentStatus ? (
-        <Button type="submit" name="status" value="REMOVE" variant="ghost" size="sm" disabled={pending}>
-          Undo
-        </Button>
-      ) : (
-        <Button type="submit" name="status" value="DISMISSED" variant="ghost" size="sm" disabled={pending}>
-          Not for me
-        </Button>
-      )}
+      {state.error ? <span className="text-[10px] text-danger-text">{state.error}</span> : null}
     </form>
   );
 }

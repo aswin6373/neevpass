@@ -9,7 +9,7 @@ export interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
 export function Label({ className, required = false, children, ...props }: LabelProps) {
   return (
     <label
-      className={cn('block text-[13px] font-medium leading-5 text-content', className)}
+      className={cn('block text-[11px] font-medium leading-4 text-content-secondary', className)}
       {...props}
     >
       {children}
@@ -17,7 +17,7 @@ export function Label({ className, required = false, children, ...props }: Label
         // Not colour alone: the word "required" is exposed to screen readers,
         // and the asterisk is only a visual shorthand for sighted users.
         <>
-          <span aria-hidden="true" className="ml-0.5 text-brand-text">
+          <span aria-hidden="true" className="ml-0.5 text-content-muted">
             *
           </span>
           <span className="sr-only"> (required)</span>

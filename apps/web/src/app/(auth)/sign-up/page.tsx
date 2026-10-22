@@ -1,4 +1,3 @@
-import { SELF_REPORTED_NOTICE } from '@neevpass/domain';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -16,14 +15,15 @@ export default function SignUpPage() {
   const providers = getConfiguredOAuthProviders();
 
   return (
-    <div className="flex flex-col">
-      <p className="text-[12px] text-content-muted">New account</p>
-      <h1 className="np-display mt-2.5 text-[2.25rem] text-content">Create your account</h1>
-      <p className="mt-3 text-[14px] leading-relaxed text-content-secondary">
-        One profile, used for every resume, portfolio and career page you make.
+    <div>
+      <h1 className="text-[1.35rem] font-semibold tracking-[-0.03em] text-content">
+        Create your account
+      </h1>
+      <p className="mt-1 text-[12px] text-content-secondary">
+        One profile, used for every document you make.
       </p>
 
-      <div className="mt-7 flex flex-col gap-5 border-t border-line pt-6">
+      <div className="mt-6 flex flex-col gap-5">
         <OAuthButtons providers={providers} />
 
         {providers.length > 0 && <AuthDivider />}
@@ -31,19 +31,14 @@ export default function SignUpPage() {
         <SignUpForm />
       </div>
 
-      <p className="mt-6 text-[13px] text-content-secondary">
+      <p className="mt-6 border-t border-line pt-4 text-[12px] text-content-secondary">
         Already have an account?{' '}
         <Link
           href="/sign-in"
-          className="text-brand-text underline decoration-brand/40 underline-offset-4 hover:decoration-brand"
+          className="text-content underline decoration-line-strong underline-offset-4 hover:decoration-content"
         >
           Sign in
         </Link>
-      </p>
-
-      <p className="mt-8 border-t border-line-subtle pt-4 text-[11px] leading-relaxed text-content-muted">
-        Your profile is private by default. You choose what, if anything, to publish.{' '}
-        {SELF_REPORTED_NOTICE}
       </p>
     </div>
   );

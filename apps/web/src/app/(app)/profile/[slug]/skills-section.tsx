@@ -50,27 +50,24 @@ export function SkillsSection({ revision, options, skills }: {
   return (
     <div className="flex flex-col gap-10">
       <section aria-labelledby="claimed-skills-heading">
-        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-2.5">
+        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-2">
           <div>
             <h2
               id="claimed-skills-heading"
-              className="font-display text-[1.6rem] text-content"
+              className="text-[12px] font-semibold text-content"
             >
-              Claimed skills
-              <span className="ml-2 font-sans text-[11px] font-normal text-content-muted">
+              Claimed
+              <span className="np-mono ml-2 text-[10px] font-normal text-content-muted">
                 {skills.length}
               </span>
             </h2>
-            <p className="mt-0.5 text-[11px] text-content-muted">
-              Level is self-assessed. Documents label it as reported by you.
-            </p>
           </div>
           {skills.length > 0 ? <VisibilityAllForm revision={revision} /> : null}
         </div>
 
         {skills.length === 0 ? (
-          <p className="border-b border-line py-5 text-[13px] text-content-secondary">
-            No skills claimed yet. Add the ones you actually use below.
+          <p className="border-b border-line py-4 text-[12px] text-content-secondary">
+            No skills claimed yet.
           </p>
         ) : (
           <ul>
@@ -144,13 +141,13 @@ function AddSkillSection({ revision, available }: {
   return (
     <section aria-labelledby="add-skill-heading" className="border-t border-line pt-6">
       <div className="max-w-3xl">
-        <h2 id="add-skill-heading" className="text-[13px] font-medium text-content">
+        <h2 id="add-skill-heading" className="text-[12px] font-semibold text-content">
           Add a skill
         </h2>
-        <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
+        <p className="np-mono mt-1 text-[10px] text-content-muted">
           {available.length === 0
-            ? 'Every skill in the taxonomy is already on your profile.'
-            : `${available.length} skills available. Pick from the curated list so role matching can read it.`}
+            ? 'no skills left to add'
+            : `${available.length} available`}
         </p>
 
         {available.length > 0 ? (
@@ -167,12 +164,12 @@ function AddSkillSection({ revision, available }: {
               </Alert>
             ) : null}
 
-            <Field label="Search" description="Filters the list below. One skill per save.">
+            <Field label="Search">
               <Input
                 type="search"
                 value={filter}
                 onChange={(event) => setFilter(event.target.value)}
-                placeholder="e.g. react, python, figma"
+                placeholder="react, python, figma"
                 aria-label="Filter skills"
               />
             </Field>

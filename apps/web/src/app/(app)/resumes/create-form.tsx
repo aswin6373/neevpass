@@ -24,7 +24,7 @@ export function CreateResumeForm({ defaultTitle }: { defaultTitle: string }) {
       ) : null}
 
       <div className="flex flex-wrap items-end gap-3">
-        <div className="min-w-64 flex-1">
+        <div className="min-w-64 flex-1 sm:max-w-sm">
           <Field label="Resume name" error={state.fieldErrors?.title} required>
             <Input name="title" defaultValue={defaultTitle} maxLength={120} required />
           </Field>

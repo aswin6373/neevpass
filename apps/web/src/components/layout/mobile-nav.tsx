@@ -4,18 +4,17 @@ import { Button } from '@neevpass/ui';
 import { Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { MobileNavList } from './sidebar';
+import { Brand } from './brand';
+import { SidebarContent } from './sidebar';
 
 /**
  * Mobile navigation drawer.
  *
- * The behaviour is the same as any well-built dialog: Escape closes and returns
- * focus to the trigger, the page behind is locked, focus moves into the panel,
- * and the trigger exposes its state through `aria-expanded`. It is only
- * rendered below `lg`; the desktop tabs in the header are hidden there, so a
- * screen reader never meets two navigation landmarks at once.
+ * Follows the usual dialog contract: Escape closes and returns focus to the
+ * trigger, the page behind is locked, focus moves into the panel, and the
+ * trigger exposes its state through `aria-expanded`.
  */
-export function MobileNav() {
+export function MobileNav({ user }: { user: { name: string | null; email: string } }) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -51,7 +50,7 @@ export function MobileNav() {
         ref={triggerRef}
         variant="ghost"
         size="icon"
-        className="-ml-2 lg:hidden"
+        className="-ml-1.5"
         aria-label="Open navigation menu"
         aria-expanded={open}
         aria-controls="mobile-nav-panel"
@@ -63,7 +62,7 @@ export function MobileNav() {
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="absolute inset-0 bg-black/45"
+            className="absolute inset-0 bg-stone-950/40 backdrop-blur-[1px]"
             aria-hidden="true"
             onClick={() => setOpen(false)}
           />
@@ -75,24 +74,13 @@ export function MobileNav() {
             role="dialog"
             aria-modal="true"
             aria-label="Navigation"
-            className="absolute inset-y-0 left-0 flex w-[19rem] max-w-[88vw] flex-col border-r border-line bg-background"
+            className="absolute inset-y-0 left-0 flex w-[17rem] max-w-[86vw] flex-col border-r border-line bg-surface"
           >
-            <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-line px-5">
-              <span className="flex items-center gap-2.5">
-                <span
-                  aria-hidden="true"
-                  className="flex h-[26px] w-[26px] items-center justify-center rounded-[2px] bg-content font-display text-[14px] font-medium leading-none text-background"
-                >
-                  N
-                </span>
-                <span className="font-display text-[19px] font-medium leading-none tracking-[-0.02em] text-content">
-                  NeevPass
-                </span>
-              </span>
+            <div className="flex h-14 shrink-0 items-center justify-between border-b border-line px-4">
+              <Brand href="/dashboard" />
               <Button
                 variant="ghost"
                 size="icon"
-                className="-mr-2"
                 aria-label="Close navigation menu"
                 onClick={() => {
                   setOpen(false);
@@ -103,8 +91,8 @@ export function MobileNav() {
               </Button>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
-              <MobileNavList onNavigate={() => setOpen(false)} />
+            <div className="min-h-0 flex-1 overflow-y-auto px-3 py-5">
+              <SidebarContent user={user} onNavigate={() => setOpen(false)} />
             </div>
           </div>
         </div>

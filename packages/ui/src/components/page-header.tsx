@@ -5,8 +5,6 @@ import { cn } from '../lib/cn';
 export interface PageHeaderProps {
   title: string;
   description?: ReactNode;
-  /** A short context label above the title. */
-  eyebrow?: string;
   /** Rendered on the trailing edge — typically a primary action. */
   actions?: ReactNode;
   className?: string;
@@ -15,25 +13,58 @@ export interface PageHeaderProps {
 /**
  * The heading block for an application page.
  *
- * Pages are documents, so the title is set in the display serif. A hairline
- * rule below the block separates it from the content without boxing anything
- * in. Each page owns exactly one `h1`.
+ * One title, one short description, one action group. No eyebrow: navigation
+ * already says where you are.
  */
-export function PageHeader({ title, description, eyebrow, actions, className }: PageHeaderProps) {
+export function PageHeader({ title, description, actions, className }: PageHeaderProps) {
   return (
-    <header className={cn('border-b border-line pb-5', className)}>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
-        <div className="flex min-w-0 flex-col gap-2">
-          {eyebrow && <p className="text-[12px] font-medium text-content-muted">{eyebrow}</p>}
-          <h1 className="np-display text-[2rem] text-content sm:text-[2.5rem]">{title}</h1>
-          {description && (
-            <p className="max-w-2xl text-[14px] leading-relaxed text-content-secondary">
-              {description}
-            </p>
-          )}
-        </div>
-        {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
+    <header
+      className={cn(
+        'flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-8',
+        className,
+      )}
+    >
+      <div className="flex min-w-0 flex-col gap-1">
+        <h1 className="text-[1.4rem] font-semibold leading-tight tracking-[-0.03em] text-content sm:text-[1.6rem]">
+          {title}
+        </h1>
+        {description && (
+          <p className="max-w-[58ch] text-[12.5px] leading-relaxed text-content-secondary">
+            {description}
+          </p>
+        )}
       </div>
+      {actions && (
+        <div className="flex shrink-0 flex-wrap items-center gap-2 sm:pt-0.5">{actions}</div>
+      )}
     </header>
+  );
+}
+
+export interface SectionHeaderProps {
+  title: string;
+  description?: ReactNode;
+  actions?: ReactNode;
+  className?: string;
+}
+
+/**
+ * The heading for a block inside a page.
+ *
+ * Small and typographic, so it does not compete with the page title.
+ */
+export function SectionHeader({ title, description, actions, className }: SectionHeaderProps) {
+  return (
+    <div className={cn('flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1', className)}>
+      <div className="min-w-0">
+        <h2 className="text-[12.5px] font-semibold tracking-[-0.01em] text-content">{title}</h2>
+        {description && (
+          <p className="mt-0.5 max-w-[58ch] text-[12px] leading-relaxed text-content-muted">
+            {description}
+          </p>
+        )}
+      </div>
+      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+    </div>
   );
 }
