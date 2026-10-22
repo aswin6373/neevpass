@@ -27,7 +27,7 @@ export default async function OnboardingPage() {
 
   return (
     <div className="mx-auto w-full max-w-lg py-2 sm:py-8">
-      <h1 className="text-[1.6rem] font-semibold leading-tight tracking-[-0.03em] text-content sm:text-[1.8rem]">
+      <h1 className="np-display text-[2rem] text-content sm:text-[2.35rem]">
         Set up your profile.
       </h1>
       <p className="mt-1.5 max-w-md text-[12.5px] leading-relaxed text-content-secondary">

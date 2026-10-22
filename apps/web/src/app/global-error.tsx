@@ -31,17 +31,18 @@ export default function GlobalError({
 
   return (
     <html lang="en">
-      <body className="min-h-dvh bg-background font-sans text-content antialiased">
-        <main className="flex min-h-dvh flex-col items-center justify-center px-6 py-12 text-center">
+      <body className="min-h-dvh border-t-[3px] border-t-[var(--np-accent)] bg-background font-sans text-content antialiased">
+        <main className="flex min-h-[calc(100dvh-3px)] flex-col items-center justify-center px-6 py-12 text-center">
           <span
             aria-hidden="true"
-            className="flex size-8 items-center justify-center rounded-[1px] bg-content text-[13px] font-semibold text-background"
+            className="relative flex size-8 items-center justify-center bg-content text-background"
           >
-            N
+            <span className="np-serif text-[15px] font-semibold leading-none">N</span>
+            <span className="absolute -bottom-0.5 -right-0.5 size-1.5 bg-accent" />
           </span>
 
           <p className="np-mono mt-6 text-[10px] text-content-muted">interrupted</p>
-          <h1 className="mt-2 max-w-lg text-[2rem] font-semibold leading-tight tracking-[-0.04em] text-content sm:text-[2.5rem]">
+          <h1 className="np-display mt-2 max-w-lg text-[2rem] text-content sm:text-[2.5rem]">
             {APP_NAME} could not load.
           </h1>
           <p className="mt-3 max-w-md text-[13px] leading-relaxed text-content-secondary">

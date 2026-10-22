@@ -24,12 +24,10 @@ export function PageHeader({ title, description, actions, className }: PageHeade
         className,
       )}
     >
-      <div className="flex min-w-0 flex-col gap-1">
-        <h1 className="text-[1.4rem] font-semibold leading-tight tracking-[-0.03em] text-content sm:text-[1.6rem]">
-          {title}
-        </h1>
+      <div className="flex min-w-0 flex-col gap-1.5">
+        <h1 className="np-display text-[1.9rem] text-content sm:text-[2.25rem]">{title}</h1>
         {description && (
-          <p className="max-w-[58ch] text-[12.5px] leading-relaxed text-content-secondary">
+          <p className="max-w-[58ch] text-[13px] leading-relaxed text-content-secondary">
             {description}
           </p>
         )}
@@ -57,9 +55,9 @@ export function SectionHeader({ title, description, actions, className }: Sectio
   return (
     <div className={cn('flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1', className)}>
       <div className="min-w-0">
-        <h2 className="text-[12.5px] font-semibold tracking-[-0.01em] text-content">{title}</h2>
+        <h2 className="np-section-label">{title}</h2>
         {description && (
-          <p className="mt-0.5 max-w-[58ch] text-[12px] leading-relaxed text-content-muted">
+          <p className="mt-1 max-w-[58ch] text-[12px] leading-relaxed text-content-muted">
             {description}
           </p>
         )}

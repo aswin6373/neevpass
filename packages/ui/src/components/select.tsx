@@ -16,7 +16,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
       ref={ref}
       aria-invalid={hasError || undefined}
       className={cn(
-        'flex h-8 w-full cursor-pointer rounded-[2px] border bg-surface px-2.5 py-1.5 text-[12.5px] text-content',
+        'flex h-9 w-full cursor-pointer border bg-surface px-3 py-2 text-[13px] text-content',
         'transition-colors hover:border-content-muted',
         'disabled:cursor-not-allowed disabled:bg-surface-sunken disabled:opacity-60',
         hasError ? 'border-danger' : 'border-line-strong',

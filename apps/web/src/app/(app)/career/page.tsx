@@ -97,7 +97,7 @@ export default async function CareerPage() {
       <section className="grid gap-8 border-b border-line pb-9 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
         <div>
           <p className="np-mono text-[10px] text-content-muted">target role</p>
-          <h2 className="mt-2 text-[1.5rem] font-semibold leading-tight tracking-[-0.03em] text-content">
+          <h2 className="np-display mt-2 text-[1.9rem] text-content sm:text-[2.1rem]">
             {state.goal?.roleName ?? 'No role selected'}
           </h2>
           <p className="mt-2 max-w-[44ch] text-[12px] leading-relaxed text-content-secondary">
@@ -130,7 +130,7 @@ export default async function CareerPage() {
         </div>
 
         <div>
-          <h3 className="text-[12px] font-semibold text-content">
+          <h3 className="np-section-label">
             {state.goal ? 'Change the goal' : 'Set a goal'}
           </h3>
           <div className="mt-4">
@@ -147,7 +147,7 @@ export default async function CareerPage() {
       {state.gap && state.role ? (
         <section aria-labelledby="gap-heading">
           <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-line pb-2">
-            <h2 id="gap-heading" className="text-[12px] font-semibold text-content">
+            <h2 id="gap-heading" className="np-section-label">
               Skill gap
             </h2>
             <p className="np-mono text-[10px] text-content-muted">
@@ -168,7 +168,7 @@ export default async function CareerPage() {
       {roadmap ? (
         <section aria-labelledby="roadmap-heading">
           <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-line pb-2">
-            <h2 id="roadmap-heading" className="text-[12px] font-semibold text-content">
+            <h2 id="roadmap-heading" className="np-section-label">
               Roadmap
             </h2>
             <p className="np-mono text-[10px] text-content-muted">

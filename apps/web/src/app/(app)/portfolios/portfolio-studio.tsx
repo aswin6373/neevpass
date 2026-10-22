@@ -112,7 +112,7 @@ export function PortfolioStudio({
         <div className="overflow-hidden border border-line bg-surface">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3 py-2">
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-medium text-content">Preview</span>
+              <span className="np-section-label">Preview</span>
               <span className="np-mono text-[10px] text-content-muted">
                 {activeTemplate?.label ?? 'Template'}
               </span>
@@ -150,7 +150,7 @@ export function PortfolioStudio({
           ) : null}
 
           <fieldset>
-            <legend className="text-[12px] font-medium text-content">Template</legend>
+            <legend className="np-section-label">Template</legend>
             <div className="mt-2 border-t border-line">
               {templates.map((template) => {
                 const active = template.key === templateKey;
@@ -239,7 +239,7 @@ export function PortfolioStudio({
           </label>
 
           <fieldset>
-            <legend className="text-[12px] font-medium text-content">Sections to hide</legend>
+            <legend className="np-section-label">Sections to hide</legend>
             <div className="mt-2 border-t border-line-subtle">
               {sections.map((section) => (
                 <label

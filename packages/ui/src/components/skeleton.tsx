@@ -18,7 +18,7 @@ export function Skeleton({ className, shape = 'line', ...props }: SkeletonProps)
     <div
       aria-hidden="true"
       className={cn(
-        'animate-pulse rounded-[1px] bg-line',
+        'animate-pulse bg-line',
         shape === 'line' && 'h-2.5 w-full',
         shape === 'block' && 'h-20 w-full',
         shape === 'circle' && 'size-9 rounded-full',

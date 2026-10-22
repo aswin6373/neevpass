@@ -43,7 +43,7 @@ export default async function SignInPage({
 
   return (
     <div>
-      <h1 className="text-[1.35rem] font-semibold tracking-[-0.03em] text-content">Sign in</h1>
+      <h1 className="np-display text-[1.9rem] text-content sm:text-[2.1rem]">Sign in</h1>
       <p className="mt-1 text-[12px] text-content-secondary">
         Your profile and documents are where you left them.
       </p>

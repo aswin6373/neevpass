@@ -45,7 +45,7 @@ export function SectionEditor({ kind, slug, revision, skillOptions, entries, ski
   return (
     <div className="flex flex-col gap-2">
       {entries.length === 0 ? (
-        <p className="rounded-[3px] bg-surface px-4 py-4 text-[12px] text-content-secondary">
+        <p className="rounded-none bg-surface px-4 py-4 text-[12px] text-content-secondary">
           No entries yet.
         </p>
       ) : (
@@ -80,9 +80,9 @@ function AddEntry({ kind, slug, revision, skillOptions }: {
   const start = useCallback(() => setOpen(true), []);
 
   return (
-    <div className="mt-5 rounded-[3px] bg-surface px-4 py-4">
+    <div className="mt-5 rounded-none bg-surface px-4 py-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-[12px] font-medium text-content">Add an entry</p>
+        <p className="np-section-label">Add an entry</p>
         {open ? (
           <Button type="button" variant="ghost" size="sm" onClick={close}>
             Hide form
@@ -121,7 +121,7 @@ function EntryCard({ kind, slug, revision, entry, skillOptions, skillNames }: {
   const close = useCallback(() => setOpen(false), []);
 
   return (
-    <div className="rounded-[3px] bg-surface px-4 py-4">
+    <div className="rounded-none bg-surface px-4 py-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <p className="truncate text-[14px] font-medium text-content">{entryTitle(entry)}</p>
@@ -157,7 +157,7 @@ function EntryCard({ kind, slug, revision, entry, skillOptions, skillNames }: {
       </div>
 
       {open ? (
-        <div className="mt-4 rounded-[3px] bg-surface-sunken p-4">
+        <div className="mt-4 rounded-none bg-surface-sunken p-4">
           <div className="flex flex-col gap-4">
             <EntryForm
               kind={kind}
@@ -436,7 +436,7 @@ function SkillPicker({ error, initial, options }: {
       label="Skills shown in this entry"
       error={error}
     >
-      <div className="rounded-[3px] bg-background p-3">
+      <div className="rounded-none bg-background p-3">
         {options.length === 0 ? (
           <p className="py-2 text-[12px] text-content-muted">Loading skills…</p>
         ) : (

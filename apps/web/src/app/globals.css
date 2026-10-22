@@ -90,3 +90,74 @@
   --shadow-md: var(--np-shadow-md);
   --shadow-lg: var(--np-shadow-lg);
 }
+
+/* ==========================================================================
+   Marketing surface
+   ==========================================================================
+
+   The public landing page is an editorial surface, not the application shell:
+   warm paper, ink-navy sections, copper accents and a serif display face. It
+   is intentionally light-only, so the palette below is fixed rather than
+   wired to the light/dark product tokens. `color-scheme: light` keeps native
+   controls and scrollbars consistent with the page.
+   ========================================================================== */
+
+:root {
+  --m-paper: #fbfaf6;
+  --m-ivory: #f4f0e7;
+  --m-sand: #ece8df;
+  --m-navy: #071726;
+  --m-navy-deep: #04101a;
+  --m-ink: #10202a;
+  --m-muted: #5f686c;
+  --m-copper: #c9804b;
+  --m-copper-light: #dea276;
+  --m-copper-text: #9a5a2f;
+  --m-line: rgb(12 34 52 / 0.14);
+  --m-line-on-dark: rgb(255 255 255 / 0.14);
+}
+
+.np-marketing {
+  color-scheme: light;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.np-marketing :focus-visible {
+  border-radius: 0;
+  outline-color: var(--m-copper);
+}
+
+/* Copper sections need a dark ring; copper on copper disappears. */
+.np-m-on-copper :focus-visible {
+  outline-color: var(--m-navy);
+}
+
+.np-m-display {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+.np-m-serif {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.np-m-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.np-m-eyebrow::before {
+  content: '';
+  width: 30px;
+  height: 1px;
+  flex: 0 0 auto;
+  background: currentColor;
+}

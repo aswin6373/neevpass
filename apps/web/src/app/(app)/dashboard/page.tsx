@@ -60,7 +60,7 @@ export default async function DashboardPage() {
     <div className="flex flex-col gap-10">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
         <div className="min-w-0">
-          <h1 className="text-[1.5rem] font-semibold leading-tight tracking-[-0.03em] text-content sm:text-[1.8rem]">
+          <h1 className="np-display text-[2rem] text-content sm:text-[2.35rem]">
             {greetingFor(new Date())}, {displayName}.
           </h1>
           <p className="mt-1 text-[12.5px] text-content-secondary">
@@ -129,7 +129,7 @@ export default async function DashboardPage() {
         {/* Sections ------------------------------------------------------ */}
         <section aria-labelledby="sections-heading">
           <div className="flex items-baseline justify-between gap-4 border-b border-line pb-2">
-            <h2 id="sections-heading" className="text-[12px] font-semibold text-content">
+            <h2 id="sections-heading" className="np-section-label">
               {incomplete.length > 0 ? 'Still to add' : 'Profile sections'}
             </h2>
             <Link
@@ -187,7 +187,7 @@ export default async function DashboardPage() {
         {/* Documents ----------------------------------------------------- */}
         <section aria-labelledby="documents-heading">
           <div className="flex items-baseline justify-between gap-4 border-b border-line pb-2">
-            <h2 id="documents-heading" className="text-[12px] font-semibold text-content">
+            <h2 id="documents-heading" className="np-section-label">
               Documents
             </h2>
             <Link

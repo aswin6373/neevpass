@@ -4,7 +4,7 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../lib/cn';
 
 const alertVariants = cva(
-  'flex gap-2.5 rounded-[2px] border border-l-2 p-3 text-[12px] leading-relaxed',
+  'flex gap-2.5 border border-l-2 p-3 text-[12px] leading-relaxed',
   {
     variants: {
       variant: {

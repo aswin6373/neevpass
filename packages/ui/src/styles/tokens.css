@@ -1,92 +1,95 @@
 /* ==========================================================================
-   NeevPass design tokens — "Precision"
+   NeevPass design tokens — "Editorial ledger"
    ==========================================================================
 
    Application chrome only. Document themes (resumes, portfolios) live in
    packages/docgen and remain separate by design.
 
-   Direction: near-black ink on white, one grey rule, no decorative colour.
-   Dense typographic hierarchy, small radii, no shadows. Metadata is set in a
-   monospace face so figures and labels read as data rather than decoration.
+   Direction: warm paper and ivory surfaces, ink-navy type, one copper accent
+   and a serif display face. Dense typographic hierarchy, square corners, no
+   decorative gradients. Metadata is set in a monospace face so figures and
+   labels read as data rather than decoration.
 
-   Contrast: every text/background pairing targets WCAG 2.2 AA.
+   The light palette is the same family as the public landing page; the dark
+   palette reinterprets it as deep navy with copper-light accents. Contrast:
+   every text/background pairing targets WCAG 2.2 AA.
    ========================================================================== */
 
 :root {
   /* --- Raw ramps -------------------------------------------------------- */
   --np-ink-0: #ffffff;
-  --np-ink-25: #fcfcfc;
-  --np-ink-50: #f7f7f8;
-  --np-ink-100: #f0f0f1;
-  --np-ink-200: #e4e4e7;
-  --np-ink-300: #d4d4d8;
-  --np-ink-400: #a1a1aa;
-  --np-ink-500: #71717a;
-  --np-ink-600: #52525b;
-  --np-ink-700: #3f3f46;
-  --np-ink-800: #27272a;
-  --np-ink-900: #18181b;
-  --np-ink-950: #09090b;
+  --np-ink-25: #fdfbf7;
+  --np-ink-50: #fbfaf6;
+  --np-ink-100: #f4f0e7;
+  --np-ink-200: #e8e2d7;
+  --np-ink-300: #d6cdbf;
+  --np-ink-400: #b3a99a;
+  --np-ink-500: #8d8579;
+  --np-ink-600: #6b655d;
+  --np-ink-700: #4f4b45;
+  --np-ink-800: #2f3539;
+  --np-ink-900: #10202a;
+  --np-ink-950: #071726;
 
   /* --- Semantic: surfaces ----------------------------------------------- */
-  --np-background: #fafafa;
-  --np-surface: #ffffff;
+  --np-background: #fbfaf6;
+  --np-surface: #fffdf9;
   --np-surface-raised: #ffffff;
-  --np-surface-sunken: #f4f4f5;
-  --np-surface-hover: #f4f4f5;
-  --np-surface-glass: rgb(255 255 255 / 0.88);
+  --np-surface-sunken: #f4f0e7;
+  --np-surface-hover: #f4f0e7;
+  --np-surface-glass: rgb(251 250 246 / 0.9);
 
   /* --- Semantic: text --------------------------------------------------- */
-  --np-text-primary: #09090b;
-  --np-text-secondary: #52525b;
-  --np-text-muted: #71717a;
+  --np-text-primary: #071726;
+  --np-text-secondary: #46545c;
+  --np-text-muted: #5f686c;
   --np-text-inverted: #ffffff;
 
   /* --- Semantic: borders ------------------------------------------------ */
-  --np-border: #e4e4e7;
+  --np-border: #e2ddd3;
   /* Strong borders are also the visible boundary of inputs and secondary
      buttons, so they meet the 3:1 non-text contrast requirement. */
-  --np-border-strong: #8e8e96;
-  --np-border-subtle: #efeff1;
+  --np-border-strong: #8a8176;
+  --np-border-subtle: #eee9e0;
 
   /* --- Semantic: interactive -------------------------------------------- */
-  --np-primary: #09090b;
-  --np-primary-hover: #27272a;
-  --np-primary-active: #3f3f46;
-  --np-primary-subtle: #f4f4f5;
+  --np-primary: #071726;
+  --np-primary-hover: #0c2234;
+  --np-primary-active: #10202a;
+  --np-primary-subtle: #ece8df;
   --np-primary-foreground: #ffffff;
-  --np-primary-text: #18181b;
+  --np-primary-text: #071726;
 
-  /* Secondary marks are neutral: black is the only accent. */
-  --np-accent: #52525b;
-  --np-accent-soft: #f4f4f5;
+  /* Copper is the one decorative accent. `--np-accent` is the accessible
+     text-safe shade on paper; brighter copper is reserved for dark surfaces. */
+  --np-accent: #9a5a2f;
+  --np-accent-soft: #f3e5d8;
 
   /* --- Semantic: status ------------------------------------------------- */
   /* Status colours are functional signals, not decoration. */
-  --np-success: #15803d;
-  --np-success-subtle: #f3faf5;
-  --np-success-text: #166534;
+  --np-success: #3f7f5c;
+  --np-success-subtle: #eef5ef;
+  --np-success-text: #2f6a4c;
 
   --np-warning: #a16207;
-  --np-warning-subtle: #fdf9ee;
-  --np-warning-text: #854d0e;
+  --np-warning-subtle: #fbf4e3;
+  --np-warning-text: #7a4d05;
 
-  --np-danger: #b91c1c;
-  --np-danger-subtle: #fdf4f4;
-  --np-danger-text: #991b1b;
+  --np-danger: #b23a35;
+  --np-danger-subtle: #fbefed;
+  --np-danger-text: #8f2c28;
 
-  --np-info: #3f3f46;
-  --np-info-subtle: #f4f4f5;
-  --np-info-text: #27272a;
+  --np-info: #3f4d55;
+  --np-info-subtle: #f4f0e7;
+  --np-info-text: #2f3c44;
 
   /* --- Focus ------------------------------------------------------------ */
-  --np-focus-ring: #09090b;
+  --np-focus-ring: #9a5a2f;
   --np-focus-ring-offset: var(--np-background);
 
   /* --- Typography ------------------------------------------------------- */
-  --np-font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --np-font-display: var(--np-font-sans);
+  --np-font-sans: "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --np-font-display: Georgia, "Times New Roman", serif;
   --np-font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
     "Liberation Mono", monospace;
 
@@ -121,21 +124,21 @@
   --np-space-24: 6rem;
 
   /* --- Radii ------------------------------------------------------------ */
-  /* Small radii are intentional: this is a document tool, not a toy. */
-  --np-radius-sm: 2px;
-  --np-radius-md: 3px;
-  --np-radius-lg: 4px;
-  --np-radius-xl: 6px;
-  --np-radius-2xl: 8px;
-  --np-radius-3xl: 10px;
+  /* Square is the rule: this is a printed-ledger surface, not a toy. */
+  --np-radius-sm: 0;
+  --np-radius-md: 0;
+  --np-radius-lg: 0;
+  --np-radius-xl: 0;
+  --np-radius-2xl: 0;
+  --np-radius-3xl: 0;
   --np-radius-full: 9999px;
 
   /* --- Elevation -------------------------------------------------------- */
-  /* Depth is expressed with rules, not shadows. */
+  /* Depth is expressed with rules; shadows are reserved for floating paper. */
   --np-shadow-xs: none;
-  --np-shadow-sm: 0 1px 2px 0 rgb(9 9 11 / 0.04);
-  --np-shadow-md: 0 8px 24px -16px rgb(9 9 11 / 0.16);
-  --np-shadow-lg: 0 24px 48px -24px rgb(9 9 11 / 0.22);
+  --np-shadow-sm: 0 1px 2px 0 rgb(7 23 38 / 0.04);
+  --np-shadow-md: 0 18px 40px -28px rgb(7 23 38 / 0.22);
+  --np-shadow-lg: 0 36px 72px -40px rgb(7 23 38 / 0.3);
 
   /* --- Layout ----------------------------------------------------------- */
   --np-topbar-height: 3.5rem;
@@ -148,54 +151,54 @@
    ========================================================================== */
 
 .dark {
-  --np-background: #09090b;
-  --np-surface: #0e0e10;
-  --np-surface-raised: #121214;
-  --np-surface-sunken: #18181b;
-  --np-surface-hover: #18181b;
-  --np-surface-glass: rgb(14 14 16 / 0.88);
+  --np-background: #071726;
+  --np-surface: #0b1e2e;
+  --np-surface-raised: #102736;
+  --np-surface-sunken: #0a1a27;
+  --np-surface-hover: #123042;
+  --np-surface-glass: rgb(11 30 46 / 0.9);
 
-  --np-text-primary: #fafafa;
-  --np-text-secondary: #a1a1aa;
-  --np-text-muted: #8b8b94;
-  --np-text-inverted: #09090b;
+  --np-text-primary: #f7f3eb;
+  --np-text-secondary: #b8c2c6;
+  --np-text-muted: #8fa0a8;
+  --np-text-inverted: #071726;
 
-  --np-border: #27272a;
-  --np-border-strong: #62626b;
-  --np-border-subtle: #1c1c1f;
+  --np-border: #223a49;
+  --np-border-strong: #6f8490;
+  --np-border-subtle: #132b39;
 
-  --np-primary: #fafafa;
-  --np-primary-hover: #e4e4e7;
-  --np-primary-active: #d4d4d8;
-  --np-primary-subtle: #18181b;
-  --np-primary-foreground: #09090b;
-  --np-primary-text: #fafafa;
+  --np-primary: #dea276;
+  --np-primary-hover: #e8b58c;
+  --np-primary-active: #d49a6d;
+  --np-primary-subtle: #132a37;
+  --np-primary-foreground: #071726;
+  --np-primary-text: #dea276;
 
-  --np-accent: #a1a1aa;
-  --np-accent-soft: #18181b;
+  --np-accent: #dea276;
+  --np-accent-soft: #132a37;
 
-  --np-success: #4ade80;
-  --np-success-subtle: #0e1f15;
-  --np-success-text: #86efac;
+  --np-success: #62c28e;
+  --np-success-subtle: #0f241b;
+  --np-success-text: #8fd9b1;
 
-  --np-warning: #facc15;
-  --np-warning-subtle: #211b0b;
-  --np-warning-text: #fde047;
+  --np-warning: #d9a441;
+  --np-warning-subtle: #241d0f;
+  --np-warning-text: #f0c777;
 
-  --np-danger: #f87171;
-  --np-danger-subtle: #241112;
-  --np-danger-text: #fca5a5;
+  --np-danger: #e07a72;
+  --np-danger-subtle: #2a1415;
+  --np-danger-text: #f2a39d;
 
-  --np-info: #d4d4d8;
-  --np-info-subtle: #18181b;
-  --np-info-text: #e4e4e7;
+  --np-info: #b8c2c6;
+  --np-info-subtle: #132a37;
+  --np-info-text: #d5dde0;
 
-  --np-focus-ring: #fafafa;
+  --np-focus-ring: #dea276;
 
   --np-shadow-xs: none;
   --np-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
-  --np-shadow-md: 0 12px 32px -16px rgb(0 0 0 / 0.7);
-  --np-shadow-lg: 0 28px 56px -24px rgb(0 0 0 / 0.8);
+  --np-shadow-md: 0 18px 40px -28px rgb(0 0 0 / 0.7);
+  --np-shadow-lg: 0 36px 72px -40px rgb(0 0 0 / 0.8);
 }
 
 /* ==========================================================================
@@ -226,13 +229,13 @@ body {
 }
 
 ::selection {
-  background: #09090b;
-  color: #ffffff;
+  background: #071726;
+  color: #fbfaf6;
 }
 
 .dark ::selection {
-  background: #fafafa;
-  color: #09090b;
+  background: #dea276;
+  color: #071726;
 }
 
 /* A single, consistent focus treatment everywhere. Never `outline: none`. */
@@ -242,12 +245,28 @@ body {
   border-radius: var(--np-radius-sm);
 }
 
-/* Display type: tight sans, used for page titles and marketing headlines. */
+/* Serif face without display sizing, for small editorial marks. */
+.np-serif {
+  font-family: var(--np-font-display);
+}
+
+/* Serif display type: page titles, document names and editorial moments. */
 .np-display {
   font-family: var(--np-font-display);
   font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1.05;
+  letter-spacing: -0.03em;
+  line-height: 1.03;
+}
+
+/* Copper micro-label used for section headings inside the workspace. */
+.np-section-label {
+  font-family: var(--np-font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--np-accent);
 }
 
 .np-tabular {

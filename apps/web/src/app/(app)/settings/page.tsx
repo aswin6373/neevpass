@@ -30,7 +30,7 @@ export default async function SettingsPage() {
 
       <section aria-labelledby="account-heading">
         <div className="flex items-baseline justify-between gap-4 border-b border-line pb-2">
-          <h2 id="account-heading" className="text-[12px] font-semibold text-content">
+          <h2 id="account-heading" className="np-section-label">
             Account
           </h2>
         </div>
@@ -55,7 +55,7 @@ export default async function SettingsPage() {
 
       <section aria-labelledby="privacy-heading" className="border-t border-line pt-8">
         <div className="flex items-baseline justify-between gap-4 border-b border-line pb-2">
-          <h2 id="privacy-heading" className="text-[12px] font-semibold text-content">
+          <h2 id="privacy-heading" className="np-section-label">
             Privacy
           </h2>
         </div>

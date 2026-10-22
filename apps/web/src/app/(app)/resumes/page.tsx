@@ -32,7 +32,7 @@ export default async function ResumesPage() {
       />
 
       <section aria-labelledby="new-resume-heading" className="border-y border-line py-5">
-        <h2 id="new-resume-heading" className="mb-3 text-[12px] font-semibold text-content">
+        <h2 id="new-resume-heading" className="mb-3 np-section-label">
           New resume
         </h2>
         <CreateResumeForm defaultTitle={`${user.name ?? 'My'} — resume`} />
@@ -40,7 +40,7 @@ export default async function ResumesPage() {
 
       <section aria-labelledby="resume-list-heading">
         <div className="flex items-baseline justify-between gap-4 border-b border-line pb-2">
-          <h2 id="resume-list-heading" className="text-[12px] font-semibold text-content">
+          <h2 id="resume-list-heading" className="np-section-label">
             Documents
           </h2>
           <span className="np-mono text-[10px] text-content-muted">

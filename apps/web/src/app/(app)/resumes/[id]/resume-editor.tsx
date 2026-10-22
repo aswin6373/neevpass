@@ -113,7 +113,7 @@ export function ResumeConfigForm({
       </Field>
 
       <fieldset>
-        <legend className="text-[12px] font-medium text-content">Sections to hide</legend>
+        <legend className="np-section-label">Sections to hide</legend>
         <div className="mt-2 border-t border-line-subtle">
           {sections.map((section) => (
             <label

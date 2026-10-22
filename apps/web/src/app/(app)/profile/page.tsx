@@ -30,7 +30,7 @@ export default async function ProfilePage() {
     <div className="flex flex-col gap-9">
       <header className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
         <div className="min-w-0">
-          <h1 className="text-[1.5rem] font-semibold leading-tight tracking-[-0.03em] text-content sm:text-[1.8rem]">
+          <h1 className="np-display text-[2rem] text-content sm:text-[2.35rem]">
             {aggregate.fullName}
           </h1>
           <p className="mt-1 max-w-[55ch] text-[12.5px] leading-relaxed text-content-secondary">
@@ -49,11 +49,11 @@ export default async function ProfilePage() {
         </Link>
       </header>
 
-      <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_15rem] lg:gap-14">
+      <div className="grid items-start gap-8 xl:grid-cols-[minmax(0,1fr)_15rem] xl:gap-14">
         {/* Section index -------------------------------------------------- */}
         <section aria-labelledby="sections-heading">
           <div className="flex items-baseline justify-between gap-4">
-            <h2 id="sections-heading" className="text-[12px] font-semibold text-content">
+            <h2 id="sections-heading" className="np-section-label">
               Sections
             </h2>
             <span className="np-mono text-[10px] text-content-muted">
@@ -68,7 +68,7 @@ export default async function ProfilePage() {
                 <li key={section.kind}>
                   <Link
                     href={`/profile/${definition?.slug ?? ''}`}
-                    className="group flex items-center gap-3 rounded-[3px] bg-surface px-3.5 py-3 transition-colors hover:bg-surface-sunken"
+                    className="group flex items-center gap-3 rounded-none bg-surface px-3.5 py-3 transition-colors hover:bg-surface-sunken"
                   >
                     <span className="np-mono text-[10px] text-content-muted">
                       {String(index + 1).padStart(2, '0')}
@@ -99,8 +99,8 @@ export default async function ProfilePage() {
 
         {/* Margin --------------------------------------------------------- */}
         <aside className="flex flex-col gap-8">
-          <section aria-labelledby="completeness-heading" className="rounded-[3px] bg-surface p-4">
-            <h2 id="completeness-heading" className="text-[12px] font-semibold text-content">
+          <section aria-labelledby="completeness-heading" className="rounded-none bg-surface p-4">
+            <h2 id="completeness-heading" className="np-section-label">
               Completeness
             </h2>
             <p className="np-tabular mt-4 text-[2.6rem] font-medium leading-none tracking-[-0.05em] text-content">

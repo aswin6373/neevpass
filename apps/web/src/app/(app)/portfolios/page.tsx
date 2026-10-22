@@ -117,7 +117,7 @@ export default async function PortfoliosPage() {
       {/* Studio ---------------------------------------------------------- */}
       <section aria-labelledby="studio-heading">
         <div className="mb-4 flex items-baseline justify-between gap-3 border-b border-line pb-2">
-          <h2 id="studio-heading" className="text-[12px] font-semibold text-content">
+          <h2 id="studio-heading" className="np-section-label">
             Design &amp; publish
           </h2>
           <span className="np-mono text-[10px] text-content-muted">

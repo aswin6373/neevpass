@@ -34,7 +34,7 @@ export default function RouteError({
   return (
     <div className="max-w-xl py-8 sm:py-14">
       <p className="np-mono text-[10px] text-content-muted">error</p>
-      <h1 className="mt-3 text-[2rem] font-semibold leading-tight tracking-[-0.04em] text-content sm:text-[2.5rem]">
+      <h1 className="np-display mt-3 text-[2rem] text-content sm:text-[2.5rem]">
         This page stopped loading.
       </h1>
       <p className="mt-3 text-[13px] leading-relaxed text-content-secondary" role="alert">

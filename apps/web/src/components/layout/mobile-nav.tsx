@@ -62,7 +62,7 @@ export function MobileNav({ user }: { user: { name: string | null; email: string
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="absolute inset-0 bg-stone-950/40 backdrop-blur-[1px]"
+            className="absolute inset-0 bg-[#04101a]/55 backdrop-blur-[2px]"
             aria-hidden="true"
             onClick={() => setOpen(false)}
           />

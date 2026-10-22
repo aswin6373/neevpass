@@ -17,9 +17,9 @@ export const metadata: Metadata = {
  */
 export default function NotFound() {
   return (
-    <main className="flex min-h-dvh flex-col">
-      <header className="border-b border-line">
-        <div className="mx-auto flex h-14 w-full max-w-[72rem] items-center justify-between gap-4 px-5 sm:px-8">
+    <main className="flex min-h-dvh flex-col border-t-[3px] border-t-[var(--np-accent)]">
+      <header className="border-b border-line bg-surface">
+        <div className="mx-auto flex h-16 w-full max-w-[80rem] items-center justify-between gap-4 px-5 sm:h-[72px] sm:px-8 lg:px-14">
           <Brand href="/" />
           <Link
             href="/dashboard"
@@ -30,11 +30,11 @@ export default function NotFound() {
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-[72rem] flex-1 flex-col justify-center px-5 py-16 sm:px-8">
+      <div className="mx-auto flex w-full max-w-[80rem] flex-1 flex-col justify-center px-5 py-16 sm:px-8 lg:px-14">
         <p className="np-mono text-[10px] text-content-muted" role="status">
           404
         </p>
-        <h1 className="mt-3 max-w-2xl text-[2.4rem] font-semibold leading-tight tracking-[-0.045em] text-content sm:text-[3.6rem]">
+        <h1 className="np-display mt-3 max-w-2xl text-[2.4rem] text-content sm:text-[3.6rem]">
           This page does not exist.
         </h1>
         <p className="mt-3 max-w-md text-[13px] leading-relaxed text-content-secondary">

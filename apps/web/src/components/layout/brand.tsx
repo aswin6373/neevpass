@@ -22,12 +22,13 @@ export function Brand({
     >
       <span
         aria-hidden="true"
-        className="grid size-6 place-items-center rounded-[1px] bg-content text-[12px] font-semibold leading-none text-background"
+        className="relative grid size-7 shrink-0 place-items-center bg-content leading-none text-background"
       >
-        N
+        <span className="np-serif text-[14px] font-semibold">N</span>
+        <span className="absolute -bottom-0.5 -right-0.5 size-1.5 bg-accent" />
       </span>
       {!compact && (
-        <span className="text-[14px] font-semibold leading-none tracking-[-0.03em] text-content">
+        <span className="text-[13px] font-semibold uppercase leading-none tracking-[0.12em] text-content">
           NeevPass
         </span>
       )}

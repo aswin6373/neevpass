@@ -7,11 +7,11 @@ import { Spinner } from './spinner';
 export const buttonVariants = cva(
   // Focus styling comes from the global :focus-visible rule in tokens.css, so
   // every focusable element in the product looks the same.
-  'inline-flex select-none items-center justify-center gap-1.5 whitespace-nowrap rounded-[3px] font-medium tracking-[-0.005em] transition-colors duration-100 disabled:pointer-events-none disabled:opacity-40',
+  'inline-flex select-none items-center justify-center gap-1.5 whitespace-nowrap font-medium tracking-[-0.005em] transition-colors duration-100 disabled:pointer-events-none disabled:opacity-40',
   {
     variants: {
       variant: {
-        // Black is the primary action. There is no brand colour to spend.
+        // Ink-navy is the primary action; copper stays reserved for emphasis.
         primary: 'bg-brand text-brand-foreground hover:bg-brand-hover',
         secondary:
           'border border-line-strong bg-surface text-content hover:border-content hover:bg-surface-hover',
@@ -21,10 +21,10 @@ export const buttonVariants = cva(
         link: 'h-auto p-0 text-content underline decoration-line-strong underline-offset-4 hover:decoration-content',
       },
       size: {
-        sm: 'h-7 px-2.5 text-[12px]',
-        md: 'h-8 px-3 text-[12.5px]',
-        lg: 'h-10 px-4 text-[13px]',
-        icon: 'h-8 w-8',
+        sm: 'h-8 px-3 text-[12px]',
+        md: 'h-9 px-3.5 text-[12.5px]',
+        lg: 'h-11 px-4 text-[13px]',
+        icon: 'h-9 w-9',
       },
       block: {
         true: 'w-full',

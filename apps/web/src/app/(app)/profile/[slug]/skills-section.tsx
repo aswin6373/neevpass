@@ -54,7 +54,7 @@ export function SkillsSection({ revision, options, skills }: {
           <div>
             <h2
               id="claimed-skills-heading"
-              className="text-[12px] font-semibold text-content"
+              className="np-section-label"
             >
               Claimed
               <span className="np-mono ml-2 text-[10px] font-normal text-content-muted">
@@ -66,7 +66,7 @@ export function SkillsSection({ revision, options, skills }: {
         </div>
 
         {skills.length === 0 ? (
-          <p className="mt-3 rounded-[3px] bg-surface px-4 py-4 text-[12px] text-content-secondary">
+          <p className="mt-3 rounded-none bg-surface px-4 py-4 text-[12px] text-content-secondary">
             No skills claimed yet.
           </p>
         ) : (
@@ -139,10 +139,10 @@ function AddSkillSection({ revision, available }: {
   }, [filtered]);
 
   return (
-    <section aria-labelledby="add-skill-heading" className="rounded-[3px] bg-surface p-4 sm:p-5">
+    <section aria-labelledby="add-skill-heading" className="rounded-none bg-surface p-4 sm:p-5">
       <div className="max-w-3xl">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          <h2 id="add-skill-heading" className="text-[12px] font-semibold text-content">
+          <h2 id="add-skill-heading" className="np-section-label">
             Add a skill
           </h2>
           <p className="np-mono text-[10px] text-content-muted">
@@ -232,7 +232,7 @@ function SkillRow({ revision, skill }: { revision: number; skill: ProfileSkillRo
   const [open, setOpen] = useState(false);
 
   return (
-    <li className="rounded-[3px] bg-surface px-4 py-3">
+    <li className="rounded-none bg-surface px-4 py-3">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <div className="min-w-0 flex-1">
           <p className="text-[13px] font-medium text-content">{skill.name}</p>
@@ -264,7 +264,7 @@ function SkillRow({ revision, skill }: { revision: number; skill: ProfileSkillRo
       </div>
 
       {open ? (
-        <div className="mt-4 rounded-[3px] bg-surface-sunken p-4">
+        <div className="mt-4 rounded-none bg-surface-sunken p-4">
           <div className="flex flex-col gap-4">
             <EditSkillForm revision={revision} skill={skill} onDone={() => setOpen(false)} />
             <RemoveSkillForm skillId={skill.skillId} name={skill.name} />

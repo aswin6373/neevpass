@@ -65,7 +65,7 @@ export default async function ResumePreviewPage({ params }: PageProps) {
 
       <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
         <div className="min-w-0">
-          <h1 className="truncate text-[1.4rem] font-semibold leading-tight tracking-[-0.03em] text-content sm:text-[1.6rem]">
+          <h1 className="np-display truncate text-[1.75rem] text-content sm:text-[2rem]">
             {resume.title}
           </h1>
           <p className="np-mono mt-1 text-[10px] text-content-muted">
@@ -93,9 +93,9 @@ export default async function ResumePreviewPage({ params }: PageProps) {
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_19rem] xl:gap-8">
         {/* Paper ---------------------------------------------------------- */}
         <div className="order-1 min-w-0">
-          <div className="overflow-hidden rounded-[3px] border border-line bg-surface">
+          <div className="overflow-hidden rounded-none border border-line bg-surface">
             <div className="flex items-center justify-between gap-3 border-b border-line px-3 py-2">
-              <span className="text-[11px] font-medium text-content">Preview</span>
+              <span className="np-section-label">Preview</span>
               <span className="np-mono text-[10px] text-content-muted">
                 {config.layout.toLowerCase()} · A4
               </span>
@@ -116,8 +116,8 @@ export default async function ResumePreviewPage({ params }: PageProps) {
 
         {/* Controls ------------------------------------------------------- */}
         <aside className="order-2 xl:sticky xl:top-6">
-          <div className="rounded-[3px] border border-line bg-surface p-4">
-            <h2 className="text-[12px] font-semibold text-content">Template</h2>
+          <div className="rounded-none border border-line bg-surface p-4">
+            <h2 className="np-section-label">Template</h2>
             <p className="mt-1 text-[11px] leading-relaxed text-content-muted">
               Section visibility applies to this document only.
             </p>

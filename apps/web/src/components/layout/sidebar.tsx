@@ -28,7 +28,7 @@ function NavLink({
       className={cn(
         'relative flex items-center py-1.5 pl-3 text-[13px] tracking-[-0.01em] transition-colors',
         active
-          ? 'font-medium text-content before:absolute before:inset-y-1 before:left-0 before:w-px before:bg-content'
+          ? 'font-semibold text-content before:absolute before:inset-y-0.5 before:left-0 before:w-[2px] before:bg-accent'
           : 'text-content-secondary hover:text-content',
       )}
     >
@@ -102,7 +102,7 @@ export function SidebarContent({
  */
 export function AppSidebar({ user }: { user: { name: string | null; email: string } }) {
   return (
-    <aside className="sticky top-0 hidden h-dvh flex-col border-r border-line bg-surface px-5 py-5 lg:flex">
+    <aside className="sticky top-0 hidden h-dvh flex-col border-r border-t-[3px] border-line border-t-[var(--np-accent)] bg-surface px-5 py-5 lg:flex">
       <Brand href="/dashboard" />
       <div className="mt-8 flex min-h-0 flex-1 flex-col overflow-y-auto">
         <SidebarContent user={user} />
