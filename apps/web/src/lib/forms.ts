@@ -11,6 +11,8 @@
 import { AppError, isUserFacing, toAppError } from '@neevpass/domain';
 import type { ZodType } from 'zod';
 
+import { logger } from '@/lib/logger';
+
 export interface FormState {
   ok?: boolean;
   /** Whole-form error, shown in an alert. */
@@ -33,6 +35,15 @@ export function actionError(error: unknown): FormState {
       ? { error: appError.message, fieldErrors }
       : { error: appError.message };
   }
+
+  // Internal failures are deliberately hidden from the browser, but they must
+  // never disappear. The logger redacts secrets and walks the cause chain, so a
+  // generic alert can still be traced back to the Prisma or filesystem error.
+  logger.error('Server action failed with an internal error', {
+    code: appError.code,
+    error: appError,
+    details: appError.details,
+  });
 
   return { error: 'Something went wrong on our side. Try again in a moment.' };
 }

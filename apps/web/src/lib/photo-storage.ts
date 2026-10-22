@@ -4,7 +4,9 @@ import path from 'node:path';
 
 import { AppError } from '@neevpass/domain';
 
-export const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+import { MAX_PHOTO_BYTES } from './photo-limits';
+
+export { MAX_PHOTO_BYTES };
 
 interface PhotoKind {
   readonly mimeType: 'image/jpeg' | 'image/png' | 'image/webp';
@@ -76,8 +78,20 @@ function sniffPhoto(buffer: Buffer): PhotoKind {
   throw AppError.validation('Choose a JPEG, PNG or WebP image.');
 }
 
+/**
+ * Node exposes `File`, but relying on `instanceof` is brittle across runtimes
+ * and multipart parsers that construct a compatible Blob in another realm.
+ * Duck-typing the two methods this module actually needs keeps the upload
+ * action working regardless of which implementation produced the entry.
+ */
+function isUploadedFile(value: FormDataEntryValue | null): value is File {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as { arrayBuffer?: unknown; size?: unknown };
+  return typeof candidate.arrayBuffer === 'function' && typeof candidate.size === 'number';
+}
+
 export async function parsePhotoUpload(value: FormDataEntryValue | null): Promise<ParsedPhoto> {
-  if (!(value instanceof File) || value.size === 0) {
+  if (!isUploadedFile(value) || value.size === 0) {
     throw AppError.validation('Choose a photo to upload.');
   }
 
@@ -95,8 +109,14 @@ export async function savePhoto(photo: ParsedPhoto): Promise<SavedPhoto> {
   const storageKey = path.posix.join('profile-photos', `${randomUUID()}.${photo.extension}`);
   const target = storagePath(storageKey);
 
-  await mkdir(path.dirname(target), { recursive: true });
-  await writeFile(target, photo.buffer, { flag: 'wx' });
+  try {
+    await mkdir(path.dirname(target), { recursive: true });
+    await writeFile(target, photo.buffer, { flag: 'wx' });
+  } catch (error) {
+    // Keep the filesystem path out of the UI; the action logger records the
+    // cause so an operator can tell a permissions problem from a full disk.
+    throw AppError.internal('Failed to store the uploaded profile photo.', error);
+  }
 
   return {
     storageKey,

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useActionState, useRef, useState } from 'react';
 
 import type { FormState } from '@/lib/forms';
+import { PROFILE_PHOTO_ACCEPT, validateSelectedPhoto } from '@/lib/photo-limits';
 
 import { removeProfilePhotoAction, uploadProfilePhotoAction } from './actions';
 
@@ -34,6 +35,12 @@ export interface ProfilePhotoProps {
 export function ProfilePhoto({ fullName, photoUrl, revision }: ProfilePhotoProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
+
+  function selectFile(file: File | undefined): void {
+    setFileName(file?.name ?? null);
+    setFileError(file ? validateSelectedPhoto(file) : null);
+  }
 
   const [uploadState, uploadAction, uploading] = useActionState(
     uploadProfilePhotoAction,
@@ -71,9 +78,9 @@ export function ProfilePhoto({ fullName, photoUrl, revision }: ProfilePhotoProps
               ref={inputRef}
               name="photo"
               type="file"
-              accept="image/jpeg,image/png,image/webp"
+              accept={PROFILE_PHOTO_ACCEPT}
               className="hidden"
-              onChange={(event) => setFileName(event.target.files?.[0]?.name ?? null)}
+              onChange={(event) => selectFile(event.target.files?.[0])}
             />
 
             <div className="flex flex-wrap items-center gap-1.5">
@@ -86,7 +93,7 @@ export function ProfilePhoto({ fullName, photoUrl, revision }: ProfilePhotoProps
                 {photoUrl ? 'Replace' : 'Choose photo'}
               </Button>
 
-              {fileName ? (
+              {fileName && !fileError ? (
                 <Button type="submit" size="sm" isLoading={uploading} loadingLabel="Uploading">
                   Upload
                 </Button>
@@ -118,7 +125,11 @@ export function ProfilePhoto({ fullName, photoUrl, revision }: ProfilePhotoProps
         </div>
       </div>
 
-      {uploadState.error ? (
+      {fileError ? (
+        <Alert variant="danger" title="Could not upload">
+          {fileError}
+        </Alert>
+      ) : uploadState.error ? (
         <Alert variant="danger" title="Could not upload">
           {uploadState.error}
         </Alert>

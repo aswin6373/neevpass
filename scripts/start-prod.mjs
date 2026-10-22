@@ -73,6 +73,13 @@ if (existsSync(envFile)) {
   }
 }
 
+// The standalone server's cwd is inside `.next`, which every build replaces.
+// For a local production run, keep uploads beside the source app so a rebuild
+// does not orphan the FileAsset rows. Containers set UPLOAD_DIR explicitly.
+if (!env.UPLOAD_DIR) {
+  env.UPLOAD_DIR = path.join(repoRoot, 'apps', 'web', '.uploads');
+}
+
 const child = spawn('node', ['server.js'], {
   cwd: appDir,
   env,
