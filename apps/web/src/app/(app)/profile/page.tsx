@@ -15,8 +15,9 @@ export const metadata: Metadata = {
 /**
  * Profile overview.
  *
- * The index of the record: every section in one ruled list, with the
- * completeness figure in a narrow margin. Deliberately not a gallery of cards.
+ * The index of the record: every section in a compact grid of quiet surfaces,
+ * with the completeness figure in a narrow margin. Spacing and fill carry the
+ * grouping; the page avoids stacking a rule under every section.
  */
 export default async function ProfilePage() {
   const { user, scope } = await requireProfile();
@@ -48,10 +49,10 @@ export default async function ProfilePage() {
         </Link>
       </header>
 
-      <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-16">
+      <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_15rem] lg:gap-14">
         {/* Section index -------------------------------------------------- */}
         <section aria-labelledby="sections-heading">
-          <div className="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+          <div className="flex items-baseline justify-between gap-4">
             <h2 id="sections-heading" className="text-[12px] font-semibold text-content">
               Sections
             </h2>
@@ -60,14 +61,14 @@ export default async function ProfilePage() {
             </span>
           </div>
 
-          <ol>
+          <ol className="mt-3 grid gap-2 sm:grid-cols-2">
             {completeness.sections.map((section, index) => {
               const definition = sectionDefinition(section.kind);
               return (
                 <li key={section.kind}>
                   <Link
                     href={`/profile/${definition?.slug ?? ''}`}
-                    className="group grid grid-cols-[1.5rem_minmax(0,1fr)_auto_1rem] items-baseline gap-3 border-b border-line py-3.5 transition-colors hover:bg-surface-hover"
+                    className="group flex items-center gap-3 rounded-[3px] bg-surface px-3.5 py-3 transition-colors hover:bg-surface-sunken"
                   >
                     <span className="np-mono text-[10px] text-content-muted">
                       {String(index + 1).padStart(2, '0')}
@@ -75,19 +76,19 @@ export default async function ProfilePage() {
                     <span
                       className={
                         section.filled
-                          ? 'text-[13px] font-medium text-content'
-                          : 'text-[13px] text-content-secondary'
+                          ? 'min-w-0 flex-1 truncate text-[13px] font-medium text-content'
+                          : 'min-w-0 flex-1 truncate text-[13px] text-content-secondary'
                       }
                     >
                       {section.label}
                     </span>
-                    <span className="np-mono text-[10px] text-content-muted">
+                    <span className="np-mono shrink-0 text-[10px] text-content-muted">
                       {section.filled ? `${section.items} entr${section.items === 1 ? 'y' : 'ies'}` : 'empty'}
                     </span>
                     <ArrowUpRight
                       size={13}
                       aria-hidden="true"
-                      className="text-content-muted transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-content"
+                      className="shrink-0 text-content-muted transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-content"
                     />
                   </Link>
                 </li>
@@ -98,11 +99,8 @@ export default async function ProfilePage() {
 
         {/* Margin --------------------------------------------------------- */}
         <aside className="flex flex-col gap-8">
-          <section aria-labelledby="completeness-heading">
-            <h2
-              id="completeness-heading"
-              className="border-b border-line pb-2 text-[12px] font-semibold text-content"
-            >
+          <section aria-labelledby="completeness-heading" className="rounded-[3px] bg-surface p-4">
+            <h2 id="completeness-heading" className="text-[12px] font-semibold text-content">
               Completeness
             </h2>
             <p className="np-tabular mt-4 text-[2.6rem] font-medium leading-none tracking-[-0.05em] text-content">
@@ -117,10 +115,10 @@ export default async function ProfilePage() {
               aria-valuemin={0}
               aria-valuemax={100}
               aria-label="Profile completeness"
-              className="mt-4 h-px w-full bg-line"
+              className="mt-4 h-1 w-full rounded-full bg-surface-sunken"
             >
               <div
-                className="h-px bg-content"
+                className="h-1 rounded-full bg-content"
                 style={{ width: `${completeness.percent}%` }}
               />
             </div>

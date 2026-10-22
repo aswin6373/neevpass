@@ -48,9 +48,9 @@ export function SkillsSection({ revision, options, skills }: {
   );
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-8">
       <section aria-labelledby="claimed-skills-heading">
-        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-2">
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2
               id="claimed-skills-heading"
@@ -66,11 +66,11 @@ export function SkillsSection({ revision, options, skills }: {
         </div>
 
         {skills.length === 0 ? (
-          <p className="border-b border-line py-4 text-[12px] text-content-secondary">
+          <p className="mt-3 rounded-[3px] bg-surface px-4 py-4 text-[12px] text-content-secondary">
             No skills claimed yet.
           </p>
         ) : (
-          <ul>
+          <ul className="mt-3 flex flex-col gap-2">
             {skills.map((skill) => (
               <SkillRow key={skill.skillId} revision={revision} skill={skill} />
             ))}
@@ -139,16 +139,18 @@ function AddSkillSection({ revision, available }: {
   }, [filtered]);
 
   return (
-    <section aria-labelledby="add-skill-heading" className="border-t border-line pt-6">
+    <section aria-labelledby="add-skill-heading" className="rounded-[3px] bg-surface p-4 sm:p-5">
       <div className="max-w-3xl">
-        <h2 id="add-skill-heading" className="text-[12px] font-semibold text-content">
-          Add a skill
-        </h2>
-        <p className="np-mono mt-1 text-[10px] text-content-muted">
-          {available.length === 0
-            ? 'no skills left to add'
-            : `${available.length} available`}
-        </p>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h2 id="add-skill-heading" className="text-[12px] font-semibold text-content">
+            Add a skill
+          </h2>
+          <p className="np-mono text-[10px] text-content-muted">
+            {available.length === 0
+              ? 'no skills left to add'
+              : `${available.length} available`}
+          </p>
+        </div>
 
         {available.length > 0 ? (
           <form action={formAction} className="mt-4 flex flex-col gap-4">
@@ -230,7 +232,7 @@ function SkillRow({ revision, skill }: { revision: number; skill: ProfileSkillRo
   const [open, setOpen] = useState(false);
 
   return (
-    <li className="border-b border-line py-3.5">
+    <li className="rounded-[3px] bg-surface px-4 py-3">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <div className="min-w-0 flex-1">
           <p className="text-[13px] font-medium text-content">{skill.name}</p>
@@ -242,24 +244,11 @@ function SkillRow({ revision, skill }: { revision: number; skill: ProfileSkillRo
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] tabular-nums text-content-muted">
-            Level {skill.proficiency} of 5
-          </span>
-          <span className="flex gap-0.5" aria-hidden="true">
-            {[1, 2, 3, 4, 5].map((level) => (
-              <span
-                key={level}
-                className={cn(
-                  'h-1 w-2.5',
-                  level <= skill.proficiency ? 'bg-brand' : 'bg-line-strong/50',
-                )}
-              />
-            ))}
-          </span>
-        </div>
+        <span className="np-mono shrink-0 text-[10px] tabular-nums text-content-muted">
+          Level {skill.proficiency}/5
+        </span>
 
-        <span className={cn('text-[10px]', visibilityTone(skill.visibility))}>
+        <span className={cn('shrink-0 text-[10px]', visibilityTone(skill.visibility))}>
           {visibilityLabel(skill.visibility)}
         </span>
 
@@ -275,9 +264,11 @@ function SkillRow({ revision, skill }: { revision: number; skill: ProfileSkillRo
       </div>
 
       {open ? (
-        <div className="mt-4 flex flex-col gap-4 border-t border-line pt-4">
-          <EditSkillForm revision={revision} skill={skill} onDone={() => setOpen(false)} />
-          <RemoveSkillForm skillId={skill.skillId} name={skill.name} />
+        <div className="mt-4 rounded-[3px] bg-surface-sunken p-4">
+          <div className="flex flex-col gap-4">
+            <EditSkillForm revision={revision} skill={skill} onDone={() => setOpen(false)} />
+            <RemoveSkillForm skillId={skill.skillId} name={skill.name} />
+          </div>
         </div>
       ) : null}
     </li>
@@ -345,7 +336,7 @@ function RemoveSkillForm({ skillId, name }: { skillId: string; name: string }) {
   const [armed, setArmed] = useState(false);
 
   return (
-    <form action={formAction} className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3">
+    <form action={formAction} className="flex flex-wrap items-center justify-between gap-3">
       <input type="hidden" name="skillId" value={skillId} />
       <span className="text-[12px] text-content-muted">
         {state.error ?? `Remove ${name} from your profile?`}

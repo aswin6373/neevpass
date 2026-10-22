@@ -43,13 +43,13 @@ export interface SectionEditorProps {
  */
 export function SectionEditor({ kind, slug, revision, skillOptions, entries, skillNamesByEntryId }: SectionEditorProps) {
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       {entries.length === 0 ? (
-        <p className="border-y border-line py-4 text-[12px] text-content-secondary">
+        <p className="rounded-[3px] bg-surface px-4 py-4 text-[12px] text-content-secondary">
           No entries yet.
         </p>
       ) : (
-        <div className="border-t border-line">
+        <div className="flex flex-col gap-2">
           {entries.map((entry) => (
             <EntryCard
               key={entry.id}
@@ -80,7 +80,7 @@ function AddEntry({ kind, slug, revision, skillOptions }: {
   const start = useCallback(() => setOpen(true), []);
 
   return (
-    <div className="mt-7 border-y border-line py-4">
+    <div className="mt-5 rounded-[3px] bg-surface px-4 py-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-[12px] font-medium text-content">Add an entry</p>
         {open ? (
@@ -95,7 +95,7 @@ function AddEntry({ kind, slug, revision, skillOptions }: {
       </div>
 
       {open ? (
-        <div className="mt-5 border-t border-line pt-5">
+        <div className="mt-5">
           <EntryForm
             kind={kind}
             slug={slug}
@@ -121,7 +121,7 @@ function EntryCard({ kind, slug, revision, entry, skillOptions, skillNames }: {
   const close = useCallback(() => setOpen(false), []);
 
   return (
-    <div className="border-b border-line py-4">
+    <div className="rounded-[3px] bg-surface px-4 py-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <p className="truncate text-[14px] font-medium text-content">{entryTitle(entry)}</p>
@@ -157,16 +157,18 @@ function EntryCard({ kind, slug, revision, entry, skillOptions, skillNames }: {
       </div>
 
       {open ? (
-        <div className="mt-4 flex flex-col gap-4 border-t border-line pt-4">
-          <EntryForm
-            kind={kind}
-            slug={slug}
-            revision={revision}
-            skillOptions={skillOptions}
-            initial={entry}
-            onSuccess={close}
-          />
-          <RemoveEntry slug={slug} entryId={entry.id} />
+        <div className="mt-4 rounded-[3px] bg-surface-sunken p-4">
+          <div className="flex flex-col gap-4">
+            <EntryForm
+              kind={kind}
+              slug={slug}
+              revision={revision}
+              skillOptions={skillOptions}
+              initial={entry}
+              onSuccess={close}
+            />
+            <RemoveEntry slug={slug} entryId={entry.id} />
+          </div>
         </div>
       ) : null}
     </div>
@@ -180,7 +182,7 @@ function RemoveEntry({ slug, entryId }: { slug: string; entryId: string }) {
   if (state.ok) return null; // removed: the card unmounts with the first render
 
   return (
-    <form action={formAction} className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3">
+    <form action={formAction} className="flex flex-wrap items-center justify-between gap-3">
       <input type="hidden" name="section" value={slug} />
       <input type="hidden" name="entryId" value={entryId} />
       <span className="text-[11px] text-content-muted">
@@ -332,7 +334,7 @@ function FieldRow({ spec, state, initial, skillOptions }: {
       );
     case 'checkbox':
       return (
-        <label className="flex items-start gap-2.5 border-y border-line py-2.5 text-[13px] text-content sm:col-span-2">
+        <label className="flex items-start gap-2.5 py-1 text-[13px] text-content sm:col-span-2">
           <input
             type="checkbox"
             name={spec.name}
@@ -434,7 +436,7 @@ function SkillPicker({ error, initial, options }: {
       label="Skills shown in this entry"
       error={error}
     >
-      <div className="border-y border-line py-2">
+      <div className="rounded-[3px] bg-background p-3">
         {options.length === 0 ? (
           <p className="py-2 text-[12px] text-content-muted">Loading skills…</p>
         ) : (

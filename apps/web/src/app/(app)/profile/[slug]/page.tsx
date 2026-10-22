@@ -114,7 +114,7 @@ export default async function SectionPage({ params }: PageProps) {
 
       <nav
         aria-label="Profile section navigation"
-        className="flex items-center justify-between gap-4 border-t border-line pt-6"
+        className="flex items-center justify-between gap-4 pt-2"
       >
         <div>
           {previousSection ? (
