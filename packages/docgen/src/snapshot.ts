@@ -303,7 +303,6 @@ export function buildSnapshot(input: BuildSnapshotInput): ProfileSnapshot {
     ...(email ? { email } : {}),
     ...(aggregate.phone ? { phone: aggregate.phone } : {}),
     ...(aggregate.location ? { location: aggregate.location } : {}),
-    ...(aggregate.photoUrl ? { photoUrl: aggregate.photoUrl } : {}),
     links: aggregate.links
       .filter((link) => include(link.visibility))
       .map((link) => linksOf(link.label, link.url)),

@@ -204,11 +204,6 @@ model Profile {
   location String?
   phone    String?
 
-  /// A profile has at most one photo, so the foreign key is unique. The unique
-  /// constraint is what makes this a one-to-one relation rather than one-to-many.
-  photoAssetId String?    @unique
-  photoAsset   FileAsset? @relation("ProfilePhoto", fields: [photoAssetId], references: [id], onDelete: SetNull)
-
   /// Address of the public career page, e.g. /p/aswin-kumar.
   /// Null until the student claims one. Reserved words are rejected in the
   /// domain layer (see RESERVED_SLUGS) so a slug can never shadow a route.
@@ -779,13 +774,11 @@ model FileAsset {
   width    Int?
   height   Int?
 
-  /// What the file is for, e.g. "profile-photo" or "project-image".
+  /// What the file is for, e.g. "project-image" or "certificate-scan".
   purpose String
 
   createdAt DateTime  @default(now())
   deletedAt DateTime?
-
-  profilePhoto Profile? @relation("ProfilePhoto")
 
   @@index([ownerId, purpose])
 }

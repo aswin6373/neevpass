@@ -71,7 +71,7 @@ describe('normalisePortfolioConfig', () => {
     expect(config.accentColor).toBe('#26523f');
   });
 
-  it('uses the portrait accent for the photo-led template', () => {
+  it('uses the portrait accent for the portrait template', () => {
     expect(normalisePortfolioConfig({}, 'portrait').accentColor).toBe('#9a3412');
   });
 });
@@ -126,49 +126,17 @@ describe('renderPortfolioHtml', () => {
     expect(html).toContain('&quot;&gt;&lt;img');
   });
 
-  it('renders a photo in the portrait template and initials when none exists', () => {
-    const withPhoto = buildSnapshot({
-      aggregate: aggregate({ photoUrl: '/api/assets/photo-1' }),
-      revision: 2,
-      now: NOW,
-      publicOnly: true,
-    });
+  it('renders the portrait template with an initials monogram', () => {
     const html = renderPortfolioHtml({
-      snapshot: withPhoto,
-      config: {},
-      templateKey: 'PORTRAIT',
-      title: 'Portfolio',
-    });
-
-    expect(html).toContain('src="/api/assets/photo-1"');
-    expect(html).not.toContain('<div class="portrait-placeholder"');
-
-    const withoutPhoto = renderPortfolioHtml({
       snapshot,
       config: {},
       templateKey: 'PORTRAIT',
       title: 'Portfolio',
     });
 
-    expect(withoutPhoto).toContain('portrait-placeholder');
-    expect(withoutPhoto).toContain('>AV</span>');
-  });
-
-  it('does not turn a script URL into a portrait image', () => {
-    const unsafe = buildSnapshot({
-      aggregate: aggregate({ photoUrl: 'javascript:alert(1)' }),
-      revision: 2,
-      now: NOW,
-      publicOnly: true,
-    });
-    const html = renderPortfolioHtml({
-      snapshot: unsafe,
-      config: {},
-      templateKey: 'PORTRAIT',
-      title: 'Portfolio',
-    });
-
-    expect(html).not.toContain('javascript:alert(1)');
-    expect(html).toContain('portrait-placeholder');
+    expect(html).toContain('portrait-monogram');
+    expect(html).toContain('aria-label="Initials"');
+    expect(html).toContain('>AV</span>');
+    expect(html).not.toMatch(/<img/i);
   });
 });

@@ -35,8 +35,6 @@ import {
   editWorkshop,
   removeProfileSkill,
   requireProfileForUser,
-  clearProfilePhoto,
-  setProfilePhoto,
   setProfileSkillsVisibility,
   softDeleteSectionEntry,
   updateProfileBasics,
@@ -47,7 +45,6 @@ import {
 import { revalidatePath } from 'next/cache';
 
 import { getCurrentUser } from '@/lib/session';
-import { deletePhoto, parsePhotoUpload, savePhoto } from '@/lib/photo-storage';
 
 import {
   bool,
@@ -472,58 +469,6 @@ export async function saveBasicsAction(_prev: FormState, form: FormData): Promis
     revalidateProfile();
     revalidatePath('/profile/summary');
     return { ok: true, message: 'Profile basics saved.' };
-  } catch (error) {
-    return actionError(error);
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Profile photo
-// ---------------------------------------------------------------------------
-
-export async function uploadProfilePhotoAction(
-  _prev: FormState,
-  form: FormData,
-): Promise<FormState> {
-  try {
-    const user = await getCurrentUser();
-    if (!user) return { error: 'Your session ended. Sign in again and retry.' };
-    const scope = scopeWithFormRevision(await requireProfileForUser(user.id), form);
-
-    const photo = await parsePhotoUpload(form.get('photo'));
-    const saved = await savePhoto(photo);
-
-    let previous: string | null = null;
-    try {
-      previous = await setProfilePhoto(scope, saved);
-    } catch (error) {
-      await deletePhoto(saved.storageKey);
-      throw error;
-    }
-
-    if (previous) await deletePhoto(previous);
-
-    revalidateProfile();
-    return { ok: true, message: 'Profile photo updated.' };
-  } catch (error) {
-    return actionError(error);
-  }
-}
-
-export async function removeProfilePhotoAction(
-  _prev: FormState,
-  form: FormData,
-): Promise<FormState> {
-  try {
-    const user = await getCurrentUser();
-    if (!user) return { error: 'Your session ended. Sign in again and retry.' };
-    const scope = scopeWithFormRevision(await requireProfileForUser(user.id), form);
-
-    const previous = await clearProfilePhoto(scope);
-    if (previous) await deletePhoto(previous);
-
-    revalidateProfile();
-    return { ok: true, message: 'Profile photo removed.' };
   } catch (error) {
     return actionError(error);
   }

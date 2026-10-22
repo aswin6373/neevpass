@@ -37,14 +37,6 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
 
-  // Profile photos travel through a server action. The 1 MB default rejects a
-  // normal phone photo before the action can validate it.
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '6mb',
-    },
-  },
-
   // Produces a self-contained server bundle, which is what we deploy to the
   // long-lived Node host that the PDF renderer will need in Phase 2.
   output: 'standalone',

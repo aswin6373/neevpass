@@ -80,16 +80,6 @@ describe('buildSnapshot', () => {
     expect(snapshot.identity.headline).toBe('Final-year CS student');
     expect(snapshot.sections.map((section) => section.kind)).toEqual(SECTION_KINDS.filter((kind) => kind !== 'SUMMARY'));
   });
-
-  it('carries the uploaded profile photo into the immutable snapshot', () => {
-    const snapshot = buildSnapshot({
-      aggregate: aggregate({ photoUrl: '/api/assets/photo-1' }),
-      revision: 3,
-      now: NOW,
-    });
-
-    expect(snapshot.identity.photoUrl).toBe('/api/assets/photo-1');
-  });
 });
 
 describe('createEntryFilter', () => {

@@ -377,7 +377,7 @@ Target **WCAG 2.2 AA**, treated as an engineering requirement with automated che
 **Identity and profile**
 
 - `User` — auth identity: email, password hash, OAuth accounts, status, timestamps.
-- `Profile` — 1:1 with `User`. Full name, headline, summary, location, phone, photo asset,
+- `Profile` — 1:1 with `User`. Full name, headline, summary, location, phone,
   public slug, default visibility, `revision`.
 - `ProfileLink` — labelled links (GitHub, LinkedIn, portfolio, blog, etc.), ordered.
 
@@ -445,7 +445,7 @@ Target **WCAG 2.2 AA**, treated as an engineering requirement with automated che
 - `Skill M—N Skill` through `SkillPrerequisite` (self-referencing DAG)
 - `Opportunity M—N Skill` through `OpportunitySkill`
 - `Roadmap 1—N RoadmapItem`; `RoadmapItem N—1 Resource` (optional)
-- `FileAsset` referenced by `Profile`, `Project`, `Certificate`
+- `FileAsset` referenced by `Project`, `Certificate`
 
 ### 5.4 Draft Prisma schema (proposal, not final)
 
@@ -462,7 +462,6 @@ model Profile {
   summary        String?
   location       String?
   phone          String?
-  photoAssetId   String?
   publicSlug     String?       @unique
   defaultVisibility Visibility  @default(PRIVATE)
   revision       Int           @default(1)
@@ -600,13 +599,13 @@ access goes through the module's public entry point, never through its internals
 | # | Module | Responsibility | Key use cases |
 | --- | --- | --- | --- |
 | 1 | **Identity & Auth** | Accounts, sessions, OAuth, password reset, account deletion | Sign up, sign in, link GitHub, delete account |
-| 2 | **Profile** | The canonical career profile and all its sections | Create/edit every section, autosave, reorder, set visibility, upload photo |
+| 2 | **Profile** | The canonical career profile and all its sections | Create/edit every section, autosave, reorder, set visibility |
 | 3 | **Taxonomy** | Reference data: skills, categories, roles, prerequisites | Search skills, suggest related skills, admin-seeded only |
 | 4 | **Document Generation** | Snapshot → document model → renderers; templates and themes | Preview resume, switch template/font/accent, export PDF, create multiple resume variants |
 | 5 | **Publishing** | Public career profile and portfolio pages | Claim slug, publish/unpublish, SEO metadata, OG image, sitemap |
 | 6 | **Career Intelligence** | Score, goals, skill gap, roadmap, recommendations | See score with breakdown, set a goal, view gap, follow roadmap |
 | 7 | **Opportunities** | Catalog, filtering, matching, saved items | Browse internships/competitions/workshops, save, dismiss, apply link-out |
-| 8 | **Media** | Uploads and asset lifecycle | Photo upload, project images, certificate scans |
+| 8 | **Media** | Uploads and asset lifecycle | Project images, certificate scans |
 | 9 | **Platform** | Design system, guards, logging, config, error taxonomy | Cross-cutting concerns |
 
 Route groups in `apps/web/src/app`:
@@ -730,7 +729,8 @@ Remaining work for the next milestone:
 - Legal terms and privacy pages; the sign-in footer links to `/terms` and
   `/privacy`, which do not exist yet.
 - Portfolio slug redirects when a student renames their address.
-- Photo upload and object storage (the schema has the relation; there is no UI yet).
+- Project image and certificate scan uploads with object storage (the schema has
+  `FileAsset`; there is no UI yet).
 - Optional server-side PDF rendering for users who need a generated file without the
   print dialog.
 - Docker image smoke test in CI, plus a documented backup, monitoring and alerting

@@ -32,7 +32,6 @@ export interface SnapshotIdentity {
   readonly email?: string;
   readonly phone?: string;
   readonly location?: string;
-  readonly photoUrl?: string;
   readonly links: readonly SnapshotLink[];
 }
 

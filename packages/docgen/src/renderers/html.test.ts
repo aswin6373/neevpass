@@ -88,18 +88,4 @@ describe('renderResumeHtml', () => {
       expect(html).toContain('A marketplace for hostel supplies.');
     },
   );
-
-  it('ignores an uploaded profile photo in every resume template', () => {
-    const snapshot = buildSnapshot({
-      aggregate: aggregate({ photoUrl: '/api/assets/photo-1' }),
-      revision: 1,
-      now: new Date('2026-10-11T00:00:00Z'),
-    });
-
-    for (const layout of ['CLASSIC', 'MODERN', 'COMPACT']) {
-      const html = renderResumeHtml({ snapshot, config: { layout }, title: 'Resume' });
-      expect(html).not.toContain('/api/assets/photo-1');
-      expect(html).not.toMatch(/<img/i);
-    }
-  });
 });

@@ -479,7 +479,7 @@ ${contacts.length > 0 ? `<nav class="contact" aria-label="Contact">${contacts.ma
 }
 
 // ---------------------------------------------------------------------------
-// PORTRAIT — photo-led, warm paper, sticky portrait, quiet typography
+// PORTRAIT — portrait-led, warm paper, sticky monogram, quiet typography
 // ---------------------------------------------------------------------------
 
 const PORTRAIT_CSS = (accent: string) => `
@@ -496,10 +496,9 @@ a{color:inherit}
 .layout{display:grid;grid-template-columns:minmax(280px,.82fr) minmax(0,1.55fr);gap:clamp(32px,5vw,76px);align-items:start;padding:clamp(34px,5vw,62px) 0 40px}
 .side{position:sticky;top:24px;min-width:0}
 .portrait{position:relative;margin:0;aspect-ratio:4/5;overflow:hidden;border-radius:46% 46% 18px 18px / 31% 31% 14px 14px;border:1px solid var(--line);background:radial-gradient(circle at 32% 22%,color-mix(in srgb,var(--accent) 24%,#fff) 0,color-mix(in srgb,var(--accent) 9%,#f8f2e7) 58%,#ece2d2 100%);box-shadow:0 28px 55px -42px rgba(32,29,25,.7)}
-.portrait img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.94)}
 .portrait::after{content:"";position:absolute;inset:9px;border:1px solid rgba(255,255,255,.32);border-radius:inherit;pointer-events:none}
-.portrait-placeholder{position:absolute;inset:0;display:grid;place-items:center;color:var(--accent)}
-.portrait-placeholder span{display:grid;place-items:center;width:44%;aspect-ratio:1;border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 26%,transparent);background:color-mix(in srgb,var(--accent) 9%,#fff);font-family:"Iowan Old Style",Charter,Cambria,Georgia,serif;font-size:clamp(2.2rem,5vw,4.2rem);line-height:1;letter-spacing:-.05em}
+.portrait-monogram{position:absolute;inset:0;display:grid;place-items:center;color:var(--accent)}
+.portrait-monogram span{display:grid;place-items:center;width:44%;aspect-ratio:1;border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 26%,transparent);background:color-mix(in srgb,var(--accent) 9%,#fff);font-family:"Iowan Old Style",Charter,Cambria,Georgia,serif;font-size:clamp(2.2rem,5vw,4.2rem);line-height:1;letter-spacing:-.05em}
 .side-meta{display:flex;justify-content:space-between;gap:12px;margin:16px 2px 0;font:600 8.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .contact{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .contact a{display:inline-flex;align-items:center;font-size:9.5px;font-weight:600;letter-spacing:.04em;text-decoration:none;color:var(--accent);background:transparent;border:1px solid color-mix(in srgb,var(--accent) 26%,var(--line));border-radius:999px;padding:5px 9px;transition:background .15s,color .15s,border-color .15s}
@@ -548,23 +547,14 @@ function portraitInitials(name: string): string {
   return (first + last).toUpperCase() || 'NP';
 }
 
-function safePortraitUrl(value: string | undefined): string | undefined {
-  if (!value) return undefined;
-  if (value.startsWith('/') && !value.startsWith('//')) return escapeHtml(value);
-  return /^https?:\/\//i.test(value) ? escapeHtml(value) : undefined;
-}
-
 function portraitBody(snapshot: ProfileSnapshot, config: PortfolioConfig): string {
   const sections = sectionViews(snapshot, config);
   const contacts = contactsFor(snapshot, config);
   const summary = escapeHtml(snapshot.summary ?? '');
-  const photoUrl = safePortraitUrl(snapshot.identity.photoUrl);
   const initials = portraitInitials(snapshot.identity.fullName);
   const year = snapshot.takenAt.slice(0, 4);
 
-  const portrait = photoUrl
-    ? `<img src="${photoUrl}" alt="Portrait of ${escapeHtml(snapshot.identity.fullName)}" loading="eager" referrerpolicy="no-referrer">`
-    : `<div class="portrait-placeholder" role="img" aria-label="Profile photo placeholder"><span>${escapeHtml(initials)}</span></div>`;
+  const portrait = `<div class="portrait-monogram" role="img" aria-label="Initials"><span>${escapeHtml(initials)}</span></div>`;
 
   const chapters = sections
     .map((section, i) => {

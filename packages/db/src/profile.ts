@@ -80,7 +80,6 @@ function wrapWriteError(error: unknown, label: string): never {
 // ---------------------------------------------------------------------------
 
 const AGGREGATE_INCLUDE = {
-  photoAsset: { select: { id: true, deletedAt: true } },
   links: { where: { deletedAt: null }, orderBy: { order: 'asc' as const } },
   education: { where: { deletedAt: null }, orderBy: { order: 'asc' as const } },
   experience: {
@@ -132,9 +131,6 @@ export async function findProfileAggregate(profileId: string): Promise<ProfileAg
     ...(profile.summary ? { summary: profile.summary } : {}),
     ...(profile.location ? { location: profile.location } : {}),
     ...(profile.phone ? { phone: profile.phone } : {}),
-    ...(profile.photoAsset && !profile.photoAsset.deletedAt
-      ? { photoUrl: `/api/assets/${profile.photoAsset.id}` }
-      : {}),
     ...(profile.publicSlug ? { publicSlug: profile.publicSlug } : {}),
     defaultVisibility: profile.defaultVisibility,
     links: profile.links.map((link) => ({
@@ -611,107 +607,6 @@ export async function updateProfileBasics(scope: ProfileScope, input: ProfileBas
       },
     });
   });
-}
-
-export interface ProfilePhotoInput {
-  readonly storageKey: string;
-  readonly mimeType: string;
-  readonly byteSize: number;
-  readonly width?: number;
-  readonly height?: number;
-}
-
-/**
- * Attaches an uploaded file to the profile and soft-deletes the previous asset.
- *
- * Returns the previous storage key after the transaction commits so the caller
- * can delete the orphaned file. A failed cleanup is harmless: the row is already
- * invisible to readers, and the storage sweep can remove it later.
- */
-export async function setProfilePhoto(
-  scope: ProfileScope,
-  input: ProfilePhotoInput,
-): Promise<string | null> {
-  let previousStorageKey: string | null = null;
-
-  try {
-    await runProfileWrite(scope, async (tx) => {
-      const profile = await tx.profile.findUnique({
-        where: { id: scope.profileId },
-        select: {
-          id: true,
-          photoAsset: { select: { id: true, storageKey: true, deletedAt: true } },
-        },
-      });
-      if (!profile) throw AppError.notFound('Profile not found', { profileId: scope.profileId });
-
-      if (profile.photoAsset && !profile.photoAsset.deletedAt) {
-        previousStorageKey = profile.photoAsset.storageKey;
-        await tx.fileAsset.update({
-          where: { id: profile.photoAsset.id },
-          data: { deletedAt: new Date() },
-        });
-      }
-
-      const asset = await tx.fileAsset.create({
-        data: {
-          ownerId: scope.userId,
-          storageKey: input.storageKey,
-          mimeType: input.mimeType,
-          byteSize: input.byteSize,
-          ...(input.width !== undefined ? { width: input.width } : {}),
-          ...(input.height !== undefined ? { height: input.height } : {}),
-          purpose: 'profile-photo',
-        },
-        select: { id: true },
-      });
-
-      await tx.profile.update({
-        where: { id: scope.profileId },
-        data: { photoAssetId: asset.id },
-      });
-    });
-  } catch (error) {
-    wrapWriteError(error, 'profile photo');
-  }
-
-  return previousStorageKey;
-}
-
-/** Detaches the current photo and returns its storage key for cleanup. */
-export async function clearProfilePhoto(scope: ProfileScope): Promise<string | null> {
-  let previousStorageKey: string | null = null;
-
-  try {
-    await runProfileWrite(scope, async (tx) => {
-      const profile = await tx.profile.findUnique({
-        where: { id: scope.profileId },
-        select: {
-          id: true,
-          photoAssetId: true,
-          photoAsset: { select: { storageKey: true, deletedAt: true } },
-        },
-      });
-      if (!profile) throw AppError.notFound('Profile not found', { profileId: scope.profileId });
-
-      if (profile.photoAsset && !profile.photoAsset.deletedAt && profile.photoAssetId) {
-        previousStorageKey = profile.photoAsset.storageKey;
-        await tx.fileAsset.update({
-          where: { id: profile.photoAssetId },
-          data: { deletedAt: new Date() },
-        });
-      }
-
-      await tx.profile.update({
-        where: { id: scope.profileId },
-        data: { photoAssetId: null },
-      });
-    });
-  } catch (error) {
-    wrapWriteError(error, 'profile photo');
-  }
-
-  return previousStorageKey;
 }
 
 // ---------------------------------------------------------------------------

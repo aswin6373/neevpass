@@ -47,7 +47,7 @@ export const PORTFOLIO_TEMPLATES: readonly PortfolioTemplateDefinition[] = [
   {
     key: 'PORTRAIT',
     label: 'Portrait',
-    description: 'A photo-led personal page with a warm palette, sticky portrait and quiet typography.',
+    description: 'A portrait-led personal page with a warm palette, sticky monogram and quiet typography.',
     defaultAccent: '#9a3412',
   },
 ] as const;

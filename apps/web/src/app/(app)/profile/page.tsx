@@ -7,8 +7,6 @@ import Link from 'next/link';
 
 import { requireProfile } from '@/lib/session';
 
-import { ProfilePhoto } from './profile-photo';
-
 export const metadata: Metadata = {
   title: 'Profile',
   robots: { index: false, follow: false },
@@ -18,8 +16,7 @@ export const metadata: Metadata = {
  * Profile overview.
  *
  * The index of the record: every section in one ruled list, with the
- * completeness figure and the photo controls in a narrow margin. Deliberately
- * not a gallery of cards.
+ * completeness figure in a narrow margin. Deliberately not a gallery of cards.
  */
 export default async function ProfilePage() {
   const { user, scope } = await requireProfile();
@@ -142,22 +139,6 @@ export default async function ProfilePage() {
                 'Every section has at least one entry.'
               )}
             </p>
-          </section>
-
-          <section aria-labelledby="photo-heading">
-            <h2
-              id="photo-heading"
-              className="border-b border-line pb-2 text-[12px] font-semibold text-content"
-            >
-              Photo
-            </h2>
-            <div className="mt-4">
-              <ProfilePhoto
-                fullName={aggregate.fullName}
-                photoUrl={aggregate.photoUrl}
-                revision={aggregate.revision}
-              />
-            </div>
           </section>
         </aside>
       </div>
