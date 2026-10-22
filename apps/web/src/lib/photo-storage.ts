@@ -24,12 +24,17 @@ export interface SavedPhoto {
 }
 
 function storageRoot(): string {
-  return path.resolve(process.env.UPLOAD_DIR ?? path.join(process.cwd(), '.uploads'));
+  // Uploaded photos are runtime data, not build inputs. UPLOAD_DIR may point at
+  // a mounted volume outside the project, so tell Turbopack not to trace this
+  // path — otherwise it assumes the whole project belongs in the build output.
+  return path.resolve(
+    /* turbopackIgnore: true */ process.env.UPLOAD_DIR ?? path.join(process.cwd(), '.uploads'),
+  );
 }
 
 function storagePath(storageKey: string): string {
   const root = storageRoot();
-  const resolved = path.resolve(root, storageKey);
+  const resolved = path.resolve(/* turbopackIgnore: true */ root, storageKey);
   if (!resolved.startsWith(`${root}${path.sep}`)) {
     throw AppError.validation('The uploaded file reference was invalid.');
   }
