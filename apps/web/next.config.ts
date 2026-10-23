@@ -19,6 +19,12 @@ if (existsSync(rootEnvFile)) {
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
+  // Marks the dependency update as an agent-driven security upgrade so future
+  // upgrade checks can detect it.
+  experimental: {
+    agentUpgrade: 'security',
+  },
+
   // Workspace packages ship TypeScript source rather than a build artifact, so
   // Next compiles them as part of the app. This keeps the monorepo free of a
   // build-orchestration step and means a change in packages/domain is picked up
