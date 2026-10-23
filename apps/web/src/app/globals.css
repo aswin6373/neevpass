@@ -6,22 +6,16 @@
 
    Three layers, in order:
      1. Tailwind itself.
-     2. The design tokens from @neevpass/ui — raw values, plus the light and
-        dark palettes and the base layer.
+     2. The dark-only design tokens from @neevpass/ui and the base layer.
      3. `@theme inline`, which maps those raw token values onto Tailwind's
         theme so utilities like `bg-surface` and `text-content` exist and stay
         wired to the live token value (that is what `inline` buys us: the
-        utility emits `var(--np-surface)`, so switching `.dark` re-themes the
-        whole app without re-generating any CSS).
+        utility emits `var(--np-surface)`, so token changes re-theme the whole
+        app without re-generating any CSS).
    ========================================================================== */
 
 @import 'tailwindcss';
 @import '../../../../packages/ui/src/styles/tokens.css';
-
-/* Tailwind's `dark:` variant follows the OS preference by default. NeevPass
-   uses an explicit class so the user can override the system setting, and so
-   the server can render the correct theme without a flash. */
-@custom-variant dark (&:where(.dark, .dark *));
 
 /* The design system lives outside this app, so Tailwind has to be told to scan
    it for class names. Without this, classes used only in packages/ui would be
@@ -98,7 +92,7 @@
    The public landing page is an editorial surface, not the application shell:
    warm paper, ink-navy sections, copper accents and a serif display face. It
    is intentionally light-only, so the palette below is fixed rather than
-   wired to the light/dark product tokens. `color-scheme: light` keeps native
+   wired to the dark product tokens. `color-scheme: light` keeps native
    controls and scrollbars consistent with the page.
    ========================================================================== */
 

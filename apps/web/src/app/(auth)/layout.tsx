@@ -3,7 +3,6 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 
 import { Brand } from '@/components/layout/brand';
-import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { getCurrentUser } from '@/lib/session';
 
 /**
@@ -29,15 +28,12 @@ export default async function AuthLayout({ children }: { children: ReactNode }) 
         <div className="mx-auto flex h-16 w-full max-w-[80rem] items-center justify-between gap-4 px-5 sm:h-[72px] sm:px-8 lg:px-14">
           <Brand href="/" />
 
-          <div className="flex items-center gap-2">
-            <Link
-              href={user ? '/dashboard' : '/'}
-              className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'hidden sm:inline-flex')}
-            >
-              {user ? 'Dashboard' : 'Back to home'}
-            </Link>
-            <ThemeToggle />
-          </div>
+          <Link
+            href={user ? '/dashboard' : '/'}
+            className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'hidden sm:inline-flex')}
+          >
+            {user ? 'Dashboard' : 'Back to home'}
+          </Link>
         </div>
       </header>
 

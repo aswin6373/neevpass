@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { MobileNav } from './mobile-nav';
 import { Brand } from './brand';
 import { AppSidebar } from './sidebar';
-import { ThemeToggle } from './theme-toggle';
 import { Topbar } from './topbar';
 
 export interface AppShellProps {
@@ -49,9 +48,6 @@ export function AppShell({ user, children, footer }: AppShellProps) {
             <header className="sticky top-0 z-30 flex h-12 items-center gap-2 border-b border-t-[3px] border-line border-t-[var(--np-accent)] bg-surface px-4 lg:hidden">
               <MobileNav user={user} />
               <Brand href="/dashboard" />
-              <div className="ml-auto">
-                <ThemeToggle />
-              </div>
             </header>
 
             <main

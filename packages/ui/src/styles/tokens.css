@@ -5,17 +5,18 @@
    Application chrome only. Document themes (resumes, portfolios) live in
    packages/docgen and remain separate by design.
 
-   Direction: warm paper and ivory surfaces, ink-navy type, one copper accent
-   and a serif display face. Dense typographic hierarchy, square corners, no
+   Direction: deep navy surfaces, warm ivory type, one copper accent and a
+   serif display face. Dense typographic hierarchy, square corners, no
    decorative gradients. Metadata is set in a monospace face so figures and
    labels read as data rather than decoration.
 
-   The light palette is the same family as the public landing page; the dark
-   palette reinterprets it as deep navy with copper-light accents. Contrast:
-   every text/background pairing targets WCAG 2.2 AA.
+   The application is dark-only. Contrast: every text/background pairing
+   targets WCAG 2.2 AA.
    ========================================================================== */
 
 :root {
+  color-scheme: dark;
+
   /* --- Raw ramps -------------------------------------------------------- */
   --np-ink-0: #ffffff;
   --np-ink-25: #fdfbf7;
@@ -32,59 +33,58 @@
   --np-ink-950: #071726;
 
   /* --- Semantic: surfaces ----------------------------------------------- */
-  --np-background: #fbfaf6;
-  --np-surface: #fffdf9;
-  --np-surface-raised: #ffffff;
-  --np-surface-sunken: #f4f0e7;
-  --np-surface-hover: #f4f0e7;
-  --np-surface-glass: rgb(251 250 246 / 0.9);
+  --np-background: #071726;
+  --np-surface: #0b1e2e;
+  --np-surface-raised: #102736;
+  --np-surface-sunken: #0a1a27;
+  --np-surface-hover: #123042;
+  --np-surface-glass: rgb(11 30 46 / 0.9);
 
   /* --- Semantic: text --------------------------------------------------- */
-  --np-text-primary: #071726;
-  --np-text-secondary: #46545c;
-  --np-text-muted: #5f686c;
-  --np-text-inverted: #ffffff;
+  --np-text-primary: #f7f3eb;
+  --np-text-secondary: #b8c2c6;
+  --np-text-muted: #8fa0a8;
+  --np-text-inverted: #071726;
 
   /* --- Semantic: borders ------------------------------------------------ */
-  --np-border: #e2ddd3;
+  --np-border: #223a49;
   /* Strong borders are also the visible boundary of inputs and secondary
      buttons, so they meet the 3:1 non-text contrast requirement. */
-  --np-border-strong: #8a8176;
-  --np-border-subtle: #eee9e0;
+  --np-border-strong: #6f8490;
+  --np-border-subtle: #132b39;
 
   /* --- Semantic: interactive -------------------------------------------- */
-  --np-primary: #071726;
-  --np-primary-hover: #0c2234;
-  --np-primary-active: #10202a;
-  --np-primary-subtle: #ece8df;
-  --np-primary-foreground: #ffffff;
-  --np-primary-text: #071726;
+  --np-primary: #dea276;
+  --np-primary-hover: #e8b58c;
+  --np-primary-active: #d49a6d;
+  --np-primary-subtle: #132a37;
+  --np-primary-foreground: #071726;
+  --np-primary-text: #dea276;
 
-  /* Copper is the one decorative accent. `--np-accent` is the accessible
-     text-safe shade on paper; brighter copper is reserved for dark surfaces. */
-  --np-accent: #9a5a2f;
-  --np-accent-soft: #f3e5d8;
+  /* Copper is the one decorative accent. */
+  --np-accent: #dea276;
+  --np-accent-soft: #132a37;
 
   /* --- Semantic: status ------------------------------------------------- */
   /* Status colours are functional signals, not decoration. */
-  --np-success: #3f7f5c;
-  --np-success-subtle: #eef5ef;
-  --np-success-text: #2f6a4c;
+  --np-success: #62c28e;
+  --np-success-subtle: #0f241b;
+  --np-success-text: #8fd9b1;
 
-  --np-warning: #a16207;
-  --np-warning-subtle: #fbf4e3;
-  --np-warning-text: #7a4d05;
+  --np-warning: #d9a441;
+  --np-warning-subtle: #241d0f;
+  --np-warning-text: #f0c777;
 
-  --np-danger: #b23a35;
-  --np-danger-subtle: #fbefed;
-  --np-danger-text: #8f2c28;
+  --np-danger: #e07a72;
+  --np-danger-subtle: #2a1415;
+  --np-danger-text: #f2a39d;
 
-  --np-info: #3f4d55;
-  --np-info-subtle: #f4f0e7;
-  --np-info-text: #2f3c44;
+  --np-info: #b8c2c6;
+  --np-info-subtle: #132a37;
+  --np-info-text: #d5dde0;
 
   /* --- Focus ------------------------------------------------------------ */
-  --np-focus-ring: #9a5a2f;
+  --np-focus-ring: #dea276;
   --np-focus-ring-offset: var(--np-background);
 
   /* --- Typography ------------------------------------------------------- */
@@ -136,69 +136,14 @@
   /* --- Elevation -------------------------------------------------------- */
   /* Depth is expressed with rules; shadows are reserved for floating paper. */
   --np-shadow-xs: none;
-  --np-shadow-sm: 0 1px 2px 0 rgb(7 23 38 / 0.04);
-  --np-shadow-md: 0 18px 40px -28px rgb(7 23 38 / 0.22);
-  --np-shadow-lg: 0 36px 72px -40px rgb(7 23 38 / 0.3);
+  --np-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --np-shadow-md: 0 18px 40px -28px rgb(0 0 0 / 0.7);
+  --np-shadow-lg: 0 36px 72px -40px rgb(0 0 0 / 0.8);
 
   /* --- Layout ----------------------------------------------------------- */
   --np-topbar-height: 3.5rem;
   --np-sidebar-width: 15rem;
   --np-content-max-width: 72rem;
-}
-
-/* ==========================================================================
-   Dark theme
-   ========================================================================== */
-
-.dark {
-  --np-background: #071726;
-  --np-surface: #0b1e2e;
-  --np-surface-raised: #102736;
-  --np-surface-sunken: #0a1a27;
-  --np-surface-hover: #123042;
-  --np-surface-glass: rgb(11 30 46 / 0.9);
-
-  --np-text-primary: #f7f3eb;
-  --np-text-secondary: #b8c2c6;
-  --np-text-muted: #8fa0a8;
-  --np-text-inverted: #071726;
-
-  --np-border: #223a49;
-  --np-border-strong: #6f8490;
-  --np-border-subtle: #132b39;
-
-  --np-primary: #dea276;
-  --np-primary-hover: #e8b58c;
-  --np-primary-active: #d49a6d;
-  --np-primary-subtle: #132a37;
-  --np-primary-foreground: #071726;
-  --np-primary-text: #dea276;
-
-  --np-accent: #dea276;
-  --np-accent-soft: #132a37;
-
-  --np-success: #62c28e;
-  --np-success-subtle: #0f241b;
-  --np-success-text: #8fd9b1;
-
-  --np-warning: #d9a441;
-  --np-warning-subtle: #241d0f;
-  --np-warning-text: #f0c777;
-
-  --np-danger: #e07a72;
-  --np-danger-subtle: #2a1415;
-  --np-danger-text: #f2a39d;
-
-  --np-info: #b8c2c6;
-  --np-info-subtle: #132a37;
-  --np-info-text: #d5dde0;
-
-  --np-focus-ring: #dea276;
-
-  --np-shadow-xs: none;
-  --np-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
-  --np-shadow-md: 0 18px 40px -28px rgb(0 0 0 / 0.7);
-  --np-shadow-lg: 0 36px 72px -40px rgb(0 0 0 / 0.8);
 }
 
 /* ==========================================================================
@@ -229,11 +174,6 @@ body {
 }
 
 ::selection {
-  background: #071726;
-  color: #fbfaf6;
-}
-
-.dark ::selection {
   background: #dea276;
   color: #071726;
 }

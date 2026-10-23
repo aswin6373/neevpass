@@ -718,7 +718,7 @@ The proposal's open questions were settled during implementation:
    external taxonomy.
 5. **Resume length** — free multi-page with compact layout/density options; no hard
    one-page limit.
-6. **Design language** — defined in `@neevpass/ui` (tokens, primitives, dark mode).
+6. **Design language** — defined in `@neevpass/ui` (dark-only tokens and primitives).
 
 Remaining work for the next milestone:
 
