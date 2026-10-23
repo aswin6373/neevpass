@@ -72,9 +72,6 @@ const STATS = [
   { value: '0', label: 'Public by default' },
 ] as const;
 
-const GITHUB_URL = 'https://github.com/aswin6373/neevpass';
-const LICENSE_URL = `${GITHUB_URL}/blob/main/LICENSE`;
-
 const CONTAINER = 'mx-auto w-full max-w-[80rem] px-5 sm:px-8 lg:px-14';
 
 const BUTTON_BASE =
@@ -118,7 +115,6 @@ export default function LandingPage() {
         <HowItWorks />
         <PrivacySection />
         <ClosingCta />
-        <ProjectSection />
       </div>
     </AppShell>
   );
@@ -174,8 +170,6 @@ function Hero() {
           </div>
 
           <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.16em] text-white/55">
-            Free for students
-            <span className="px-2 text-[var(--m-copper)]">/</span>
             Private by default
           </p>
         </div>
@@ -568,78 +562,11 @@ function ClosingCta() {
   );
 }
 
-function ProjectSection() {
-  return (
-    <section aria-labelledby="project-heading" className="bg-[var(--m-paper)]">
-      <div
-        className={cn(
-          CONTAINER,
-          'flex flex-col gap-10 py-16 sm:py-20 lg:flex-row lg:items-center lg:justify-between',
-        )}
-      >
-        <div>
-          <p className="np-m-eyebrow text-[var(--m-copper-text)]">The project</p>
-          <h2
-            id="project-heading"
-            className="np-m-display mt-4 text-[2.2rem] text-[var(--m-navy)] sm:text-[2.6rem]"
-          >
-            Built in the open.
-          </h2>
-          <p className="mt-3 max-w-[32rem] text-[14px] leading-[1.75] text-[var(--m-muted)]">
-            NeevPass is an open-source career record. Read the code, follow the work, or report a
-            problem.
-          </p>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Link
-            href="/#how-it-works"
-            className="group flex min-h-[8rem] w-full flex-col justify-between border border-[var(--m-line)] p-5 transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-[var(--m-copper)] sm:w-[13rem]"
-          >
-            <span className="text-[9px] font-bold uppercase tracking-[0.14em] text-[var(--m-copper-text)]">
-              Overview
-            </span>
-            <span className="mt-6 flex items-center justify-between gap-4 np-m-serif text-[17px] font-semibold text-[var(--m-navy)]">
-              How it works
-              <span
-                aria-hidden="true"
-                className="text-[13px] transition-transform duration-200 group-hover:translate-x-0.5"
-              >
-                →
-              </span>
-            </span>
-          </Link>
-
-          <a
-            href={GITHUB_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex min-h-[8rem] w-full flex-col justify-between border border-[var(--m-line)] p-5 transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-[var(--m-copper)] sm:w-[13rem]"
-          >
-            <span className="text-[9px] font-bold uppercase tracking-[0.14em] text-[var(--m-copper-text)]">
-              Project
-            </span>
-            <span className="mt-6 flex items-center justify-between gap-4 np-m-serif text-[17px] font-semibold text-[var(--m-navy)]">
-              GitHub
-              <span
-                aria-hidden="true"
-                className="text-[13px] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-              >
-                ↗
-              </span>
-            </span>
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function LandingFooter() {
   return (
     <footer className="np-marketing bg-[var(--m-navy-deep)] text-white">
       <div className="mx-auto w-full max-w-[80rem] px-5 py-16 sm:px-8 lg:px-14 lg:py-20">
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.6fr_0.8fr_0.8fr_1fr] lg:gap-16">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.6fr_0.8fr_0.8fr] lg:gap-16">
           <div className="max-w-[20rem]">
             <MarketingBrand href="/" tone="dark" />
             <p className="mt-6 text-[12px] leading-[1.8] text-white/50">
@@ -692,41 +619,6 @@ function LandingFooter() {
                 </Link>
               </li>
             </ul>
-          </nav>
-
-          <nav aria-labelledby="footer-project-heading">
-            <h2
-              id="footer-project-heading"
-              className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--m-copper-light)]"
-            >
-              Project
-            </h2>
-            <ul className="mt-5 space-y-3">
-              <li>
-                <a
-                  href={GITHUB_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={FOOTER_LINK_CLASS}
-                >
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <a
-                  href={LICENSE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={FOOTER_LINK_CLASS}
-                >
-                  MIT License
-                </a>
-              </li>
-            </ul>
-            <p className="mt-5 inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.1em] text-[#7cc69c]">
-              <span className="size-1.5 rounded-full bg-current" />
-              Open source
-            </p>
           </nav>
         </div>
 
