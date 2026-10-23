@@ -5,7 +5,7 @@ import { Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { Brand } from './brand';
-import { SidebarContent } from './sidebar';
+import { SidebarFooter, SidebarNav } from './sidebar';
 
 /**
  * Mobile navigation drawer.
@@ -92,8 +92,14 @@ export function MobileNav({ user }: { user: { name: string | null; email: string
             </div>
 
             <div className="min-h-0 flex-1 overflow-y-auto px-3 py-5">
-              <SidebarContent user={user} onNavigate={() => setOpen(false)} />
+              <SidebarNav onNavigate={() => setOpen(false)} />
             </div>
+
+            <SidebarFooter
+              user={user}
+              onNavigate={() => setOpen(false)}
+              className="px-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+            />
           </div>
         </div>
       )}
