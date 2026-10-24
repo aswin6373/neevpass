@@ -1,6 +1,7 @@
 import { APP_NAME, APP_TAGLINE } from '@neevpass/domain';
 import { cn } from '@neevpass/ui';
 import type { Metadata, Viewport } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { AppShell } from '@/components/layout/app-shell';
@@ -63,7 +64,7 @@ const PRIVACY_POINTS = [
 const VISIBILITY_ROWS = [
   { label: 'Profile', detail: 'Name, education and skills', state: 'Private' },
   { label: 'Resume', detail: 'Current version', state: 'Private' },
-  { label: 'Portfolio', detail: '/p/aarav-sharma', state: 'Public' },
+  { label: 'Portfolio', detail: '/p/your-name', state: 'Public' },
 ] as const;
 
 const STATS = [
@@ -124,24 +125,31 @@ function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative overflow-hidden bg-[var(--m-navy)] text-white"
+      className="relative isolate overflow-hidden bg-[var(--m-navy)] text-white"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-56 top-1/2 size-[50rem] -translate-y-1/2 rounded-full border border-[rgb(201_128_75/0.16)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-24 top-1/2 size-[34rem] -translate-y-1/2 rounded-full border border-[rgb(201_128_75/0.16)]"
-      />
+      {/* Full-bleed college photo behind the whole hero on every screen size. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <Image
+          src="/marketing/college-students.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[62%_40%] lg:object-[58%_38%]"
+        />
+        <div className="absolute inset-0 bg-[var(--m-navy)]/25" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--m-navy)]/95 via-[var(--m-navy)]/65 to-[var(--m-navy)]/85 lg:hidden" />
+        <div className="absolute inset-0 hidden bg-gradient-to-r from-[var(--m-navy)] via-[var(--m-navy)]/75 to-[var(--m-navy)]/5 lg:block" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--m-navy)]/90 via-transparent to-transparent" />
+      </div>
 
       <div
         className={cn(
           CONTAINER,
-          'relative grid gap-14 pb-14 pt-16 sm:pt-20 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center lg:gap-20 lg:pb-20 lg:pt-24',
+          'relative z-10 pb-10 pt-16 sm:pb-12 sm:pt-20 lg:pb-16 lg:pt-24',
         )}
       >
-        <div>
+        <div className="max-w-[43rem]">
           <p className="np-m-eyebrow text-[var(--m-copper-light)]">The career record</p>
 
           <h1
@@ -152,7 +160,7 @@ function Hero() {
             <em className="block text-[var(--m-copper-light)]">every application.</em>
           </h1>
 
-          <p className="mt-7 max-w-[33rem] text-[16px] leading-[1.75] text-white/70">
+          <p className="mt-7 max-w-[33rem] text-[16px] leading-[1.75] text-white/75">
             Keep your education, experience, projects and skills in one structured profile.
             Resumes, your portfolio and your career plan all build from that record.
           </p>
@@ -169,15 +177,13 @@ function Hero() {
             </Link>
           </div>
 
-          <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.16em] text-white/55">
+          <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.16em] text-white/65">
             Private by default
           </p>
         </div>
-
-        <RecordPaperStack />
       </div>
 
-      <div className={cn(CONTAINER, 'relative')}>
+      <div className={cn(CONTAINER, 'relative z-10')}>
         <dl className="grid grid-cols-3 gap-4 border-t border-[var(--m-line-on-dark)] py-7 sm:gap-8">
           {STATS.map((stat) => (
             <div
@@ -195,92 +201,6 @@ function Hero() {
         </dl>
       </div>
     </section>
-  );
-}
-
-function RecordPaperStack() {
-  const sections = [
-    ['Education', '2 entries'],
-    ['Experience', '1 internship'],
-    ['Projects', '3 projects'],
-    ['Skills', '14 listed'],
-  ] as const;
-
-  const outputs = ['Resume', 'Portfolio', 'Career plan'] as const;
-
-  return (
-    <div aria-hidden="true" className="relative mx-auto w-full max-w-[28rem] lg:max-w-none">
-      <div className="absolute inset-x-5 bottom-[-1.25rem] top-8 rotate-[4deg] border border-[var(--m-line)] bg-[var(--m-ivory)]" />
-      <div className="absolute inset-x-2 bottom-[-0.6rem] top-4 rotate-[-2.5deg] border border-[var(--m-line)] bg-[#efe8dc]" />
-
-      <div className="relative rotate-[1.2deg] border border-[var(--m-line)] bg-[var(--m-paper)] p-5 text-[var(--m-ink)] shadow-[0_40px_90px_rgba(0,0,0,0.38)] sm:p-7">
-        <div className="flex items-center justify-between gap-4 border-b border-[var(--m-line)] pb-3">
-          <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--m-copper-text)]">
-            Profile record
-          </span>
-          <span className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--m-muted)]">
-            <span className="size-1.5 rounded-full bg-[#4c8c71]" />
-            Private
-          </span>
-        </div>
-
-        <div className="pt-5">
-          <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0">
-              <p className="np-m-serif text-[26px] font-semibold leading-none tracking-[-0.03em] text-[var(--m-navy)]">
-                Aarav Sharma
-              </p>
-              <p className="mt-2 text-[12px] text-[var(--m-muted)]">
-                B.Tech, Computer Science · 2026
-              </p>
-            </div>
-            <div className="shrink-0 text-right">
-              <p className="np-m-display text-[28px] leading-none text-[var(--m-navy)]">
-                82<span className="text-[14px]">%</span>
-              </p>
-              <p className="mt-1 text-[8px] font-bold uppercase tracking-[0.12em] text-[var(--m-muted)]">
-                Complete
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-4 h-[3px] bg-[var(--m-line)]">
-            <div className="h-full w-[82%] bg-[var(--m-copper)]" />
-          </div>
-
-          <dl className="mt-5 border-t border-[var(--m-line)]">
-            {sections.map(([label, value]) => (
-              <div
-                key={label}
-                className="flex items-center justify-between gap-6 border-b border-[var(--m-line)] py-2.5 last:border-b-0"
-              >
-                <dt className="text-[11px] text-[var(--m-muted)]">{label}</dt>
-                <dd className="text-[11px] font-semibold text-[var(--m-navy)]">{value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-
-        <div className="mt-5 grid grid-cols-3 border-t border-[var(--m-line)] pt-4">
-          {outputs.map((output, index) => (
-            <div
-              key={output}
-              className={cn(
-                'px-2 first:pl-0 last:pr-0',
-                index < outputs.length - 1 && 'border-r border-[var(--m-line)]',
-              )}
-            >
-              <p className="text-[8px] font-bold uppercase tracking-[0.12em] text-[var(--m-copper-text)]">
-                0{index + 1}
-              </p>
-              <p className="mt-1.5 np-m-serif text-[12px] font-semibold leading-tight text-[var(--m-navy)]">
-                {output}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -495,7 +415,7 @@ function VisibilityPanel() {
 
         <div className="mt-5 flex items-center justify-between gap-4 bg-[#f1ede4] px-4 py-3">
           <p className="text-[10px] text-[var(--m-muted)]">Public link</p>
-          <p className="np-mono text-[10px] text-[var(--m-copper-text)]">/p/aarav-sharma</p>
+          <p className="np-mono text-[10px] text-[var(--m-copper-text)]">/p/your-name</p>
         </div>
 
         <p className="mt-4 text-[10px] leading-[1.6] text-[var(--m-muted)]">
